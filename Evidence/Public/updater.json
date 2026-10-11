@@ -1,0 +1,71 @@
+{
+    "build": "0.2.0",
+    "engine": "6000.3.7f1",
+    "hardware": "Intel(R) Core(TM) i5-14400F / 16173 MB",
+    "graphics": "NVIDIA GeForce RTX 5060",
+    "startedUtc": "2026-10-11T03:02:10.4780614Z",
+    "duration": 1.0126276016235352,
+    "averageFps": 0.0,
+    "minFps": 1000.0,
+    "bodies": 62,
+    "issues": 0,
+    "screenWidth": 1920,
+    "screenHeight": 1080,
+    "checks": [
+        {
+            "name": "test_inputs_not_serialized",
+            "passed": true,
+            "evidence": "runtime-only input; scene cannot install an empty test array"
+        },
+        {
+            "name": "update_version_comparison",
+            "passed": true,
+            "evidence": "newer, equal and invalid versions"
+        },
+        {
+            "name": "update_manifest_accepts_own_release",
+            "passed": true,
+            "evidence": "fixed repository HTTPS archive, numeric version, exact size/hash format"
+        },
+        {
+            "name": "update_manifest_rejects_other_hosts",
+            "passed": true,
+            "evidence": "no arbitrary download host"
+        },
+        {
+            "name": "update_rejects_archive_traversal",
+            "passed": true,
+            "evidence": "archive cannot write outside stage"
+        },
+        {
+            "name": "update_extracts_expected_layout",
+            "passed": true,
+            "evidence": "valid contained package preserves game layout"
+        },
+        {
+            "name": "update_sha256_reads_archive",
+            "passed": true,
+            "evidence": "archive hash computed from bytes"
+        },
+        {
+            "name": "update_check_returns_without_hanging",
+            "passed": true,
+            "evidence": "status=UP TO DATE • 0.2.0"
+        },
+        {
+            "name": "public_update_manifest_verified",
+            "passed": true,
+            "evidence": "status=UP TO DATE • 0.2.0 latest=0.2.0"
+        },
+        {
+            "name": "updater_no_runtime_errors",
+            "passed": true,
+            "evidence": ""
+        },
+        {
+            "name": "connected_body_joints",
+            "passed": true,
+            "evidence": "missing frames=0 maximum physical anchor separation=0.0050 m"
+        }
+    ]
+}

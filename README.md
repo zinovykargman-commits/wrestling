@@ -2,6 +2,8 @@
 
 **[Download the Windows game](https://github.com/zinovykargman-commits/wrestling/releases/latest)** — download GRIP_BREAK-Windows.zip, extract it, and open PLAY.cmd. Future releases install through the main menu's update button.
 
+[Public download and installer verification](PUBLIC_VERIFICATION.md).
+
 This repository contains the editable Unity source, update installer, and build instructions. The playable Windows build is distributed as a release asset.
 
 # GRIP BREAK v0.2.0
