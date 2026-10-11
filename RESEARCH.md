@@ -1,6 +1,6 @@
 # Design and engineering references
 
-## 0.3.1 pin and aiming correction
+## 0.3.2 pin and aiming correction
 
 The native isolated knee test established this setup's sign convention: the old -10/+145 joint range stopped positive physical bending at +10 degrees; -145/+10 allowed a +70-degree target and limited extension to -10. This measured result guides the corrected knee limits; Unity's general angular-limit documentation alone does not establish that sign. Covers soften arm motors so elbows yield, and use cloth traction for grounded feet so standing boot grip does not oppose repositioning. Mouse pulls, anatomical joints and contact remain physical. Chest-down and back-down each need both separate shoulder contacts and an live nearby controlling grip for three seconds.
 
@@ -51,7 +51,7 @@ Exactly one camera follows the controlled wrestler. Obstruction distance, side c
 
 ## GitHub updates and delivery
 
-[GitHub Releases REST API](https://docs.github.com/en/rest/releases/releases#get-the-latest-release) provides the public latest release and asset URLs for [the requested repository](https://github.com/zinovykargman-commits/wrestling). Source version is 0.3.1. A release manifest must agree with its tag, Windows archive URL, size and SHA256. Check and install are separate button presses; only a confirmed install downloads and restarts.
+[GitHub Releases REST API](https://docs.github.com/en/rest/releases/releases#get-the-latest-release) provides the public latest release and asset URLs for [the requested repository](https://github.com/zinovykargman-commits/wrestling). Source version is 0.3.2. A release manifest must agree with its tag, Windows archive URL, size and SHA256. Check and install are separate button presses; only a confirmed install downloads and restarts.
 
 [Unity DownloadHandlerFile](https://docs.unity3d.com/6000.0/Documentation/ScriptReference/Networking.DownloadHandlerFile.html) writes the archive directly to disk. [Microsoft ZipFile](https://learn.microsoft.com/en-us/dotnet/api/system.io.compression.zipfile) and [SHA256](https://learn.microsoft.com/en-us/dotnet/api/system.security.cryptography.sha256) support extraction and integrity checks. Traversal, links, duplicates, unexpected package paths and expansion limits are checked. The bundled installer also verifies staged file length/hash against the verified archive, rejects extra/missing content, waits for game exit and retains backups on the installation drive for rollback. The helper is shipped locally rather than downloaded and executed as a script. Preferences are external and editable Source is preserved.
 
@@ -69,4 +69,7 @@ Current pin rule: the grounded wrestler may be chest-down or back-down, with bot
 
 During C control, the hand grip yields vertically at its existing contact so the wrist spring cannot lift the grounded rival while bounded physical shoulder pressure holds them down. Lateral grip forces, collision, anchors, release, and the defender's bridge remain physical.
 
-Tackle has been removed from keyboard/controller bindings, control legends, AI decisions and physics. The retired network input bit is rejected. Both players need 0.3.1 (protocol 9).
+Tackle has been removed from keyboard/controller bindings, control legends, AI decisions and physics. The retired network input bit is rejected. Both players need 0.3.2 (protocol 9).
+
+
+0.3.2 invite fix: the host previously waited for its own OS DNS to resolve an already assigned/registered quick-tunnel hostname before exposing the invite. A current comparison returned NXDOMAIN through the normal resolver while Cloudflare returned public addresses. Readiness now publishes the complete room URL immediately after actual helper registration. Joining retains normal TLS and bounded DNS retries; the copied/pasted public-route check joined successfully after propagation. Official references: https://developers.cloudflare.com/tunnel/get-started/quick-tunnels/ and https://developers.cloudflare.com/1.1.1.1/encryption/dns-over-https/make-api-requests/dns-json/ .

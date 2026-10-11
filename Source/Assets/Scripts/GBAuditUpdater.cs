@@ -6,6 +6,13 @@ using System.IO.Compression;
 
 public partial class GBAudit {
     IEnumerator UpdaterRun(){
+        var tunnel=new GBTunnel();var tunnelType=typeof(GBTunnel);var privateFlags=System.Reflection.BindingFlags.Instance|System.Reflection.BindingFlags.NonPublic;
+        var consume=tunnelType.GetMethod("ReadLine",privateFlags);string roomSecret=GBTunnel.GenerateSecret();tunnelType.GetField("secret",privateFlags).SetValue(tunnel,roomSecret);
+        consume.Invoke(tunnel,new object[]{"API https://api.trycloudflare.com"});consume.Invoke(tunnel,new object[]{"https://grip-regression-unissued-host.trycloudflare.com"});
+        Check("invite_waits_for_registered_route",!tunnel.Ready&&tunnel.InviteUrl.Length==0,"assigned hostname alone cannot advertise a disconnected route");
+        var publishClock=System.Diagnostics.Stopwatch.StartNew();consume.Invoke(tunnel,new object[]{"Registered tunnel connection"});Uri endpoint;string parsedSecret;
+        Check("invite_publishes_without_local_dns",tunnel.Ready&&publishClock.Elapsed.TotalSeconds<.25&&GBTunnel.TryParseInvite(tunnel.InviteUrl,out endpoint,out parsedSecret)&&parsedSecret==roomSecret,"registered route immediately publishes full authenticated link without resolving an unissued hostname");
+        string firstInvite=tunnel.InviteUrl;consume.Invoke(tunnel,new object[]{"https://another-unissued-host.trycloudflare.com"});Check("invite_keeps_first_assigned_hostname",tunnel.InviteUrl==firstInvite,"later helper output cannot redirect the room");tunnel.Dispose();consume.Invoke(tunnel,new object[]{"Registered tunnel connection"});Check("disposed_invite_stays_closed",!tunnel.Ready&&tunnel.InviteUrl.Length==0,"late helper callbacks cannot reopen a disposed room");
         Check("update_version_comparison",GBUpdater.IsNewer("v0.2.0","0.1.9")&&!GBUpdater.IsNewer("0.2.0","0.2.0")&&!GBUpdater.IsNewer("nonsense","0.2.0"),"newer, equal and invalid versions");
         var manifest=new GBUpdater.Manifest{version="0.2.0",url="https://github.com/zinovykargman-commits/wrestling/releases/download/v0.2.0/GRIP_BREAK-Windows.zip",size=25,sha256=new string('a',64)};
         Check("update_manifest_accepts_own_release",GBUpdater.ValidManifest(manifest),"fixed repository HTTPS archive, numeric version, exact size/hash format");

@@ -1,4 +1,4 @@
-# Acceptance ledger — 0.3.1
+# Acceptance ledger — 0.3.2
 
 Latest user correction supersedes prior Training/ring-out/arena quantities: only Pin Wrestling in the ring is playable for now. AI Local and Private Online enter these same rules. Inactive old arena authorship can remain in source. Continued five-agent overhaul uses one lead and four specialists.
 
@@ -25,5 +25,5 @@ Walking uses alternating physical foot targets and coordinated thigh/knee motors
 
 Current pin rule: the grounded wrestler may be chest-down or back-down, with both actual shoulders on the mat and a live nearby controlling grip while C is held. The attacker does not need to place their chest over the rival. Multiplayer omits the mat motivational slogan and bottom coaching prompt.
 
-Tackle has been removed from keyboard/controller bindings, control legends, AI decisions and physics. The retired network input bit is rejected. Both players need 0.3.1 (protocol 9).
+Tackle has been removed from keyboard/controller bindings, control legends, AI decisions and physics. The retired network input bit is rejected. Both players need 0.3.2 (protocol 9).
 Jump requires 8 stamina (climb 16) and is unavailable while under pin control. C requires a physically low, lying opponent before pin control; low balance or a Down timer while upright is insufficient. Ctrl + movement still bridges/rolls.

@@ -1,9 +1,9 @@
-# GRIP BREAK 0.3.1
+# GRIP BREAK 0.3.2
 
-Fresh native build: succeeded with zero errors/warnings. 69 assertions passed across four current reports with zero runtime issues. Source/runtime hashes were frozen before checks and verified before packaging.
+Fresh native build succeeded with zero errors/warnings. 46 assertions passed across three current reports with zero runtime issues; frozen source/runtime identities matched before packaging.
 
-Removal checks exercise normal keyboard polling, default V inactivity, retired tackle command rejection before physics (no dash/stumble/stamina cost, exhausted jump spam rejection, funded jump preservation, upright victim rejection with a real grip and grounded pin completion), shared local/host/client sanitization, all remaining bindings, custom V rebinding to a live shot, and input/focus/pause behavior. Actual menu/keybind/How to Play screenshots were inspected. Production tackle action, controller/default/rebind mapping and AI decision branch are removed.
+Regression checks verify that hostname assignment alone does not advertise an unregistered route, registration immediately publishes an authenticated invite without needing the host's local DNS resolver, the first assigned hostname is preserved, and late callbacks cannot reopen a closed room. Existing updater checks passed.
 
-Two native peers verify protocol 9 authenticated ready/start, arm/sprawl commands, body/grip/reset streams, owned cameras and disconnect with 150ms simulated RTT and 5% application-message omission on one PC. Full pin/walking physics, public tunnel routing and 187 checks passed in 0.3.0; those reports are historical, not rerun evidence for this patch. Hardware input, separate-PC internet and human play feel remain hands-on checks.
+Two native peers then used a real public quick tunnel, the actual Copy Invite clipboard value, pasted Join, authentication, ready/start, protocol 9 inputs/body/grip/reset streams, owned cameras and disconnect. Actual host invite screenshot was inspected. This route ran on one PC; separate-PC routing is still a hands-on check. The joining peer retains normal secure DNS/TLS retries, and a stale recursive DNS cache delayed this test's connection before it succeeded. No system DNS settings or TLS certificate checks were changed.
 
-Archives are CRC-tested and compared with frozen source/runtime identities. Public downloads, SHA and isolated installer/native restart are verified after publication. Complete user-clicked upgrade of an older install remains a manual check.
+Gameplay guard/input/menu checks passed 69 assertions in 0.3.1 and are historical; full pin/walking checks passed in 0.3.0. Only invite readiness changed in 0.3.2. Archives are CRC-tested and match frozen source/runtime identities. Public asset verification follows publication.

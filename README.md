@@ -4,7 +4,7 @@
 
 This repository contains the editable Unity source, update installer, and build instructions. The playable Windows build is distributed as a release asset.
 
-# GRIP BREAK 0.3.1
+# GRIP BREAK 0.3.2
 
 Extract GRIP_BREAK-Windows.zip and open **PLAY.cmd**. Only **Pin Wrestling** in the ring is active. **PLAY AGAINST AI** and **PRIVATE ONLINE** enter the same rules. First to three pins wins. Training and other rule/arena choices are retired for now.
 
@@ -59,5 +59,5 @@ Walking uses alternating physical foot targets and coordinated thigh/knee motors
 
 Current pin rule: the grounded wrestler may be chest-down or back-down, with both actual shoulders on the mat and a live nearby controlling grip while C is held. The attacker does not need to place their chest over the rival. Multiplayer omits the mat motivational slogan and bottom coaching prompt.
 
-Tackle has been removed from keyboard/controller bindings, control legends, AI decisions and physics. The retired network input bit is rejected. Both players need 0.3.1 (protocol 9).
+Tackle has been removed from keyboard/controller bindings, control legends, AI decisions and physics. The retired network input bit is rejected. Both players need 0.3.2 (protocol 9).
 Jump requires 8 stamina (climb 16) and is unavailable while under pin control. C requires a physically low, lying opponent before pin control; low balance or a Down timer while upright is insufficient. Ctrl + movement still bridges/rolls.

@@ -1,7 +1,6 @@
 using System;
 using System.Diagnostics;
 using System.IO;
-using System.Net;
 using System.Security.Cryptography;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -14,7 +13,7 @@ public sealed class GBTunnel:IDisposable {
     readonly CancellationTokenSource readinessCancel=new CancellationTokenSource();
     Process process;GBWebSocketBridge bridge;
     string invite="",status="Starting private room...",error="",publicUrl,secret,configurationRoot;
-    bool registered,disposed,started,resolving;
+    bool registered,disposed,started;
     public string InviteUrl {get{lock(gate)return invite;}}
     public string Status {get{lock(gate)return status;}}
     public string Error {get{lock(gate)return error;}}
@@ -88,47 +87,17 @@ public sealed class GBTunnel:IDisposable {
                 }
             }
             if(line.IndexOf("Registered tunnel connection",StringComparison.OrdinalIgnoreCase)>=0)registered=true;
-            if(publicUrl!=null&&registered&&!resolving&&error.Length==0){
-                resolving=true;status="Preparing invite address...";
-                string selectedUrl=publicUrl;Task.Run(()=>WaitForAddress(selectedUrl,readinessCancel.Token));
+            if(publicUrl!=null&&registered&&invite.Length==0&&error.Length==0){
+                // The helper has assigned the public hostname and registered
+                // its route. Publishing it does not require the host's local
+                // DNS cache to resolve that hostname. The joining peer retains
+                // normal TLS/DNS connection retries for propagation delays.
+                invite=publicUrl+"/room#grip="+secret;
+                status="Invite link ready • copy it for your friend";
             }
             // Do not turn recoverable transport retries into a permanent error.
             if(line.IndexOf("failed to request quick Tunnel",StringComparison.OrdinalIgnoreCase)>=0){error="Could not create the invite link. Check your connection and host again.";status=error;}
         }
-    }
-    async Task WaitForAddress(string selectedUrl,CancellationToken token){
-        var clock=Stopwatch.StartNew();Task<IPAddress[]> lookup=null;
-        try{
-            string hostname=new Uri(selectedUrl).Host;
-            while(clock.Elapsed.TotalSeconds<90&&!token.IsCancellationRequested){
-                lock(gate){if(disposed||error.Length>0||publicUrl!=selectedUrl)return;}
-                // Use the normal OS resolver. Reuse a pending lookup rather than
-                // spawning overlapping DNS requests if that resolver is slow.
-                if(lookup==null)lookup=Dns.GetHostAddressesAsync(hostname);
-                int remaining=(int)Math.Max(1,(90-clock.Elapsed.TotalSeconds)*1000);
-                Task completed=await Task.WhenAny(lookup,Task.Delay(Math.Min(3000,remaining),token));
-                if(token.IsCancellationRequested)return;
-                if(completed==lookup){
-                    IPAddress[] addresses=null;
-                    try{addresses=await lookup;}catch(System.Net.Sockets.SocketException){}catch(ArgumentException){}
-                    lookup=null;
-                    if(addresses!=null&&addresses.Length>0){
-                        lock(gate){
-                            if(!disposed&&registered&&error.Length==0&&publicUrl==selectedUrl&&!token.IsCancellationRequested){
-                                invite=selectedUrl+"/room#grip="+secret;status="Invite link ready • copy it for your friend";
-                            }
-                        }
-                        return;
-                    }
-                }
-                remaining=(int)Math.Max(1,(90-clock.Elapsed.TotalSeconds)*1000);
-                await Task.Delay(Math.Min(2000,remaining),token);
-            }
-            lock(gate){if(!disposed&&!token.IsCancellationRequested&&error.Length==0&&publicUrl==selectedUrl){
-                error="The invite address did not become available. Host again to create a new link.";status=error;
-            }}
-        }catch(OperationCanceledException){}
-        catch(Exception e){lock(gate){if(!disposed&&!token.IsCancellationRequested&&error.Length==0){error="Could not prepare the invite address: "+e.Message;status=error;}}}
     }
     void DisposeResources(){
         var child=Interlocked.Exchange(ref process,null);
