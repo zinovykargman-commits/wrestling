@@ -35,3 +35,5 @@ Current update acceptance: effective physical Q shots; real earned jump/run/spin
 - Scramble costs an additional10% over1.3x and has1.2s exhausted recovery below4 usable stamina.
 
 - Opponent bracing never adds stamina drain to the gripping wrestler, against AI or another person.
+
+- Scramble never script-releases opponent grips; physical strain still may release. Rapid Ctrl tapping cannot repeat scramble bursts;0.4s release recovery.

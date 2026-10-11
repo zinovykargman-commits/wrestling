@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 public partial class GBAudit:MonoBehaviour {
     [Serializable] public class Outcome {public string name;public bool passed;public string evidence;}
-    [Serializable] public class Report {public string build="0.4.4",engine,hardware,graphics,startedUtc;public float duration,averageFps,minFps;public int bodies,issues,screenWidth,screenHeight;public List<Outcome> checks=new List<Outcome>();}
+    [Serializable] public class Report {public string build="0.4.5",engine,hardware,graphics,startedUtc;public float duration,averageFps,minFps;public int bodies,issues,screenWidth,screenHeight;public List<Outcome> checks=new List<Outcome>();}
     Report report=new Report();string directory;float started;GBApp app;
     float maximumJointGap;int missingJointFrames;
     void LateUpdate(){if(app&&app.Authority)foreach(var w in app.Wrestlers){if(measureArmContacts)MeasureArmContacts(w);float gap=w.JointSeparation();if(float.IsInfinity(gap))missingJointFrames++;else maximumJointGap=Mathf.Max(maximumJointGap,gap);}}
@@ -18,6 +18,7 @@ public partial class GBAudit:MonoBehaviour {
         if(Has("--input-test")){yield return InputRun();Finish("input.json");yield break;}
         if(Has("--ai-test")){yield return AIRun();Finish("ai.json");yield break;}
         app.ScriptedInputs=new GBInput[2];
+        if(Has("--scramble-test")){yield return GBAuditPin.ScramblePatch(app,Check);Finish("scramble.json");yield break;}
         if(Has("--stamina-test")){yield return GBAuditPin.StaminaPatch(app,Check);Finish("stamina.json");yield break;}
         if(Has("--pin-rules-test")){yield return GBAuditPin.RulesPatch(app,directory,Check);Finish("pin-rules.json");yield break;}
         if(Has("--carry-test")){yield return GBAuditCarry.Run(app,directory,Check);Finish("carry.json");yield break;}

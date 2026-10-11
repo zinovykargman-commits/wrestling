@@ -122,8 +122,8 @@ public partial class GBWrestler:MonoBehaviour {
     public void Simulate(GBInput input) {
         if(eliminated)return;command=input.Sanitize();
         bool scrambleRequested=command.Has(GBInput.Brace)&&command.Move.sqrMagnitude>.05f&&(HeldByOpponent||Down||PhysicallyDownForPin||PinControlled);
-        UpdateScrambleRecovery(scrambleRequested);
-        if(!ScrambleReady){command.flags&=~GBInput.Brace;if(scrambleRequested)Feedback("Scramble exhausted - recovering",.2f);}
+        GateScrambleInput(scrambleRequested);UpdateScrambleRecovery(scrambleRequested);
+        if(!ScrambleReady){command.flags&=~GBInput.Brace;if(scrambleRequested)Feedback(Time.time<scrambleUntil||stamina<4?"Scramble exhausted - recovering":"Scramble recovering - hold Ctrl to resume",.2f);}
         SprawlRefresh();var tuning=GBApp.I.Tuning;float dt=Time.fixedDeltaTime;
         grounded=Physics.Raycast(bodies[11].position+Vector3.up*.12f,Vector3.down,.37f,1,QueryTriggerInteraction.Ignore)||Physics.Raycast(bodies[14].position+Vector3.up*.12f,Vector3.down,.37f,1,QueryTriggerInteraction.Ignore);
         if(grounded)lastFootSupport=Time.time;

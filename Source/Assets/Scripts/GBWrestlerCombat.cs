@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 public partial class GBWrestler {
     string actionFeedback="",remoteFeedback="";float feedbackUntil,remoteStrain,feedbackPriorityUntil;bool remoteLegs;
-    float escapeCharge,shoveUntil,shotUntil,shotAt,lastLiftCharge,lastLiftAt=-10;int combatFlags;bool shotImpactDone;Vector3 shotDirection=Vector3.forward;
+    float shoveUntil,shotUntil,shotAt,lastLiftCharge,lastLiftAt=-10;int combatFlags;bool shotImpactDone;Vector3 shotDirection=Vector3.forward;
     public bool Shooting {get{return Time.time<shotUntil&&!Down;}}
     public Vector3 ShotDirection {get{return shotDirection;}}
     readonly LineRenderer[] targetRings=new LineRenderer[2];
@@ -14,12 +14,19 @@ public partial class GBWrestler {
     public bool HeldByOpponent {get{foreach(var wrestler in GBApp.I.Wrestlers)if(wrestler!=this)foreach(var hand in wrestler.hands)if(hand!=null&&hand.joint&&hand.target&&hand.target.wrestler==this)return true;return false;}}
     public void ApplyCombatSnapshot(string feedback,float strain,bool legs){remoteFeedback=feedback??"";remoteStrain=Mathf.Clamp01(strain);remoteLegs=legs;feedbackUntil=Time.time+.5f;}
     void Feedback(string text,float duration=.8f){if(duration<=.4f&&Time.time<feedbackPriorityUntil)return;actionFeedback=text;feedbackUntil=Time.time+duration;if(duration>=.5f)feedbackPriorityUntil=Time.time+duration;}
-    float scrambleUntil;bool scrambleExhausted;
-    public float ScrambleCooldown {get{return Mathf.Max(0,scrambleUntil-Time.time);}}
-    public bool ScrambleReady {get{return Time.time>=scrambleUntil&&stamina>=4;}}
+    float scrambleUntil,scrambleRepressAt;bool scrambleExhausted,scrambleInputHeld,scrambleUsed;
+    public const float ScrambleRepressSeconds=.4f;
+    void GateScrambleInput(bool requested){
+        bool held=command.Has(GBInput.Brace);
+        if(!held&&scrambleInputHeld&&scrambleUsed)scrambleRepressAt=Mathf.Max(scrambleRepressAt,Time.time+ScrambleRepressSeconds);
+        scrambleInputHeld=held;
+        if(!held)scrambleUsed=false;else scrambleUsed|=requested;
+    }
+    public float ScrambleCooldown {get{return Mathf.Max(0,Mathf.Max(scrambleUntil,scrambleRepressAt)-Time.time);}}
+    public bool ScrambleReady {get{return Time.time>=scrambleUntil&&Time.time>=scrambleRepressAt&&stamina>=4;}}
     void UpdateScrambleRecovery(bool requested){
         if(Time.time>=scrambleUntil&&stamina>=4)scrambleExhausted=false;
-        if(requested&&stamina<4&&!scrambleExhausted){scrambleUntil=Time.time+1.2f;scrambleExhausted=true;escapeCharge=0;}
+        if(requested&&stamina<4&&!scrambleExhausted){scrambleUntil=Time.time+1.2f;scrambleExhausted=true;}
     }
     int GripsOn(GBWrestler target){int count=0;foreach(var h in hands)if(h.joint&&h.target&&h.target.wrestler==target)count++;return count;}
     float AttackLeverage(GBWrestler target){
@@ -28,7 +35,7 @@ public partial class GBWrestler {
         if(PhysicallyDownForPin||Down)power*=.55f;
         return power;
     }
-    void CombatReset(){scrambleUntil=0;scrambleExhausted=false;escapeCharge=shoveUntil=shotUntil=shotAt=lastLiftCharge=0;lastLiftAt=-10;combatFlags=0;shotImpactDone=false;shotDirection=Vector3.forward;actionFeedback=remoteFeedback="";feedbackUntil=remoteStrain=feedbackPriorityUntil=0;remoteLegs=false;MomentumReset();for(int h=0;h<2;h++)if(targetRings[h])targetRings[h].enabled=false;}
+    void CombatReset(){scrambleUntil=scrambleRepressAt=0;scrambleExhausted=scrambleInputHeld=scrambleUsed=false;shoveUntil=shotUntil=shotAt=lastLiftCharge=0;lastLiftAt=-10;combatFlags=0;shotImpactDone=false;shotDirection=Vector3.forward;actionFeedback=remoteFeedback="";feedbackUntil=remoteStrain=feedbackPriorityUntil=0;remoteLegs=false;MomentumReset();for(int h=0;h<2;h++)if(targetRings[h])targetRings[h].enabled=false;}
 
     void ReachLedge(int h,Vector3 point){
         int upper=h==0?3:6,fore=h==0?4:7,index=h==0?5:8;
@@ -109,12 +116,9 @@ public partial class GBWrestler {
         int edges=command.flags&~combatFlags;combatFlags=command.flags;
         if((edges&GBInput.Shove)!=0&&!Down&&Time.time>=shoveUntil)Shove();
         bool escaping=ScrambleReady&&HeldByOpponent&&command.Has(GBInput.Brace)&&command.Move.sqrMagnitude>.08f&&stamina>8&&!Down;
-        escapeCharge=escaping?escapeCharge+dt:Mathf.Max(0,escapeCharge-dt*2);
-        if(escaping){stamina=Mathf.Max(0,stamina-dt*5*ScrambleStaminaMultiplier);Feedback("Escaping - brace and keep moving",.2f);}
-        if(escapeCharge>=.7f){
-            foreach(var opponent in GBApp.I.Wrestlers)if(opponent!=this)for(int h=0;h<2;h++)if(opponent.hands[h].joint&&opponent.hands[h].target&&opponent.hands[h].target.wrestler==this){opponent.Release(h);opponent.hands[h].releaseRequired=true;opponent.Feedback("Opponent broke your hold",.85f);}
-            EscapeUntil=Time.time+.65f;escapeCharge=0;stamina=Mathf.Max(0,stamina-9*ScrambleStaminaMultiplier);foreach(var part in bodies)part.AddForce(command.Move.normalized*1.35f,ForceMode.VelocityChange);Feedback("Escaped - move into the opening",.85f);
-        }
+        // Scrambling works against the real hold. It never releases the
+        // opponent's hands or awards a timed escape/velocity impulse.
+        if(escaping){stamina=Mathf.Max(0,stamina-dt*5*ScrambleStaminaMultiplier);Feedback("Work out of the hold - brace and move",.2f);}
         if(Down||GripCount==0||command.Has(GBInput.Lift)||Time.time<shoveUntil||stamina<6)return;
         float backward=Mathf.Max(0,-Vector3.Dot(command.Move,facing));Vector3 side=Vector3.Cross(Vector3.up,facing);float lateral=Vector3.Dot(command.Move,side);
         if(backward<.15f&&Mathf.Abs(lateral)<.2f)return;var affected=new HashSet<GBWrestler>();

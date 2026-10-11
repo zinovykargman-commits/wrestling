@@ -36,7 +36,7 @@ public class GBNetwork:MonoBehaviour {
     readonly List<Delayed> delayed=new List<Delayed>();
     class Delayed {public float at;public byte[] bytes;}
     string password,nonce;double lastSnapshot;int inputSequence;float heartbeat;
-    public const int Protocol=11;
+    public const int Protocol=12;
     public bool Authority {get{return role!=Role.Client;}}
     void Awake(){role=Role.Offline;}
     public void Host(int port,string secret) {

@@ -6,6 +6,34 @@ using System.Collections;
 // Prepared poses isolate rule geometry. Covers, escapes and the standing
 // exchange run the normal GBInput path: no Attach, forced count, or attack call.
 public static class GBAuditPin {
+    public static IEnumerator ScramblePatch(GBApp app,Action<string,bool,string> check){
+        Start(app);yield return null;app.enabled=false;var oldMode=Physics.simulationMode;Physics.simulationMode=SimulationMode.Script;
+        var a=app.Wrestlers[0];var b=app.Wrestlers[1];
+        a.ResetTo(new Vector3(-.5f,.28f,0));b.ResetTo(new Vector3(.5f,.28f,0));
+        a.Attach(0,b.bodies[1].GetComponent<GBTarget>(),b.bodies[1].position);a.hands[0].joint.enabled=false;
+        var request=new GBInput{az=-1,x=1,flags=GBInput.Brace};
+        for(int n=0;n<Mathf.CeilToInt(1.2f/Time.fixedDeltaTime);n++)b.Simulate(request);
+        check("sustained_scramble_never_script_releases_hold",a.GripCount==1&&!a.hands[0].releaseRequired,"1.2s of production input steps; real grip retained without displacement/overload");
+        check("scramble_has_no_timed_escape_immunity",b.EscapeUntil==0,"no automatic release, immunity or charged velocity kick");
+        a.ResetTo(new Vector3(-.5f,.28f,0));b.ResetTo(new Vector3(.5f,.28f,0));a.Attach(0,b.bodies[1].GetComponent<GBTarget>(),b.bodies[1].position);a.hands[0].joint.enabled=false;
+        int accepted=0;
+        for(int n=0;n<10;n++){
+            b.Simulate(request);if(b.command.Has(GBInput.Brace))accepted++;
+            yield return new WaitForSeconds(.02f);b.Simulate(new GBInput{az=-1,x=1});yield return new WaitForSeconds(.02f);
+        }
+        check("jitter_clicks_cannot_repeat_scramble",accepted==1&&b.ScrambleCooldown>.3f,"accepted="+accepted+"/10 rapid presses; release recovery="+b.ScrambleCooldown);
+        check("jitter_clicks_do_not_break_grip",a.GripCount==1&&!a.hands[0].releaseRequired,"prepared real grip survives repeated input edges");
+        b.Simulate(request);check("holding_early_press_waits_for_recovery",!b.command.Has(GBInput.Brace),"early press is gated");
+        yield return new WaitForSeconds(.45f);b.Simulate(request);check("held_scramble_resumes_after_recovery",b.command.Has(GBInput.Brace)&&b.ScrambleReady,"held key resumes after0.4s; no extra burst");
+        b.stamina=0;b.Simulate(request);check("exhaustion_still_requires_1_2_seconds",b.ScrambleCooldown>1.19f&&!b.ScrambleReady,"remaining="+b.ScrambleCooldown);
+        b.ResetTo(new Vector3(.5f,.28f,0));check("reset_clears_both_scramble_timers",b.ScrambleCooldown==0&&b.ScrambleReady,"new round restores control");
+        a.ResetTo(new Vector3(-.5f,.28f,0));b.ResetTo(new Vector3(.5f,.28f,0));
+        var target=b.bodies[1].GetComponent<GBTarget>();Vector3 contact=target.GetComponent<Collider>().ClosestPoint(a.bodies[5].position);a.bodies[5].position=contact;Physics.SyncTransforms();a.Attach(0,target,contact);var grip=a.hands[0].joint;grip.enabled=false;
+        for(int n=0;n<48;n++)grip.SendMessage("FixedUpdate");check("unstrained_physical_hold_still_survives",a.GripCount==1,"production grip spring/strain evaluated with coincident contact endpoints");
+        b.bodies[1].position+=Vector3.right*.8f;Physics.SyncTransforms();for(int n=0;n<48&&a.GripCount>0;n++)grip.SendMessage("FixedUpdate");
+        check("real_physical_overload_can_still_break_hold",a.GripCount==0&&a.hands[0].releaseRequired,"real0.8m anchor separation breaks through strain, not a scramble key event");
+        a.ResetTo(new Vector3(-.5f,.28f,0));b.ResetTo(new Vector3(.5f,.28f,0));Physics.simulationMode=oldMode;app.enabled=true;app.ReturnToMenu();check("scramble_patch_no_runtime_issues",app.Issues.Count==0,string.Join("; ",app.Issues));
+    }
     public static IEnumerator StaminaPatch(GBApp app,Action<string,bool,string> check){
         Start(app);yield return null;app.Paused=true;app.enabled=false;
         var a=app.Wrestlers[0];var b=app.Wrestlers[1];
@@ -49,7 +77,7 @@ public static class GBAuditPin {
         int ticks=Mathf.CeilToInt(GBApp.PinSeconds/Time.fixedDeltaTime);
         for(int n=0;n<ticks-1;n++)app.SendMessage("CheckPin");
         check("pin_does_not_win_early",app.Scores[0]==0&&app.PinCount>2.4f,"count="+app.PinCount);
-        Time.timeScale=0;app.Paused=false;app.enabled=true;yield return Capture(app,directory,"rope-pin-2_5-seconds",true);app.enabled=false;app.Paused=true;Time.timeScale=1;
+        if(!Application.isBatchMode){Time.timeScale=0;app.Paused=false;app.enabled=true;yield return new WaitForEndOfFrame();ScreenCapture.CaptureScreenshot(Path.Combine(directory,"rope-pin-2_5-seconds-hud.png"));yield return null;app.enabled=false;app.Paused=true;Time.timeScale=1;}
         app.SendMessage("CheckPin");if(app.Scores[0]==0)app.SendMessage("CheckPin");
         check("rope_pin_wins_at_2_5_seconds",app.Scores[0]==1,"score="+app.Scores[0]+" count="+app.PinCount);
         Start(app);yield return null;app.Paused=true;app.enabled=false;a=app.Wrestlers[0];b=app.Wrestlers[1];a.ResetTo(new Vector3(-.5f,.28f,0));b.ResetTo(new Vector3(.5f,.28f,0));

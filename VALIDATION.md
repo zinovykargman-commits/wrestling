@@ -1,9 +1,7 @@
-# GRIP BREAK 0.4.4
+# GRIP BREAK0.4.5
 
-Native Unity build succeeded with zero errors and warnings. Focused stamina and same-PC two-peer protocol 11 checks passed 37/37, with zero runtime issues. Source/runtime frozen identities matched packaging; archive CRCs checked.
+Fresh native build succeeded with zero errors/warnings. Current scramble, stamina, pin-rule and same-PC protocol12 checks passed 68/68, with no runtime issues. Prepared real-grip/production-input fixtures isolate scripted release, anti-tap timing and physical strain. Sustained scramble never releases opponent hands or grants timed escape immunity/velocity kick.10 rapid presses accept only the first;0.4s release recovery blocks further taps, holding resumes when ready. Exhaustion remains1.2s. Unstrained real grip springs survive, while real0.8m anchor separation still breaks the hold through normal overload accumulation.
 
-The opponent-bracing surcharge (12 stamina per gripping hand per second) is removed for all opponents. Bracing retains physical resistance and the bracer pays their own costs. Ordinary grip, lift, pin, scramble and action costs are unchanged.
+Scramble multiplier1.43, capacity155.25, no opponent-bracing stamina surcharge,2.5-second pins and rope pins are preserved. Both peers must update to0.4.5/protocol12. The prepared fixtures do not establish human balance. Historical broader pin observations remain retained. Mac native/cross-machine validation is recorded separately in macoswrestling. Public archives/updater verification follows publication.
 
-Native prepared fixtures exercise production Simulate with actual manual grip joints. They verify identical drain with an unresisting/bracing opponent for one/two hands, holding/lifting, plus the bracer's own cost and normal regeneration after releasing grips. Expected rates: hold 2/4 per second, lift 28/30 per second, stationary brace 7 per second, released recovery 19 per second. They isolate stamina accounting and do not establish all player exchanges.
-
-Version 0.4.3 pin/leverage/scramble checks are historical evidence in Pin-rules-f107. The previous screenshots remain historical and were not regenerated for this accounting-only fix. Historical broader 0.4.1 pin observations remain retained. Human balance and separate-PC internet were not revalidated. Public archive/updater verification follows publication.
+An earlier f110 pin-rule screenshot fixture crashed during paused manual camera capture. The fixture now uses standard screenshots and the f111 rule suite runs headless; all18 current rule checks pass. The capture fixture is only an audit command, outside normal play. The failed raw log is retained.
