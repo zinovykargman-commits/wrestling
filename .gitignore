@@ -1,0 +1,12 @@
+Source/Library/
+Source/Temp/
+Source/Obj/
+Source/Logs/
+Source/UserSettings/
+Source/.vs/
+Build/
+build.log
+build-status.txt
+*.csproj
+*.sln
+.DS_Store
