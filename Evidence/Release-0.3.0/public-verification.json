@@ -1,0 +1,108 @@
+{
+  "repository": "zinovykargman-commits/wrestling",
+  "expectedVersion": "0.3.0",
+  "anonymous": true,
+  "releaseUrl": "https://github.com/zinovykargman-commits/wrestling/releases/tag/v0.3.0",
+  "archiveUrl": "https://github.com/zinovykargman-commits/wrestling/releases/download/v0.3.0/GRIP_BREAK-Windows.zip",
+  "sha256": "a114868d926b8fc6d8a089aedb1fa646e2d452462ea98b8616f50d4ae0ab9424",
+  "archiveSize": 97453055,
+  "assemblySha256": "d0c6c5b77c023bd9c3025bf41112157db421f45a7568ce419068c754f1214a4d",
+  "helperSha256": "5f7945aa02bf59bb8267ec1d9a10ee69302971ab19c3ac3026a42c0d161b4b87",
+  "nativeReport": "C:\\Users\\zinov\\Documents\\Codex\\2026-10-09\\gi\\work\\public-verification-030\\native\\ui.json",
+  "screenshots": [
+    "C:\\Users\\zinov\\Documents\\Codex\\2026-10-09\\gi\\work\\public-verification-030\\native\\menu.png",
+    "C:\\Users\\zinov\\Documents\\Codex\\2026-10-09\\gi\\work\\public-verification-030\\native\\keybinds.png",
+    "C:\\Users\\zinov\\Documents\\Codex\\2026-10-09\\gi\\work\\public-verification-030\\native\\options.png",
+    "C:\\Users\\zinov\\Documents\\Codex\\2026-10-09\\gi\\work\\public-verification-030\\native\\online-menu.png"
+  ],
+  "startedUtc": "2026-10-11T06:38:21.011451+00:00",
+  "passed": true,
+  "checks": [
+    {
+      "name": "public_latest_version",
+      "passed": true,
+      "evidence": "v0.3.0"
+    },
+    {
+      "name": "public_assets_ready",
+      "passed": true,
+      "evidence": "manifest and Windows ZIP from expected public repository"
+    },
+    {
+      "name": "public_manifest_matches_release",
+      "passed": true,
+      "evidence": "version, URL, asset size, and SHA-256 format verified"
+    },
+    {
+      "name": "public_archive_matches_manifest",
+      "passed": true,
+      "evidence": "anonymous download: 97453055 bytes, SHA-256 a114868d926b8fc6d8a089aedb1fa646e2d452462ea98b8616f50d4ae0ab9424"
+    },
+    {
+      "name": "public_archive_matches_local_delivery",
+      "passed": true,
+      "evidence": "actual public bytes match current local Windows ZIP"
+    },
+    {
+      "name": "public_source_asset_ready",
+      "passed": true,
+      "evidence": "editable source ZIP is present in the public release"
+    },
+    {
+      "name": "public_source_archive_matches_local_delivery",
+      "passed": true,
+      "evidence": "actual public source archive SHA256 matches the curated local source delivery"
+    },
+    {
+      "name": "public_source_archive_crc_valid",
+      "passed": true,
+      "evidence": "public source ZIP decompresses correctly and contains editable game/network sources"
+    },
+    {
+      "name": "trusted_installer_succeeded",
+      "passed": true,
+      "evidence": "exit=0; bundled helper SHA-256=5f7945aa02bf59bb8267ec1d9a10ee69302971ab19c3ac3026a42c0d161b4b87"
+    },
+    {
+      "name": "public_game_restarted_and_finished",
+      "passed": true,
+      "evidence": "installer-launched public Windows game wrote native UI report"
+    },
+    {
+      "name": "public_native_checks_pass",
+      "passed": true,
+      "evidence": "checks=2; issues=0; build=0.3.0"
+    },
+    {
+      "name": "installed_assembly_matches_public_archive",
+      "passed": true,
+      "evidence": "Assembly-CSharp.dll SHA-256=d0c6c5b77c023bd9c3025bf41112157db421f45a7568ce419068c754f1214a4d"
+    },
+    {
+      "name": "installed_tunnel_helper_matches_official_pin",
+      "passed": true,
+      "evidence": "installed host helper matches packaged official release digest and includes license"
+    },
+    {
+      "name": "editable_source_preserved",
+      "passed": true,
+      "evidence": "isolated Source/keep.txt unchanged"
+    },
+    {
+      "name": "previous_build_retained",
+      "passed": true,
+      "evidence": "previous placeholder Build retained in same-volume backup"
+    },
+    {
+      "name": "public_logs_no_errors",
+      "passed": true,
+      "evidence": "installer SUCCESS and no exception, failure, or allocation-error markers in installer/native logs"
+    },
+    {
+      "name": "public_native_ui_images_present",
+      "passed": true,
+      "evidence": "four actual native UI screenshots produced with nonblank pixels"
+    }
+  ],
+  "issues": 0
+}
