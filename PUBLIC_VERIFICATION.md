@@ -1,7 +1,5 @@
-# GRIP BREAK 0.4.3 public verification
+# GRIP BREAK 0.4.4 public verification
 
-Actual public Windows/Source ZIP bytes match the packaged hashes and sizes; the updater manifest matches. The native menu updater passed15 checks and identifies0.4.3 as current.
+Actual public Windows and Source archives match packaged hashes and sizes; the updater manifest matches. The native menu updater passed 15 checks and identifies 0.4.4 as current.
 
-Pins against ropes count; both real shoulders, a nearby live grip and C remain required for2.5 continuous seconds. Applied powered lift/pivot/slam/shove assistance is slightly weaker, with substantial grounded/pinned leverage disadvantage and actual same-target hand counting. Physical earned momentum is unchanged. Ctrl scramble costs another10% over0.4.2; falling below the usable4-stamina threshold starts1.2s recovery, even if stamina regenerates early.
-
-Native prepared geometry/count and accumulated-force fixtures, live scramble drain/timer tests, normal input and same-PC two-peer protocol11 tests passed. Native screenshots were inspected. These isolated fixtures do not prove all human pin exchanges; historical broader pin scenario failures are retained. Human balance and separate-PC internet were not revalidated.
+Opponent bracing no longer adds any stamina cost to the gripping wrestler. Ordinary grip/lift/pin/action costs remain; bracers pay their own costs and still resist physically. Native production Simulate fixtures verify identical unresisted/resisted drain for one/two grips, holding/lifting, bracer cost and normal recovery. Same-PC host/client checks passed with protocol 11. This patch retains 0.4.3 pin/scramble rules. Separate-PC internet and human balance were not revalidated; historical pin observations are retained.
