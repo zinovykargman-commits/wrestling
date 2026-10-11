@@ -1,0 +1,86 @@
+{
+    "build": "0.4.2",
+    "engine": "6000.3.7f1",
+    "hardware": "Intel(R) Core(TM) i5-14400F / 16173 MB",
+    "graphics": "NVIDIA GeForce RTX 5060",
+    "startedUtc": "2026-10-11T18:56:07.0703311Z",
+    "duration": 5.9343976974487309,
+    "averageFps": 117.84575653076172,
+    "minFps": 17.262361526489259,
+    "bodies": 92,
+    "issues": 0,
+    "screenWidth": 1920,
+    "screenHeight": 1080,
+    "checks": [
+        {
+            "name": "test_inputs_not_serialized",
+            "passed": true,
+            "evidence": "runtime-only input; scene cannot install an empty test array"
+        },
+        {
+            "name": "stamina_extra_15_percent",
+            "passed": true,
+            "evidence": "fresh/reset capacity=155.25; 135 x 1.15; full normalized meter/strength"
+        },
+        {
+            "name": "upright_prepared_airborne_hold",
+            "passed": true,
+            "evidence": "prepared real grip=True airborne recovery latched=True; no Down timer"
+        },
+        {
+            "name": "upright_manual_release",
+            "passed": true,
+            "evidence": "ordinary release input; remaining hands=0"
+        },
+        {
+            "name": "upright_physical_landing",
+            "passed": true,
+            "evidence": "first core contact=False landed on core=False release torso up=1.00 landing up=1.00; contact while sideways is distinct from a standing feet-first landing; boot edges may touch first"
+        },
+        {
+            "name": "upright_recovery_not_stuck",
+            "passed": true,
+            "evidence": "carry flight/settle lock cleared after floor contact=True"
+        },
+        {
+            "name": "upright_body_integrity",
+            "passed": true,
+            "evidence": "max permanent joint gap=0.0009"
+        },
+        {
+            "name": "tilted_prepared_airborne_hold",
+            "passed": true,
+            "evidence": "prepared real grip=True airborne recovery latched=True; no Down timer"
+        },
+        {
+            "name": "tilted_manual_release",
+            "passed": true,
+            "evidence": "ordinary release input; remaining hands=0"
+        },
+        {
+            "name": "tilted_physical_landing",
+            "passed": true,
+            "evidence": "first core contact=False landed on core=True release torso up=-0.18 landing up=-0.14; contact while sideways is distinct from a standing feet-first landing; boot edges may touch first"
+        },
+        {
+            "name": "tilted_recovery_not_stuck",
+            "passed": true,
+            "evidence": "carry flight/settle lock cleared after floor contact=True"
+        },
+        {
+            "name": "tilted_body_integrity",
+            "passed": true,
+            "evidence": "max permanent joint gap=0.0050"
+        },
+        {
+            "name": "carry_runtime_no_issues",
+            "passed": true,
+            "evidence": ""
+        },
+        {
+            "name": "connected_body_joints",
+            "passed": true,
+            "evidence": "missing frames=0 maximum physical anchor separation=0.0050 m"
+        }
+    ]
+}

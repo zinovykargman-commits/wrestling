@@ -1,0 +1,211 @@
+{
+    "build": "0.4.2",
+    "engine": "6000.3.7f1",
+    "hardware": "Intel(R) Core(TM) i5-14400F / 16173 MB",
+    "graphics": "NVIDIA GeForce RTX 5060",
+    "startedUtc": "2026-10-11T18:56:16.8292141Z",
+    "duration": 16.9827880859375,
+    "averageFps": 118.45804595947266,
+    "minFps": 14.06374740600586,
+    "bodies": 92,
+    "issues": 0,
+    "screenWidth": 1920,
+    "screenHeight": 1080,
+    "checks": [
+        {
+            "name": "test_inputs_not_serialized",
+            "passed": true,
+            "evidence": "runtime-only input; scene cannot install an empty test array"
+        },
+        {
+            "name": "empty_array_falls_back_to_keyboard",
+            "passed": true,
+            "evidence": "former crash scenario now runs PollInput and physical simulation"
+        },
+        {
+            "name": "keyboard_move_W",
+            "passed": true,
+            "evidence": "physical distance=1.851337"
+        },
+        {
+            "name": "keyboard_move_S",
+            "passed": true,
+            "evidence": "physical distance=1.523182"
+        },
+        {
+            "name": "keyboard_move_A",
+            "passed": true,
+            "evidence": "physical distance=1.668416"
+        },
+        {
+            "name": "keyboard_move_D",
+            "passed": true,
+            "evidence": "physical distance=1.479869"
+        },
+        {
+            "name": "mouse_aim_own_camera",
+            "passed": true,
+            "evidence": "mouse ray uses the full-window camera"
+        },
+        {
+            "name": "bound_action_Mouse0",
+            "passed": true,
+            "evidence": "key state -> saved binding -> Update buffer -> FixedUpdate -> wrestler command"
+        },
+        {
+            "name": "bound_action_Mouse1",
+            "passed": true,
+            "evidence": "key state -> saved binding -> Update buffer -> FixedUpdate -> wrestler command"
+        },
+        {
+            "name": "bound_action_LeftShift",
+            "passed": true,
+            "evidence": "key state -> saved binding -> Update buffer -> FixedUpdate -> wrestler command"
+        },
+        {
+            "name": "bound_action_Space",
+            "passed": true,
+            "evidence": "key state -> saved binding -> Update buffer -> FixedUpdate -> wrestler command"
+        },
+        {
+            "name": "bound_action_R",
+            "passed": true,
+            "evidence": "key state -> saved binding -> Update buffer -> FixedUpdate -> wrestler command"
+        },
+        {
+            "name": "bound_action_Q",
+            "passed": true,
+            "evidence": "key state -> saved binding -> Update buffer -> FixedUpdate -> wrestler command"
+        },
+        {
+            "name": "bound_action_LeftControl",
+            "passed": true,
+            "evidence": "key state -> saved binding -> Update buffer -> FixedUpdate -> wrestler command"
+        },
+        {
+            "name": "bound_action_C",
+            "passed": true,
+            "evidence": "key state -> saved binding -> Update buffer -> FixedUpdate -> wrestler command"
+        },
+        {
+            "name": "bound_action_X",
+            "passed": true,
+            "evidence": "key state -> saved binding -> Update buffer -> FixedUpdate -> wrestler command"
+        },
+        {
+            "name": "bound_action_E",
+            "passed": true,
+            "evidence": "key state -> saved binding -> Update buffer -> FixedUpdate -> wrestler command"
+        },
+        {
+            "name": "f1_opens_controls",
+            "passed": true,
+            "evidence": "F1 command path"
+        },
+        {
+            "name": "controls_prevents_hidden_actions",
+            "passed": true,
+            "evidence": "overlay blocks player commands"
+        },
+        {
+            "name": "f1_closes_controls",
+            "passed": true,
+            "evidence": "keyboard closes overlay"
+        },
+        {
+            "name": "escape_pauses",
+            "passed": true,
+            "evidence": "pause command"
+        },
+        {
+            "name": "manual_pause_stays_paused",
+            "passed": true,
+            "evidence": "focus recovery does not cancel an intentional pause"
+        },
+        {
+            "name": "escape_resumes",
+            "passed": true,
+            "evidence": "resume command"
+        },
+        {
+            "name": "focus_loss_clears_and_pauses",
+            "passed": true,
+            "evidence": "offline focus loss"
+        },
+        {
+            "name": "focus_return_restores_input",
+            "passed": true,
+            "evidence": "automatic focus pause cleared on return"
+        },
+        {
+            "name": "pin_only_and_throw_absent",
+            "passed": true,
+            "evidence": "all entrances normalize to ring/pin; throw removed from legend"
+        },
+        {
+            "name": "old_throw_key_does_nothing",
+            "passed": true,
+            "evidence": "F is absent from defaults; retired bit is removed by Sanitize"
+        },
+        {
+            "name": "retired_tackle_key_inactive",
+            "passed": true,
+            "evidence": "default V and both control legends have no tackle action"
+        },
+        {
+            "name": "retired_tackle_command_inactive",
+            "passed": true,
+            "evidence": "retired command stripped before physics; no dash, stumble or stamina cost"
+        },
+        {
+            "name": "retired_tackle_network_bit_rejected",
+            "passed": true,
+            "evidence": "common local/client/host sanitizer rejects tackle and preserves live bits"
+        },
+        {
+            "name": "mouse_sets_vertical_hand_target",
+            "passed": true,
+            "evidence": "normal PollInput high=0.9857011 low=-0.007551789 no click necessary"
+        },
+        {
+            "name": "rebound_shot_key_reaches_player",
+            "passed": true,
+            "evidence": "capture V -> saved shot binding -> normal input command"
+        },
+        {
+            "name": "reset_bindings_restores_shot",
+            "passed": true,
+            "evidence": "default Q restored"
+        },
+        {
+            "name": "exhausted_jump_spam_blocked",
+            "passed": true,
+            "evidence": "five exhausted jump presses produced no jump impulse"
+        },
+        {
+            "name": "funded_jump_still_works",
+            "passed": true,
+            "evidence": "normal jump still spends 8 stamina and rises"
+        },
+        {
+            "name": "upright_rival_rejects_pin_attempt",
+            "passed": true,
+            "evidence": "actual manual grip=1; standing target rejected despite low balance and stale Down timer"
+        },
+        {
+            "name": "grounded_pin_still_counts",
+            "passed": true,
+            "evidence": "normal manual grounded pin count=2.995831 won=True"
+        },
+        {
+            "name": "input_no_runtime_issues",
+            "passed": true,
+            "evidence": ""
+        },
+        {
+            "name": "connected_body_joints",
+            "passed": true,
+            "evidence": "missing frames=0 maximum physical anchor separation=0.0050 m"
+        }
+    ]
+}
