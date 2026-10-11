@@ -6,6 +6,28 @@ using System.Collections;
 // Prepared poses isolate rule geometry. Covers, escapes and the standing
 // exchange run the normal GBInput path: no Attach, forced count, or attack call.
 public static class GBAuditPin {
+    public static IEnumerator StaminaPatch(GBApp app,Action<string,bool,string> check){
+        Start(app);yield return null;app.Paused=true;app.enabled=false;
+        var a=app.Wrestlers[0];var b=app.Wrestlers[1];
+        foreach(int hands in new[]{1,2})foreach(bool lift in new[]{false,true}){
+            float neutral=0,resisting=0;
+            foreach(bool brace in new[]{false,true}){
+                a.ResetTo(new Vector3(-.5f,.28f,0));b.ResetTo(new Vector3(.5f,.28f,0));
+                for(int h=0;h<hands;h++){a.Attach(h,b.bodies[1].GetComponent<GBTarget>(),b.bodies[1].position);a.hands[h].joint.enabled=false;}
+                b.command=new GBInput{az=-1,flags=brace?GBInput.Brace:0};
+                int flags=GBInput.Left|(hands==2?GBInput.Right:0)|(lift?GBInput.Lift:0);float before=a.stamina;
+                for(int n=0;n<20;n++)a.Simulate(new GBInput{az=1,flags=flags});
+                float rate=(before-a.stamina)/(20*Time.fixedDeltaTime);if(brace)resisting=rate;else neutral=rate;
+            }
+            float expected=hands*2+(lift?app.Tuning.liftCost:0);
+            check("opponent_brace_does_not_add_cost_"+hands+"_hands_"+(lift?"lift":"hold"),Mathf.Abs(neutral-resisting)<.02f&&Mathf.Abs(resisting-expected)<.03f,"normal="+neutral+" resisting="+resisting+" expected="+expected+" stamina/s; production Simulate and actual manual joints");
+        }
+        b.stamina=80;float ownBefore=b.stamina;b.Simulate(new GBInput{az=-1,flags=GBInput.Brace});
+        check("brace_spends_only_bracer_stamina",Mathf.Abs((ownBefore-b.stamina)/Time.fixedDeltaTime-7)<.03f,"own brace cost="+(ownBefore-b.stamina)/Time.fixedDeltaTime);
+        a.Release(0);a.Release(1);a.stamina=80;float recovery=a.stamina;a.Simulate(new GBInput{az=1});
+        check("released_grips_allow_recovery",a.stamina>recovery&&Mathf.Abs((a.stamina-recovery)/Time.fixedDeltaTime-app.Tuning.staminaRegen)<.03f,"recovery="+(a.stamina-recovery)/Time.fixedDeltaTime+"/s");
+        app.enabled=true;app.Paused=false;app.ReturnToMenu();check("stamina_patch_no_runtime_issues",app.Issues.Count==0,string.Join("; ",app.Issues));
+    }
     // Prepared native fixtures isolate rules and applied forces. They do not
     // claim an autonomous player can complete every physical pin exchange.
     public static IEnumerator RulesPatch(GBApp app,string directory,Action<string,bool,string> check){

@@ -142,7 +142,7 @@ public partial class GBWrestler:MonoBehaviour {
         bool effort=command.Has(GBInput.Lift)&&GripCount>0||command.Has(GBInput.Sprint)&&command.Move.magnitude>.1f||GripCount>0||brace||groundEscape||Sprawling;
         bool scrambling=groundEscape||(HeldByOpponent&&command.Has(GBInput.Brace)&&command.Move.sqrMagnitude>.08f&&stamina>8);
         float cost=GripCount*2.0f+(command.Has(GBInput.Lift)&&GripCount>0?tuning.liftCost:0)+(command.Has(GBInput.Sprint)&&command.Move.magnitude>.1f?12:0)+(brace?7*(scrambling?ScrambleStaminaMultiplier:1):0)+(Sprawling?10:0);
-        for(int h=0;h<2;h++)if(hands[h].target&&hands[h].target.wrestler&&hands[h].target.wrestler.command.Has(GBInput.Brace))cost+=12;
+        // Opponent resistance changes physical leverage, not our stamina bill.
         stamina=Mathf.Clamp(stamina+(effort?-cost:tuning.staminaRegen)*dt,0,MaxStamina);
         if(stamina<=.1f){Release(0);Release(1);}
         PinRefresh();

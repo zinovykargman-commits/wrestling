@@ -4,7 +4,7 @@
 
 This repository contains the editable Unity source, update installer, and build instructions. The playable Windows build is distributed as a release asset.
 
-# GRIP BREAK 0.4.3
+# GRIP BREAK 0.4.4
 
 Extract GRIP_BREAK-Windows.zip and open **PLAY.cmd**. Only **Pin Wrestling** in the ring is active. **PLAY AGAINST AI** and **PRIVATE ONLINE** enter the same rules. First to three pins wins. Training and other rule/arena choices are retired for now.
 
@@ -59,7 +59,7 @@ Walking uses alternating physical foot targets and coordinated thigh/knee motors
 
 Current pin rule: the grounded wrestler may be chest-down or back-down, with both actual shoulders on the mat and a live nearby controlling grip while C is held. The attacker does not need to place their chest over the rival. Multiplayer omits the mat motivational slogan and bottom coaching prompt.
 
-Tackle has been removed from keyboard/controller bindings, control legends, AI decisions and physics. The retired network input bit is rejected. Both players need 0.4.3 (protocol 11).
+Tackle has been removed from keyboard/controller bindings, control legends, AI decisions and physics. The retired network input bit is rejected. Both players should update to 0.4.4 (protocol 11).
 Jump requires 8 stamina (climb 16) and is unavailable while under pin control. C requires a physically low, lying opponent before pin control; low balance or a Down timer while upright is insufficient. Ctrl + movement still bridges/rolls.
 
 
@@ -69,3 +69,5 @@ Single-grip pin control is stronger in 0.4.0 so a live one-hand hold can settle 
 0.4.2: slightly more forgiving general grip break limits, without stronger pulling forces or higher stamina costs. Carried/released bodies preserve physical orientation through flight and briefly settle on impact before automatic standing recovery; tilted releases can land on their core instead of always on boots.
 
 0.4.3: pins against ropes count for2.5 seconds; active lift/pivot/slam/shove leverage reduced slightly, with weaker one-arm, grounded and pinned leverage. Scramble costs an additional10% and has1.2 seconds recovery after usable stamina runs out.
+
+0.4.4: opponent bracing no longer drains your stamina. Holding costs 2 stamina per hand per second; lifting adds 26/s. Bracers still pay their own costs and resist physically.

@@ -1,9 +1,9 @@
-# GRIP BREAK0.4.3
+# GRIP BREAK 0.4.4
 
-Current native Unity build succeeded with zero errors/warnings. Current rule/leverage/scramble, input and same-PC two-peer protocol11 checks passed85/85, with zero runtime issues. Source/runtime frozen identities matched packaging; archives CRC checked.
+Native Unity build succeeded with zero errors and warnings. Focused stamina and same-PC two-peer protocol 11 checks passed 37/37, with zero runtime issues. Source/runtime frozen identities matched packaging; archive CRCs checked.
 
-Prepared real-shoulder/rope geometry and live grip fixtures exercise the production pin rules, asserting no win before2.5s and a rope pin win at2.5s. They also verify C/grip/shoulder loss resets. Bodies are held still only in this isolated rule test. Actual gameplay remains fully physical. Native accumulated forces verify one-handed lift < two-handed lift, ground lift lower, and pinned one-handed lift lowest. Live ground scrambling measures another10% drain over0.4.2, starts a1.2s timer below4 usable stamina, remains unavailable during that timer even with stamina restored, then resumes. Reset clears timer. Actual native HUD screenshot inspected.
+The opponent-bracing surcharge (12 stamina per gripping hand per second) is removed for all opponents. Bracing retains physical resistance and the bracer pays their own costs. Ordinary grip, lift, pin, scramble and action costs are unchanged.
 
-Pinning pressure and earned physical momentum are unchanged. Powered lift/pivot/slam/shove assistance scales .9 with two grips on the same opponent or .8 with one; ground multiplies by .55, while pinned multiplies by .45(two) or .25(one). Capacity remains155.25. Scramble multiplier1.43 vs previous1.3. Both players need0.4.3/protocol11.
+Native prepared fixtures exercise production Simulate with actual manual grip joints. They verify identical drain with an unresisting/bracing opponent for one/two hands, holding/lifting, plus the bracer's own cost and normal regeneration after releasing grips. Expected rates: hold 2/4 per second, lift 28/30 per second, stationary brace 7 per second, released recovery 19 per second. They isolate stamina accounting and do not establish all player exchanges.
 
-These fixtures isolate rules, force application and cooldown. They do not prove every human pin exchange. Historical broader0.4.1 pin scenario failures remain retained; this patch does not claim to resolve all of them. Human balance and separate-PC internet are unverified. Public archive/updater verification follows publication.
+Version 0.4.3 pin/leverage/scramble checks are historical evidence in Pin-rules-f107. The previous screenshots remain historical and were not regenerated for this accounting-only fix. Historical broader 0.4.1 pin observations remain retained. Human balance and separate-PC internet were not revalidated. Public archive/updater verification follows publication.

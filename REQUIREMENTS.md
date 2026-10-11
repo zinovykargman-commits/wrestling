@@ -33,3 +33,5 @@ Current update acceptance: effective physical Q shots; real earned jump/run/spin
 
 - Same-target hand count determines lift power; ground/pinned leverage is weaker.
 - Scramble costs an additional10% over1.3x and has1.2s exhausted recovery below4 usable stamina.
+
+- Opponent bracing never adds stamina drain to the gripping wrestler, against AI or another person.
