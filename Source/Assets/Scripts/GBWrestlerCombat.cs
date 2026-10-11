@@ -140,15 +140,6 @@ public partial class GBWrestler {
             r.AddForce(Vector3.down*(t.wrestler?1000:Mathf.Min(400,r.mass*18)),ForceMode.Force);if(t.wrestler)t.wrestler.balance=Mathf.Max(0,t.wrestler.balance-Time.fixedDeltaTime*32);Feedback("Slamming - keep the grip",.2f);
         }
     }
-    void Strike(bool tackle) {
-        if(!tackle){Shot();return;}if(stamina<6){Feedback("Exhausted - recover stamina");return;}bool hit=false;
-        foreach(var w in GBApp.I.Wrestlers){if(w==this||w.eliminated)continue;var delta=w.bodies[1].position-bodies[1].position;
-            if(delta.magnitude<(tackle?1.7f:1.25f)&&Vector3.Dot(delta.normalized,facing)>.1f){bool braced=w.command.Has(GBInput.Brace)&&w.grounded&&w.stamina>8;float scale=braced?.5f:1;
-                w.bodies[1].AddForce((facing*(tackle?140:55)+Vector3.up*16)*scale,ForceMode.Impulse);w.Knock((tackle?70:24)*scale,tackle?.8f:.35f);hit=true;
-                GBApp.I.Sfx.Play("hit",.7f);GBApp.I.Burst(w.bodies[1].position,color);GBPad.Rumble(GBApp.I.PadFor(player),.5f);Feedback(braced?"Opponent braced the hit":tackle?"Tackle connected":"Hit - follow with a grip",.75f);
-            }
-        }if(hit)stamina=Mathf.Max(0,stamina-6);else Feedback(tackle?"Tackle missed - reposition":"Out of reach - close the distance",.75f);
-    }
     // A shot changes stance and momentum only. The player operates both grips.
     public void Shot(){
         if(Time.time<shotAt){Feedback("Shot recovering - reposition",.3f);return;}

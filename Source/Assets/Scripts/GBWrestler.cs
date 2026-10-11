@@ -23,7 +23,7 @@ public partial class GBWrestler:MonoBehaviour {
     public bool Stumbling {get{return !Down&&Time.time<stumbleUntil;}}
     readonly Vector3[] plantedFeet=new Vector3[2],stepStarts=new Vector3[2],stepGoals=new Vector3[2];
     readonly float[] stepBegin={-10,-10};bool feetInitialized;int nextStep;float totalMass;
-    int oldFlags;float strikeAt,tackleAt,jumpAt,climbUntil,liftCharge;Vector3 spawn,lastRoot,climbGoal;Quaternion facingRotation;
+    int oldFlags;float strikeAt,jumpAt,climbUntil,liftCharge;Vector3 spawn,lastRoot,climbGoal;Quaternion facingRotation;
     PhysicsMaterial standingBoots,groundCloth;
     public SphereCollider[] shoulderPads=new SphereCollider[4];
     public class Hand {
@@ -115,7 +115,7 @@ public partial class GBWrestler:MonoBehaviour {
     }
     public void ResetTo(Vector3 at) {
         Release(0);Release(1);for(int n=0;n<15;n++){bodies[n].position=at+initial[n];bodies[n].rotation=Quaternion.identity;bodies[n].linearVelocity=Vector3.zero;bodies[n].angularVelocity=Vector3.zero;}
-        stamina=MaxStamina;balance=100;downUntil=recoveryUntil=pressureUntil=climbUntil=liftCharge=stumbleUntil=EscapeUntil=jumpAt=strikeAt=tackleAt=0;lastImpact=-1;eliminated=false;oldFlags=0;facing=Vector3.forward;facingRotation=Quaternion.identity;command=default;pinProgress=0;lastRoot=at+initial[0];feetInitialized=false;nextStep=0;stepBegin[0]=stepBegin[1]=-10;foreach(var hand in hands){hand.releaseRequired=false;hand.candidate=null;}CombatReset();PinReset();SprawlReset();
+        stamina=MaxStamina;balance=100;downUntil=recoveryUntil=pressureUntil=climbUntil=liftCharge=stumbleUntil=EscapeUntil=jumpAt=strikeAt=0;lastImpact=-1;eliminated=false;oldFlags=0;facing=Vector3.forward;facingRotation=Quaternion.identity;command=default;pinProgress=0;lastRoot=at+initial[0];feetInitialized=false;nextStep=0;stepBegin[0]=stepBegin[1]=-10;foreach(var hand in hands){hand.releaseRequired=false;hand.candidate=null;}CombatReset();PinReset();SprawlReset();
     }
     public void Simulate(GBInput input) {
         if(eliminated)return;command=input.Sanitize();SprawlRefresh();var tuning=GBApp.I.Tuning;float dt=Time.fixedDeltaTime;
@@ -193,11 +193,10 @@ public partial class GBWrestler:MonoBehaviour {
             // must let elbows fold instead of propping the torso above contact.
             float armPower=coverArm?.075f:lifting&&n>=3&&n<=8?2.5f:1;var d=joints[n].slerpDrive;d.maximumForce=(n==1?260:n>=9?140:85)*muscle*armPower;d.positionSpring=(n==1?2100:n>=9?1050:700)*muscle*armPower;d.positionDamper=(n==1?130:n>=9?65:48)*(coverArm?armPower:1);joints[n].slerpDrive=d;
         }
-        if((edges&GBInput.Jump)!=0&&!Down&&Time.time>jumpAt){jumpAt=Time.time+.45f;if(hanging){stamina=Mathf.Max(0,stamina-16);climbUntil=Time.time+2.2f;foreach(var hand in hands)if(hand.target){climbGoal=hand.target.transform.TransformPoint(hand.localAnchor)+facing*.85f;climbGoal.y=hand.target.GetComponent<Collider>().bounds.max.y+1.08f;break;}}else if(grounded){stamina=Mathf.Max(0,stamina-8);foreach(var b in bodies)b.AddForce(Vector3.up*3.8f,ForceMode.VelocityChange);}}
+        if((edges&GBInput.Jump)!=0&&!Down&&!PinControlled&&stamina>=(hanging?16:8)&&Time.time>jumpAt){jumpAt=Time.time+.45f;if(hanging){stamina-=16;climbUntil=Time.time+2.2f;foreach(var hand in hands)if(hand.target){climbGoal=hand.target.transform.TransformPoint(hand.localAnchor)+facing*.85f;climbGoal.y=hand.target.GetComponent<Collider>().bounds.max.y+1.08f;break;}}else if(grounded){stamina-=8;foreach(var b in bodies)b.AddForce(Vector3.up*3.8f,ForceMode.VelocityChange);}}
         if(Time.time<climbUntil&&!Down&&stamina>1){if(Time.time>climbUntil-1.9f&&GripCount>0){Release(0);Release(1);foreach(var hand in hands)hand.releaseRequired=true;}Vector3 goal=climbGoal;if(Root.position.y<climbGoal.y-.3f){goal.x=Root.position.x;goal.z=Root.position.z;}Vector3 acceleration=Vector3.ClampMagnitude((goal-Root.position)*18-Root.linearVelocity*7+Vector3.up*9.81f,25);foreach(var part in bodies)part.AddForce(acceleration*part.mass,ForceMode.Force);stamina=Mathf.Max(0,stamina-dt*24);}
         if(command.Has(GBInput.Lift)&&GripCount>0&&!Down&&stamina>3&&!pinTarget){if(command.Has(GBInput.Brace))Slam();else Lift();}
-        if((edges&GBInput.Strike)!=0&&!Down&&Time.time>strikeAt){strikeAt=Time.time+.45f;Strike(false);}
-        if((edges&GBInput.Tackle)!=0&&!Down&&Time.time>tackleAt&&stamina>=18){tackleAt=Time.time+1.3f;stamina=Mathf.Max(0,stamina-18);foreach(var b in bodies)b.AddForce(facing*3.2f+Vector3.up*.25f,ForceMode.VelocityChange);stumbleUntil=Mathf.Max(stumbleUntil,Time.time+.3f);Strike(true);}
+        if((edges&GBInput.Strike)!=0&&!Down&&Time.time>strikeAt){strikeAt=Time.time+.45f;Shot();}
         if(brace&&pressured){bodies[1].AddForce(Vector3.up*280,ForceMode.Force);bodies[1].AddTorque(facing*90,ForceMode.Force);}
         moveDistance+=Vector3.Distance(Root.position,lastRoot);lastRoot=Root.position;
         foreach(var b in bodies){if(b.linearVelocity.magnitude>18)b.linearVelocity=Vector3.ClampMagnitude(b.linearVelocity,18);if(!Finite(b.position)){GBApp.I.Issue("Invalid body state");ResetTo(spawn);break;}}

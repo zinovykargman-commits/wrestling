@@ -3,7 +3,7 @@ using UnityEngine;
 // Difficulty changes decisions and openings, never mass, forces, reach or stamina.
 // All wrestling still goes through the same GBInput path used by the player.
 public class GBBot {
-    float nextThink,gripSince=-1,heldSince=-1,releaseUntil,strikeAt,tackleAt;
+    float nextThink,gripSince=-1,heldSince=-1,releaseUntil,strikeAt;
     float openingUntil,nextOpening,startedAt=-1,shotSeenAt=-1,sprawlUntil;
     float pinSetupSince=-1,coverAttemptSince=-1,coverRetryUntil;
     int lastDifficulty=-1,lastPartner=-1;
@@ -28,7 +28,7 @@ public class GBBot {
         bool canAct=!me.Down&&!me.eliminated&&!me.hanging;
         bool winded=me.stamina<(difficulty==0?29:23);
         bool defending=held&&Time.time-heldSince>ReactionDelay(difficulty);
-        bool pinOpportunity=(me.PinTarget==rival&&me.GripCount>0)||rival.Down||(!rival.Shooting&&(rival.balance<=70||Vector3.Dot(rival.bodies[1].rotation*Vector3.up,Vector3.up)<.55f));
+        bool pinOpportunity=rival.PhysicallyDownForPin;
         // A hand must reach the lower surface of a downed rival. Standing a
         // whole metre away makes that physically unreachable from a shoulder.
         if(pinOpportunity){
@@ -149,11 +149,6 @@ public class GBBot {
                     strikeAt=Time.time+(difficulty==0?1.65f:difficulty==1?1.05f:.8f);
                     Attacks++;Intent="SHOOTING";
                 }
-                bool tackleWindow=Time.time-startedAt>(difficulty==0?3f:1f);
-                if(distance>1.5f&&distance<2.2f&&tackleWindow&&Time.time>=tackleAt&&me.stamina>62&&me.grounded&&!defending&&!rival.Down){
-                    bits|=GBInput.Tackle;tackleAt=Time.time+(difficulty==0?7f:difficulty==1?5.2f:3.8f);
-                    Attacks++;Intent="TACKLING";
-                }
                 if(difficulty==2&&distance>3&&me.stamina>70)bits|=GBInput.Sprint;
             }
         }
@@ -202,7 +197,7 @@ public class GBBot {
                 Intent="RESISTING";
             }else Intent="RESISTANCE OPENING";
         }else Intent="READY FOR A HOLD";
-        // Resisting partners never initiate grabs, strikes, tackles or throws.
+        // Resisting partners never initiate grabs, shots or throws.
         // Their only motion is a gentle physical escape while being held.
         move=SafeMove(app,me.Root.position,move);
         return Save(move,aim,bits);

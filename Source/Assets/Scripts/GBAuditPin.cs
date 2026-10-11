@@ -63,6 +63,18 @@ public static class GBAuditPin {
         app.Capture(Path.Combine(directory,name+".png"));
         if(hud){yield return new WaitForEndOfFrame();ScreenCapture.CaptureScreenshot(Path.Combine(directory,name+"-hud.png"));yield return null;}
     }
+    public static IEnumerator GuardChecks(GBApp app,string directory,Action<string,bool,string> check){
+        var integrity=new Integrity();Start(app);var a=app.Wrestlers[0];var b=app.Wrestlers[1];
+        yield return Wait(app,integrity,.6f);float y=a.Root.position.y;bool blocked=true;
+        for(int n=0;n<5;n++){a.stamina=0;app.ScriptedInputs[0]=new GBInput{az=1,flags=GBInput.Jump};yield return Wait(app,integrity,.05f);blocked&=a.Root.linearVelocity.y<1&&a.Root.position.y<y+.08f;app.ScriptedInputs[0]=new GBInput{az=1};yield return Wait(app,integrity,.05f);}
+        check("exhausted_jump_spam_blocked",blocked,"five exhausted jump presses produced no jump impulse");a.stamina=135;app.ScriptedInputs[0]=new GBInput{az=1,flags=GBInput.Jump};yield return Wait(app,integrity,.05f);check("funded_jump_still_works",a.Root.linearVelocity.y>1&&a.stamina<130,"normal jump still spends 8 stamina and rises");
+        Start(app);a=app.Wrestlers[0];b=app.Wrestlers[1];a.ResetTo(new Vector3(-.55f,.28f,0));b.ResetTo(new Vector3(.55f,.28f,0));yield return Wait(app,integrity,.6f);
+        foreach(var body in b.bodies)body.isKinematic=true;b.balance=10;b.downUntil=Time.time+10;
+        float end=Time.realtimeSinceStartup+2.5f;while(Time.realtimeSinceStartup<end&&Grips(a,b)==0){app.ScriptedInputs[0]=Input(a,Vector3.right,Contact(a,b,1),GBInput.Left|GBInput.Right);yield return null;}
+        int grips=Grips(a,b);app.ScriptedInputs[0]=Input(a,Vector3.right,Contact(a,b,1),GBInput.Left|GBInput.Right|GBInput.Pin);yield return Wait(app,integrity,.15f);
+        check("upright_rival_rejects_pin_attempt",grips>0&&!b.PhysicallyDownForPin&&a.PinTarget==null&&!b.PinControlled&&app.PinCount==0,"actual manual grip="+grips+"; standing target rejected despite low balance and stale Down timer");
+        var result=new Outcome();yield return Cover(app,integrity,directory,true,false,false,result);check("grounded_pin_still_counts",result.won&&result.grips>0,"normal manual grounded pin count="+result.count+" won="+result.won);
+    }
     static IEnumerator KneeLimits(GBApp app,Integrity integrity,Action<string,bool,string> check){
         var parentObject=new GameObject("native knee parent fixture");parentObject.transform.position=new Vector3(-50,5,0);
         var parent=parentObject.AddComponent<Rigidbody>();parent.isKinematic=true;
@@ -170,9 +182,9 @@ public static class GBAuditPin {
         yield return GBAuditWalk.Run(app,directory,check);
         int[] decisions=new int[3];bool legal=true;for(int difficulty=0;difficulty<3;difficulty++){
             Start(app);app.AIDifficulty=difficulty;var bot=new GBBot();a=app.Wrestlers[1];b=app.Wrestlers[0];float end=Time.realtimeSinceStartup+2;
-            while(Time.realtimeSinceStartup<end){GBInput i=bot.Tick(app,a,b);legal&=!i.Has(32)&&i.HasHandAim;app.ScriptedInputs[1]=i;integrity.Measure(app);yield return null;}decisions[difficulty]=bot.Decisions;
+            while(Time.realtimeSinceStartup<end){GBInput i=bot.Tick(app,a,b);legal&=!i.Has(32|256)&&i.HasHandAim;app.ScriptedInputs[1]=i;integrity.Measure(app);yield return null;}decisions[difficulty]=bot.Decisions;
         }
-        check("AI_uses_real_arm_commands_no_throw",legal,"all sampled difficulties aim physical hands and emit no reserved Throw bit");
+        check("AI_uses_real_arm_commands_no_throw",legal,"all sampled difficulties aim physical hands and emit no retired Throw or Tackle bit");
         check("AI_difficulty_reaction_cadence",decisions[0]<decisions[1]&&decisions[1]<decisions[2],"easy/normal/hard decisions in matched2s="+string.Join("/",decisions));
         app.AIDifficulty=1;
         app.ApplyFocus(true);app.ScriptedInputs=new GBInput[2];bool f11=false;app.AuditKeyDown=k=>{if(k==KeyCode.F11&&f11){f11=false;return true;}return false;};

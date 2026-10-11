@@ -1,4 +1,4 @@
-# Acceptance ledger — 0.3.0
+# Acceptance ledger — 0.3.1
 
 Latest user correction supersedes prior Training/ring-out/arena quantities: only Pin Wrestling in the ring is playable for now. AI Local and Private Online enter these same rules. Inactive old arena authorship can remain in source. Continued five-agent overhaul uses one lead and four specialists.
 
@@ -17,10 +17,13 @@ Latest user correction supersedes prior Training/ring-out/arena quantities: only
 
 VALIDATION.md owns completed evidence; source alone does not prove behavior/public parity.
 
-- Hold E for physical sprawl (R3 controller): low hips, legs back, stamina cost, shot resistance, independent manual arms and normal recovery on release. Lift R and Tackle V avoid binding conflicts.
+- Hold E for physical sprawl (R3 controller): low hips, legs back, stamina cost, shot resistance, independent manual arms and normal recovery on release. Lift uses R.
 
 Stamina capacity is 135 (+35%) with unchanged action costs, allowing longer holds. Strength and the meter use the new capacity.
 
 Walking uses alternating physical foot targets and coordinated thigh/knee motors, with raised foot clearance and knee straightening on landing. No body animation teleports; idle and special wrestling stances remain separate.
 
 Current pin rule: the grounded wrestler may be chest-down or back-down, with both actual shoulders on the mat and a live nearby controlling grip while C is held. The attacker does not need to place their chest over the rival. Multiplayer omits the mat motivational slogan and bottom coaching prompt.
+
+Tackle has been removed from keyboard/controller bindings, control legends, AI decisions and physics. The retired network input bit is rejected. Both players need 0.3.1 (protocol 9).
+Jump requires 8 stamina (climb 16) and is unavailable while under pin control. C requires a physically low, lying opponent before pin control; low balance or a Down timer while upright is insufficient. Ctrl + movement still bridges/rolls.

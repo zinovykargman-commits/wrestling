@@ -4,7 +4,7 @@
 
 This repository contains the editable Unity source, update installer, and build instructions. The playable Windows build is distributed as a release asset.
 
-# GRIP BREAK 0.3.0
+# GRIP BREAK 0.3.1
 
 Extract GRIP_BREAK-Windows.zip and open **PLAY.cmd**. Only **Pin Wrestling** in the ring is active. **PLAY AGAINST AI** and **PRIVATE ONLINE** enter the same rules. First to three pins wins. Training and other rule/arena choices are retired for now.
 
@@ -21,7 +21,6 @@ Extract GRIP_BREAK-Windows.zip and open **PLAY.cmd**. Only **Pin Wrestling** in 
 | Sprawl | Hold E; release to recover | R3 |
 | Lift | Hold R | RT |
 | Shove | X | D-pad up |
-| Tackle | V | B |
 | Sprint | Shift | L3 |
 | Jump | Space | A |
 | Controls / pause / fullscreen | F1 / Escape / F11 | Keyboard utility keys |
@@ -34,7 +33,7 @@ Aim before clicking: high for shoulders, low for legs. Each click holds its own 
 
 Pull backward, pivot sideways, or take a forward Q shot and manually grip to work your rival off balance. Hold C while gripping a grounded/offbalance rival to settle their chest or back onto the mat and use a low controlling stance. The grounded rival's chest/back and both shoulders against the mat, with your live controlling grip, are required for **three continuous seconds**. Shoulder indicators/count show progress. Releasing C, losing control/contact, raising a shoulder or touching ropes interrupts the count. Leaving the ring resets the round.
 
-Hold **E** to sprawl: lower your hips, send the legs back and resist a shot with your body weight. Arms and manual grips remain independent; release E to recover. Sprawl drains stamina and cannot turn into a shot while held. Lift moves to R and Tackle to V; old default bindings migrate automatically.
+Hold **E** to sprawl: lower your hips, send the legs back and resist a shot with your body weight. Arms and manual grips remain independent; release E to recover. Sprawl drains stamina and cannot turn into a shot while held. Lift uses R; old default lift bindings migrate automatically.
 
 Defend with **Ctrl + movement** to bridge/roll even down. Stamina limits both control and escape. Q never grabs automatically. Faster approaches and actual rotation contribute bounded momentum, brace resists, and regrabbing cannot charge unlimited energy.
 
@@ -59,3 +58,6 @@ Stamina capacity is 135 (+35%) with unchanged action costs, allowing longer hold
 Walking uses alternating physical foot targets and coordinated thigh/knee motors, with raised foot clearance and knee straightening on landing. No body animation teleports; idle and special wrestling stances remain separate.
 
 Current pin rule: the grounded wrestler may be chest-down or back-down, with both actual shoulders on the mat and a live nearby controlling grip while C is held. The attacker does not need to place their chest over the rival. Multiplayer omits the mat motivational slogan and bottom coaching prompt.
+
+Tackle has been removed from keyboard/controller bindings, control legends, AI decisions and physics. The retired network input bit is rejected. Both players need 0.3.1 (protocol 9).
+Jump requires 8 stamina (climb 16) and is unavailable while under pin control. C requires a physically low, lying opponent before pin control; low balance or a Down timer while upright is insufficient. Ctrl + movement still bridges/rolls.

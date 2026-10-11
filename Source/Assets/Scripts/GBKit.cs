@@ -13,9 +13,10 @@ using System.Runtime.InteropServices;
     public float x,z,ax,az,hx,hy,hz;
     public int flags,sequence;
     public double stamp;
+    // Bit 256 (retired tackle) is rejected along with Throw.
     // Throw is reserved solely so historical audits compile; no live input may
     // activate it. Throws now follow the player's actual arm/body movement.
-    public const int Left=1,Right=2,Sprint=4,Jump=8,Lift=16,Throw=32,Strike=64,Brace=128,Tackle=256,Pin=512,Shove=1024,HandAim=2048,Sprawl=4096;
+    public const int Left=1,Right=2,Sprint=4,Jump=8,Lift=16,Throw=32,Strike=64,Brace=128,Pin=512,Shove=1024,HandAim=2048,Sprawl=4096;
     public bool Has(int bit) { return (flags & bit)!=0; }
     public bool HasHandAim {get{return Has(HandAim);}}
     public Vector3 HandOffset {get{return Vector3.ClampMagnitude(new Vector3(hx,Mathf.Clamp(hy,-1.10f,1.25f),hz),1.35f);}}
@@ -23,7 +24,7 @@ using System.Runtime.InteropServices;
     public Vector3 Aim { get { var v=new Vector3(ax,0,az); return v.sqrMagnitude>.05f ? v.normalized:Vector3.forward; } }
     public GBInput Sanitize() {
         if(!Finite(x)||!Finite(z)||!Finite(ax)||!Finite(az)||!Finite(hx)||!Finite(hy)||!Finite(hz)||double.IsNaN(stamp)||double.IsInfinity(stamp))return default;
-        x=Mathf.Clamp(x,-1,1);z=Mathf.Clamp(z,-1,1);ax=Mathf.Clamp(ax,-1,1);az=Mathf.Clamp(az,-1,1);flags&=8159;
+        x=Mathf.Clamp(x,-1,1);z=Mathf.Clamp(z,-1,1);ax=Mathf.Clamp(ax,-1,1);az=Mathf.Clamp(az,-1,1);flags&=7903;
         Vector3 hand=HasHandAim?HandOffset:Vector3.zero;hx=hand.x;hy=hand.y;hz=hand.z;
         return this;
     }
@@ -54,7 +55,6 @@ public static class GBPad {
         if(p.rightTrigger>90)i.flags|=GBInput.Lift;
         if((p.buttons&0x4000)!=0)i.flags|=GBInput.Strike;
         if(p.leftTrigger>90)i.flags|=GBInput.Brace;
-        if((p.buttons&0x2000)!=0)i.flags|=GBInput.Tackle;
         if((p.buttons&0x2)!=0)i.flags|=GBInput.Pin;
         if((p.buttons&0x1)!=0)i.flags|=GBInput.Shove;
         return i;

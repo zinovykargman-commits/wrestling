@@ -7,7 +7,7 @@ public static class BuildGripBreak {
     public static void Build() {
         PlayerSettings.companyName = "Grip Break";
         PlayerSettings.productName = "GRIP BREAK";
-        PlayerSettings.bundleVersion = "0.3.0";
+        PlayerSettings.bundleVersion = "0.3.1";
         PlayerSettings.defaultScreenWidth = 1600;
         PlayerSettings.defaultScreenHeight = 900;
         PlayerSettings.fullScreenMode = FullScreenMode.Windowed;

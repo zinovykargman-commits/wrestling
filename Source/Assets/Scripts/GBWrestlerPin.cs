@@ -56,6 +56,9 @@ public partial class GBWrestler {
     void PinReset(){pinTarget=null;pinFront=false;pinApproach=Vector3.forward;pinAlignedGrip=false;remoteCover=remoteLeftShoulder=remoteRightShoulder=false;remotePinPlayer=-1;}
     bool HoldingWrestler(GBWrestler target){foreach(var h in hands)if(h!=null&&h.joint&&h.target&&h.target.wrestler==target)return true;return false;}
 
+    public bool PhysicallyDownForPin {
+        get {RaycastHit floor;return PinFloor(bodies[1].position,out floor)&&bodies[1].position.y<floor.point.y+.8f&&Vector3.Dot(bodies[1].rotation*Vector3.up,Vector3.up)<.5f;}
+    }
     void PinRefresh(){
         var previous=pinTarget;
         pinTarget=null;
@@ -63,12 +66,12 @@ public partial class GBWrestler {
         // Balance can regenerate during a real turn. Retain that commitment
         // only while the player still holds C and an actual nearby grip.
         RaycastHit retainedFloor;
-        if(previous&&!previous.eliminated&&HoldingWrestler(previous)&&Vector3.Distance(Root.position,previous.Root.position)<=1.55f&&PinFloor(previous.bodies[1].position,out retainedFloor)){pinTarget=previous;return;}
+        if(previous&&!previous.eliminated&&previous.PhysicallyDownForPin&&HoldingWrestler(previous)&&Vector3.Distance(Root.position,previous.Root.position)<=1.55f&&PinFloor(previous.bodies[1].position,out retainedFloor)){pinTarget=previous;return;}
         foreach(var hand in hands){
             if(hand==null||!hand.joint||!hand.target||!hand.target.wrestler)continue;
             var victim=hand.target.wrestler;if(victim==this||victim.eliminated||Vector3.Distance(Root.position,victim.Root.position)>1.55f)continue;
             RaycastHit floor;if(!PinFloor(victim.bodies[1].position,out floor))continue;
-            bool offBalance=victim.Down||victim.balance<=70||(victim.bodies[1].position.y<floor.point.y+.8f&&Vector3.Dot(victim.bodies[1].rotation*Vector3.up,Vector3.up)<.5f);
+            bool offBalance=victim.PhysicallyDownForPin;
             if(offBalance){
                 pinTarget=victim;pinFront=Vector3.Dot(victim.bodies[1].rotation*Vector3.forward,Vector3.up)<-.35f;
                 pinApproach=Vector3.ProjectOnPlane(victim.bodies[1].position-Root.position,Vector3.up).normalized;

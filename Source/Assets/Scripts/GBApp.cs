@@ -45,7 +45,7 @@ public class GBApp:MonoBehaviour {
     GUIStyle title,heading,body,small,button,label;Texture2D pixel;Font font;
     string[] arenaNames={"FREIGHT TRAIN","FURNITURE STORE","CRUMBLING TOWER","THE RING"};
     string[] arenaDetails={"Moving freight cars, breakaway rails, low beams.","Tables, chairs, display shelves and a loading pit.","A rooftop that gives way under your feet.","Control both shoulders for the three-count."};
-    string[] actions={"Left hand","Right hand","Sprint","Jump / climb","Lift","Strike","Brace / escape","Tackle","Pin","Shove","Sprawl","Forward","Back","Left","Right"};
+    string[] actions={"Left hand","Right hand","Sprint","Jump / climb","Lift","Strike","Brace / escape","Pin","Shove","Sprawl","Forward","Back","Left","Right"};
     public float MeasuredFPS {get{return fpsSeconds>0?fpsFrames/fpsSeconds:0;}}
     public float MinFPS {get{return fpsMin;}}
     public float PhaseSeconds {get{return Mathf.Max(0,phaseUntil-Time.time);}}
@@ -64,8 +64,8 @@ public class GBApp:MonoBehaviour {
         string[] args=Environment.GetCommandLineArgs();if(Array.IndexOf(args,"--pin-test")>=0||Array.IndexOf(args,"--momentum-test")>=0||Array.IndexOf(args,"--throw-test")>=0||Array.IndexOf(args,"--input-test")>=0||Array.IndexOf(args,"--ai-test")>=0||Array.IndexOf(args,"--updater-test")>=0||Array.IndexOf(args,"--overhaul-test")>=0||Array.IndexOf(args,"--audit")>=0||Array.IndexOf(args,"--camera-test")>=0||Array.IndexOf(args,"--moves")>=0||Array.IndexOf(args,"--host-test")>=0||Array.IndexOf(args,"--client-test")>=0||Array.IndexOf(args,"--soak")>=0||Array.IndexOf(args,"--record")>=0||Array.IndexOf(args,"--menu-shot")>=0){Automated=true;gameObject.AddComponent<GBAudit>();}
     }
     void Defaults() {
-        KeyCode[] defaults={KeyCode.Mouse0,KeyCode.Mouse1,KeyCode.LeftShift,KeyCode.Space,KeyCode.R,KeyCode.Q,KeyCode.LeftControl,KeyCode.V,KeyCode.C,KeyCode.X,KeyCode.E,KeyCode.W,KeyCode.S,KeyCode.A,KeyCode.D};
-        int[] bits={1,2,4,8,16,64,128,256,512,1024,GBInput.Sprawl,0,0,0,0};int[] pads={0x100,0x200,0x40,0x1000,0x20000,0x4000,0x10000,0x2000,0x2,0x1,0x80,0,0,0,0};
+        KeyCode[] defaults={KeyCode.Mouse0,KeyCode.Mouse1,KeyCode.LeftShift,KeyCode.Space,KeyCode.R,KeyCode.Q,KeyCode.LeftControl,KeyCode.C,KeyCode.X,KeyCode.E,KeyCode.W,KeyCode.S,KeyCode.A,KeyCode.D};
+        int[] bits={1,2,4,8,16,64,128,512,1024,GBInput.Sprawl,0,0,0,0};int[] pads={0x100,0x200,0x40,0x1000,0x20000,0x4000,0x10000,0x2,0x1,0x80,0,0,0,0};
         for(int i=0;i<actions.Length;i++){keys[actions[i]]=defaults[i];flags[actions[i]]=bits[i];padCodes[actions[i]]=pads[i];}
     }
     void LoadPrefs(){
@@ -75,7 +75,6 @@ public class GBApp:MonoBehaviour {
         // later intentional E/R rebindings must not migrate on every launch.
         if(PlayerPrefs.GetInt("sprawlBindingsVersion",0)<1){
             if(PlayerPrefs.HasKey("key_Lift")&&keys["Lift"]==KeyCode.E)keys["Lift"]=KeyCode.R;
-            if(PlayerPrefs.HasKey("key_Tackle")&&keys["Tackle"]==KeyCode.R)keys["Tackle"]=KeyCode.V;
         }
     }
     void SavePrefs(){if(Automated)return;PlayerPrefs.SetInt("aiDifficulty",AIDifficulty);PlayerPrefs.SetString("name",PlayerName);PlayerPrefs.SetFloat("volume",Sfx.volume);PlayerPrefs.SetInt("shake",CameraShake?1:0);PlayerPrefs.SetInt("rumble",Rumble?1:0);foreach(var a in actions){PlayerPrefs.SetInt("key_"+a,(int)keys[a]);PlayerPrefs.SetInt("pad_"+a,padCodes[a]);}PlayerPrefs.SetInt("sprawlBindingsVersion",1);PlayerPrefs.Save();}
@@ -105,7 +104,7 @@ public class GBApp:MonoBehaviour {
         if(InMatch&&KeyDown(KeyCode.F1))ControlsVisible=!ControlsVisible;
         if(KeyDown(KeyCode.Escape)){if(captureAction!=""){captureAction="";}else if(InMatch&&ControlsVisible)ControlsVisible=false;else if(InMatch){focusPaused=false;Paused=!Paused;if(Authority&&Network.role==GBNetwork.Role.Offline)Time.timeScale=Paused?0:1;}else screen="home";}
         if(captureAction!=""&&Time.unscaledTime-captureStart>.25f)CaptureBinding();
-        if(InMatch&&!Paused&&!ControlsVisible&&(focus||Automated)){int mine=Network.role==GBNetwork.Role.Client?1:0;for(int p=0;p<2;p++){if(p!=mine&&(Network.role!=GBNetwork.Role.Offline||!Scripted(p)))continue;var i=Scripted(p)?ScriptedInputs[p]:PollInput(p);int pulse=(i.flags&~lastPoll[p])&(GBInput.Jump|GBInput.Strike|GBInput.Tackle|GBInput.Shove);buffered[p]|=pulse;lastPoll[p]=i.flags;inputs[p]=i;if(Network.role==GBNetwork.Role.Client){Wrestlers[p].command=i.Sanitize();Wrestlers[p].facing=i.Aim;}}if(Network.role==GBNetwork.Role.Client){var i=inputs[1];i.flags|=buffered[1];Network.SendInput(i);buffered[1]=0;}}
+        if(InMatch&&!Paused&&!ControlsVisible&&(focus||Automated)){int mine=Network.role==GBNetwork.Role.Client?1:0;for(int p=0;p<2;p++){if(p!=mine&&(Network.role!=GBNetwork.Role.Offline||!Scripted(p)))continue;var i=Scripted(p)?ScriptedInputs[p]:PollInput(p);int pulse=(i.flags&~lastPoll[p])&(GBInput.Jump|GBInput.Strike|GBInput.Shove);buffered[p]|=pulse;lastPoll[p]=i.flags;inputs[p]=i;if(Network.role==GBNetwork.Role.Client){Wrestlers[p].command=i.Sanitize();Wrestlers[p].facing=i.Aim;}}if(Network.role==GBNetwork.Role.Client){var i=inputs[1];i.flags|=buffered[1];Network.SendInput(i);buffered[1]=0;}}
         else {inputs[0]=inputs[1]=default;lastPoll[0]=lastPoll[1]=0;buffered[0]=buffered[1]=0;if(Network.role==GBNetwork.Role.Client&&Network.connected)Network.SendInput(default);}
         if(!Authority&&World){float lerp=1-Mathf.Exp(-Time.unscaledDeltaTime*22);for(int i=0;i<Registry.Count;i++){Registry[i].position=Vector3.Lerp(Registry[i].position,TargetPositions[i],lerp);Registry[i].rotation=Quaternion.Slerp(Registry[i].rotation,TargetRotations[i],lerp);}}
         Arena?.VisualTick(dt);foreach(var w in Wrestlers)w.Visuals();
@@ -256,7 +255,7 @@ public class GBApp:MonoBehaviour {
     void How() {
         Label(new Rect(61,206,540,35),"GET THE PIN",heading);
         Label(new Rect(61,263,535,280),"1. Aim your hands with the mouse. Hold left / right click to grip; release to let go. Aim low for legs.\n\n2. Pull back or pivot sideways to unbalance your rival. Q takes a forward shot; grab yourself.\n\n3. Hold C with a grip to control a grounded rival. Chest-down or back-down both count: keep both shoulders on the mat for three seconds. Ropes break the count.",body);
-        Label(new Rect(61,557,535,150),"DEFEND: Hold E to sprawl against a shot.\nCtrl + move bridges / rolls; raise a shoulder to escape.\n\nWASD move • Mouse aim • Clicks grip\nC pin • E sprawl • R lift • Q shot\nX shove • V tackle • Space jump • Shift sprint",body);
+        Label(new Rect(61,557,535,150),"DEFEND: Hold E to sprawl against a shot.\nCtrl + move bridges / rolls; raise a shoulder to escape.\n\nWASD move • Mouse aim • Clicks grip\nC pin • E sprawl • R lift • Q shot\nX shove • Space jump • Shift sprint",body);
         Label(new Rect(61,704,535,31),"Controller: left stick move, right stick aim hands. See Keybinds.",small);
         if(Button(new Rect(61,752,260,48),"BACK"))screen="home";if(Button(new Rect(337,752,260,48),"PLAY AI",true)){Network.Stop();BeginMatch(3,1);}
     }
@@ -299,7 +298,7 @@ public class GBApp:MonoBehaviour {
     }
     public string ControlSummary(int player){
         bool pad=LocalDevice==1;
-        if(pad)return "MOVE  Left stick\nAIM HANDS  Right stick\nLEFT / RIGHT HAND  "+PadName(padCodes["Left hand"])+" / "+PadName(padCodes["Right hand"])+" (hold)\nLIFT  "+PadName(padCodes["Lift"])+" (hold)\nJUMP / CLIMB  "+PadName(padCodes["Jump / climb"])+"\nSPRINT  "+PadName(padCodes["Sprint"])+"\nWRESTLING SHOT  "+PadName(padCodes["Strike"])+"\nBRACE / ESCAPE  "+PadName(padCodes["Brace / escape"])+" (hold)\nTACKLE  "+PadName(padCodes["Tackle"])+"\nCOVER / PIN  "+PadName(padCodes["Pin"])+" (hold)\nSHOVE  "+PadName(padCodes["Shove"])+"\nSPRAWL  "+PadName(padCodes["Sprawl"])+" (hold)";
+        if(pad)return "MOVE  Left stick\nAIM HANDS  Right stick\nLEFT / RIGHT HAND  "+PadName(padCodes["Left hand"])+" / "+PadName(padCodes["Right hand"])+" (hold)\nLIFT  "+PadName(padCodes["Lift"])+" (hold)\nJUMP / CLIMB  "+PadName(padCodes["Jump / climb"])+"\nSPRINT  "+PadName(padCodes["Sprint"])+"\nWRESTLING SHOT  "+PadName(padCodes["Strike"])+"\nBRACE / ESCAPE  "+PadName(padCodes["Brace / escape"])+" (hold)\nCOVER / PIN  "+PadName(padCodes["Pin"])+" (hold)\nSHOVE  "+PadName(padCodes["Shove"])+"\nSPRAWL  "+PadName(padCodes["Sprawl"])+" (hold)";
         string text="MOVE  "+KeyName(keys["Forward"])+" "+KeyName(keys["Left"])+" "+KeyName(keys["Back"])+" "+KeyName(keys["Right"])+"\nAIM HANDS  Mouse up / down / sideways";
         foreach(var a in actions){if(flags[a]==0)continue;text+="\n"+(a=="Strike"?"WRESTLING SHOT":a=="Pin"?"COVER / PIN":a.ToUpper())+"  "+KeyName(keys[a])+((a=="Left hand"||a=="Right hand"||a=="Lift"||a=="Brace / escape"||a=="Pin"||a=="Sprawl")?" (hold)":"");}return text;
     }
