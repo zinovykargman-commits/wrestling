@@ -4,7 +4,7 @@
 
 This repository contains the editable Unity source, update installer, and build instructions. The playable Windows build is distributed as a release asset.
 
-# GRIP BREAK 0.4.1
+# GRIP BREAK 0.4.2
 
 Extract GRIP_BREAK-Windows.zip and open **PLAY.cmd**. Only **Pin Wrestling** in the ring is active. **PLAY AGAINST AI** and **PRIVATE ONLINE** enter the same rules. First to three pins wins. Training and other rule/arena choices are retired for now.
 
@@ -53,15 +53,17 @@ Open Source in Unity **6000.3.7f1** with Windows Build Support (Mono). Editor me
 
 Current audits: --pin-test, --input-test, --camera-test, --updater-test, --record and --menu-shot with --evidence. Network: --host-test / --client-test, matching --port, or --tunnel for public copied invites. VALIDATION.md records current evidence; MANUAL_CHECKS.md covers hardware, human feel and separate-PC acceptance. Earlier Evidence reports are historical.
 
-Stamina capacity is135 (+35%). Ctrl movement scramble effort costs30% more; other action costs are unchanged. Strength and the meter use the new capacity.
+Stamina capacity is155.25 (+15% over the previous135). Ctrl movement scramble effort costs30% more; other action costs are unchanged. Strength and the meter use the new capacity.
 
 Walking uses alternating physical foot targets and coordinated thigh/knee motors, with raised foot clearance and knee straightening on landing. No body animation teleports; idle and special wrestling stances remain separate.
 
 Current pin rule: the grounded wrestler may be chest-down or back-down, with both actual shoulders on the mat and a live nearby controlling grip while C is held. The attacker does not need to place their chest over the rival. Multiplayer omits the mat motivational slogan and bottom coaching prompt.
 
-Tackle has been removed from keyboard/controller bindings, control legends, AI decisions and physics. The retired network input bit is rejected. Both players need 0.4.0 (protocol 9).
+Tackle has been removed from keyboard/controller bindings, control legends, AI decisions and physics. The retired network input bit is rejected. Both players need 0.4.2 (protocol 10).
 Jump requires 8 stamina (climb 16) and is unavailable while under pin control. C requires a physically low, lying opponent before pin control; low balance or a Down timer while upright is insufficient. Ctrl + movement still bridges/rolls.
 
 
 0.4.0 physical control improvements: Q connects through actual torso/hip collisions and briefly disrupts neutral footing; Ctrl or E can resist. A running jump carries your actual velocity into a single body impact, without automatic grips or a second attack impulse. Pulls/pivots have full opposite reactions. Hold C and move toward a grounded rival's left/right shoulder to shift existing pin pressure. Neutral pin pressure is preserved. Separate L/R aim markers show each hand's feasible reach; outlined body regions show actual held grips. Elbows and wrists use stable anatomical targets through physical motors. No additional escape mechanic was added.
 Single-grip pin control is stronger in 0.4.0 so a live one-hand hold can settle a raised shoulder. Two-hand control, real shoulder requirements and the three-count are unchanged.
+
+0.4.2: slightly more forgiving general grip break limits, without stronger pulling forces or higher stamina costs. Carried/released bodies preserve physical orientation through flight and briefly settle on impact before automatic standing recovery; tilted releases can land on their core instead of always on boots.

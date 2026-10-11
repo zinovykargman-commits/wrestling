@@ -67,7 +67,7 @@ public static class GBAuditPin {
         var integrity=new Integrity();Start(app);var a=app.Wrestlers[0];var b=app.Wrestlers[1];
         yield return Wait(app,integrity,.6f);float y=a.Root.position.y;bool blocked=true;
         for(int n=0;n<5;n++){a.stamina=0;app.ScriptedInputs[0]=new GBInput{az=1,flags=GBInput.Jump};yield return Wait(app,integrity,.05f);blocked&=a.Root.linearVelocity.y<1&&a.Root.position.y<y+.08f;app.ScriptedInputs[0]=new GBInput{az=1};yield return Wait(app,integrity,.05f);}
-        check("exhausted_jump_spam_blocked",blocked,"five exhausted jump presses produced no jump impulse");a.stamina=135;app.ScriptedInputs[0]=new GBInput{az=1,flags=GBInput.Jump};yield return Wait(app,integrity,.05f);check("funded_jump_still_works",a.Root.linearVelocity.y>1&&a.stamina<130,"normal jump still spends 8 stamina and rises");
+        check("exhausted_jump_spam_blocked",blocked,"five exhausted jump presses produced no jump impulse");a.stamina=GBWrestler.MaxStamina;app.ScriptedInputs[0]=new GBInput{az=1,flags=GBInput.Jump};yield return Wait(app,integrity,.05f);check("funded_jump_still_works",a.Root.linearVelocity.y>1&&a.stamina<GBWrestler.MaxStamina-5,"normal jump still spends 8 stamina and rises");
         Start(app);a=app.Wrestlers[0];b=app.Wrestlers[1];a.ResetTo(new Vector3(-.55f,.28f,0));b.ResetTo(new Vector3(.55f,.28f,0));yield return Wait(app,integrity,.6f);
         foreach(var body in b.bodies)body.isKinematic=true;b.balance=10;b.downUntil=Time.time+10;
         float end=Time.realtimeSinceStartup+2.5f;while(Time.realtimeSinceStartup<end&&Grips(a,b)==0){app.ScriptedInputs[0]=Input(a,Vector3.right,Contact(a,b,1),GBInput.Left|GBInput.Right);yield return null;}
@@ -114,7 +114,7 @@ public static class GBAuditPin {
         Start(app);check("only_pin_ring_mode",app.CurrentArena==3&&app.CurrentMode==1&&app.Wrestlers.Count==2,"ring arena="+app.CurrentArena+" pin mode="+app.CurrentMode+" bodies="+app.Wrestlers.Count+"; no training dummy");
         app.BeginMatch(0,0);check("legacy_mode_entry_still_pin_ring",app.CurrentArena==3&&app.CurrentMode==1,"legacy arena/mode entry resolves to current pin rules");app.Phase=GBApp.GamePhase.Fighting;
         yield return KneeLimits(app,integrity,check);
-        var a=app.Wrestlers[0];var b=app.Wrestlers[1];check("stamina_capacity_increased_35_percent",a.stamina==135&&b.stamina==135&&a.StaminaFraction==1,"both fresh wrestlers have135 stamina, unchanged costs, normalized full meter/strength");a.ResetTo(new Vector3(-1,.28f,0));b.ResetTo(new Vector3(2,.28f,0));Neutral(app);yield return Wait(app,integrity,.6f);
+        var a=app.Wrestlers[0];var b=app.Wrestlers[1];check("stamina_capacity_increased_extra_15_percent",a.stamina==155.25f&&b.stamina==155.25f&&a.StaminaFraction==1,"both fresh wrestlers have155.25 stamina, unchanged costs, normalized full meter/strength");a.ResetTo(new Vector3(-1,.28f,0));b.ResetTo(new Vector3(2,.28f,0));Neutral(app);yield return Wait(app,integrity,.6f);
         int neighbors=0,others=0;for(int i=0;i<15;i++)for(int j=i+1;j<15;j++)if(Physics.GetIgnoreCollision(a.bodies[i].GetComponent<Collider>(),a.bodies[j].GetComponent<Collider>())){if(a.parents[i]==j||a.parents[j]==i)neighbors++;else others++;}
         check("anatomical_self_collisions",neighbors==14&&others==0,"ignored connected neighbors="+neighbors+" ignored nonadjacent pairs="+others);
         bool pads=a.shoulderPads.Length==4&&a.bodies[1].GetComponents<Collider>().Length==5;

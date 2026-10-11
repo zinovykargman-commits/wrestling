@@ -13,7 +13,7 @@ public partial class GBWrestler:MonoBehaviour {
     public Vector3[] initial=new Vector3[15];
     public int[] parents={-1,0,1,1,3,4,1,6,7,0,9,10,0,12,13};
     public GBInput command;
-    public const float MaxStamina=135;
+    public const float MaxStamina=155.25f;
     public const float ScrambleStaminaMultiplier=1.3f;
     public float StaminaFraction {get{return Mathf.Clamp01(stamina/MaxStamina);}}
     public float stamina=MaxStamina,balance=100,downUntil,recoveryUntil,pinProgress;
@@ -22,9 +22,10 @@ public partial class GBWrestler:MonoBehaviour {
     public Hand[] hands=new Hand[2];
     public float lastImpact,moveDistance,pressureUntil,stumbleUntil,EscapeUntil;
     public bool Stumbling {get{return !Down&&Time.time<stumbleUntil;}}
+    public bool RecoveringFromCarry {get{return carriedFlight||Time.time<carriedRecoveryUntil;}}
     readonly Vector3[] plantedFeet=new Vector3[2],stepStarts=new Vector3[2],stepGoals=new Vector3[2];
     readonly float[] stepBegin={-10,-10};bool feetInitialized;int nextStep;float totalMass;
-    int oldFlags;float strikeAt,jumpAt,jumpRequestUntil,lastFootSupport=-10,climbUntil,liftCharge;Vector3 spawn,lastRoot,climbGoal;Quaternion facingRotation;
+    int oldFlags;float strikeAt,jumpAt,jumpRequestUntil,lastFootSupport=-10,climbUntil,liftCharge,carriedRecoveryUntil;bool carriedFlight;Vector3 spawn,lastRoot,climbGoal;Quaternion facingRotation;
     PhysicsMaterial standingBoots,groundCloth;
     public SphereCollider[] shoulderPads=new SphereCollider[4];
     public class Hand {
@@ -116,12 +117,19 @@ public partial class GBWrestler:MonoBehaviour {
     }
     public void ResetTo(Vector3 at) {
         Release(0);Release(1);for(int n=0;n<15;n++){bodies[n].position=at+initial[n];bodies[n].rotation=Quaternion.identity;bodies[n].linearVelocity=Vector3.zero;bodies[n].angularVelocity=Vector3.zero;}
-        stamina=MaxStamina;balance=100;downUntil=recoveryUntil=pressureUntil=climbUntil=liftCharge=stumbleUntil=EscapeUntil=jumpAt=strikeAt=jumpRequestUntil=0;lastFootSupport=-10;lastImpact=-1;eliminated=false;oldFlags=0;facing=Vector3.forward;facingRotation=Quaternion.identity;command=default;pinProgress=0;lastRoot=at+initial[0];feetInitialized=false;nextStep=0;stepBegin[0]=stepBegin[1]=-10;foreach(var hand in hands){hand.releaseRequired=false;hand.candidate=null;}CombatReset();PinReset();SprawlReset();
+        stamina=MaxStamina;balance=100;downUntil=recoveryUntil=pressureUntil=climbUntil=liftCharge=stumbleUntil=EscapeUntil=jumpAt=strikeAt=jumpRequestUntil=carriedRecoveryUntil=0;carriedFlight=false;lastFootSupport=-10;lastImpact=-1;eliminated=false;oldFlags=0;facing=Vector3.forward;facingRotation=Quaternion.identity;command=default;pinProgress=0;lastRoot=at+initial[0];feetInitialized=false;nextStep=0;stepBegin[0]=stepBegin[1]=-10;foreach(var hand in hands){hand.releaseRequired=false;hand.candidate=null;}CombatReset();PinReset();SprawlReset();
     }
     public void Simulate(GBInput input) {
         if(eliminated)return;command=input.Sanitize();SprawlRefresh();var tuning=GBApp.I.Tuning;float dt=Time.fixedDeltaTime;
         grounded=Physics.Raycast(bodies[11].position+Vector3.up*.12f,Vector3.down,.37f,1,QueryTriggerInteraction.Ignore)||Physics.Raycast(bodies[14].position+Vector3.up*.12f,Vector3.down,.37f,1,QueryTriggerInteraction.Ignore);
         if(grounded)lastFootSupport=Time.time;
+        if(!grounded&&HeldByOpponent)carriedFlight=true;
+        if(carriedFlight){
+            // A carried/released body keeps its earned orientation in flight.
+            // Any core landing can begin recovery; it need not land on boots.
+            carriedRecoveryUntil=Time.time+.35f;
+            if(grounded&&Vector3.Dot(bodies[1].transform.up,Vector3.up)>.65f||Physics.Raycast(Root.position,Vector3.down,.4f,1,QueryTriggerInteraction.Ignore)||Physics.Raycast(bodies[1].position,Vector3.down,.4f,1,QueryTriggerInteraction.Ignore))carriedFlight=false;
+        }
         hanging=false;for(int h=0;h<2;h++)if(hands[h].joint&&hands[h].target&&!hands[h].target.wrestler&&hands[h].target.GetComponent<Collider>().bounds.max.y>Root.position.y+.6f&&bodies[h==0?5:8].position.y>Root.position.y+.2f)hanging=true;
         int edges=command.flags&~oldFlags;oldFlags=command.flags;
         facing=Vector3.Slerp(facing,Shooting?ShotDirection:command.Aim,Mathf.Clamp01(dt*12));facingRotation=Quaternion.LookRotation(facing,Vector3.up);
@@ -144,7 +152,7 @@ public partial class GBWrestler:MonoBehaviour {
         float upright=Vector3.Dot(bodies[1].transform.up,Vector3.up);
         bool nearFloor=Physics.Raycast(Root.position+Vector3.up*.1f,Vector3.down,1.5f,1,QueryTriggerInteraction.Ignore);
         bool pressured=Time.time<pressureUntil;
-        bool canStand=!Down&&!pressured&&!PinControlled&&(grounded||nearFloor)&&(!JumpFlightWindow||grounded)&&!hanging&&Time.time>jumpAt-.2f;
+        bool canStand=!Down&&!pressured&&!PinControlled&&!carriedFlight&&Time.time>=carriedRecoveryUntil&&(grounded||nearFloor)&&(!JumpFlightWindow||grounded)&&!hanging&&Time.time>jumpAt-.2f;
         bool lowAim=false;
         if(canStand) {
             Vector3 locomotion=Shooting?ShotDirection:command.Move;

@@ -224,8 +224,10 @@ public class GBGrip:MonoBehaviour {
         }
         Strain=Mathf.Clamp01(Mathf.Max(error.magnitude/.5f,force.magnitude/Mathf.Max(1,breakForce*1.6f)));
         bool ledge=connectedBody.isKinematic&&b.y>owner.Root.position.y+.2f;
-        if(error.magnitude>(ledge?.65f:.52f)||force.magnitude>breakForce*2.1f)strained+=Time.fixedDeltaTime;else strained=Mathf.Max(0,strained-Time.fixedDeltaTime*2);
-        if(strained>(ledge?.18f:.13f)){owner.GripBroke(handIndex);return;}force=Vector3.ClampMagnitude(force,breakForce);handBody.AddForceAtPosition(force,a,ForceMode.Force);
+        // Slightly forgive ordinary hold strain and brief spin/contact spikes.
+        // Preserve the force cap/reaction and ledge slip behavior.
+        if(error.magnitude>(ledge?.65f:.56f)||force.magnitude>breakForce*(ledge?2.1f:2.3f))strained+=Time.fixedDeltaTime;else strained=Mathf.Max(0,strained-Time.fixedDeltaTime*2);
+        if(strained>(ledge?.18f:.15f)){owner.GripBroke(handIndex);return;}force=Vector3.ClampMagnitude(force,breakForce);handBody.AddForceAtPosition(force,a,ForceMode.Force);
         if(!connectedBody.isKinematic)connectedBody.AddForceAtPosition(-force,b,ForceMode.Force);
     }
 }
