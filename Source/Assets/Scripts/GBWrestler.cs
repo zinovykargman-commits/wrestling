@@ -14,7 +14,7 @@ public partial class GBWrestler:MonoBehaviour {
     public int[] parents={-1,0,1,1,3,4,1,6,7,0,9,10,0,12,13};
     public GBInput command;
     public const float MaxStamina=155.25f;
-    public const float ScrambleStaminaMultiplier=1.3f;
+    public const float ScrambleStaminaMultiplier=1.43f;
     public float StaminaFraction {get{return Mathf.Clamp01(stamina/MaxStamina);}}
     public float stamina=MaxStamina,balance=100,downUntil,recoveryUntil,pinProgress;
     public bool dummy,grounded,hanging,eliminated;
@@ -120,7 +120,11 @@ public partial class GBWrestler:MonoBehaviour {
         stamina=MaxStamina;balance=100;downUntil=recoveryUntil=pressureUntil=climbUntil=liftCharge=stumbleUntil=EscapeUntil=jumpAt=strikeAt=jumpRequestUntil=carriedRecoveryUntil=0;carriedFlight=false;lastFootSupport=-10;lastImpact=-1;eliminated=false;oldFlags=0;facing=Vector3.forward;facingRotation=Quaternion.identity;command=default;pinProgress=0;lastRoot=at+initial[0];feetInitialized=false;nextStep=0;stepBegin[0]=stepBegin[1]=-10;foreach(var hand in hands){hand.releaseRequired=false;hand.candidate=null;}CombatReset();PinReset();SprawlReset();
     }
     public void Simulate(GBInput input) {
-        if(eliminated)return;command=input.Sanitize();SprawlRefresh();var tuning=GBApp.I.Tuning;float dt=Time.fixedDeltaTime;
+        if(eliminated)return;command=input.Sanitize();
+        bool scrambleRequested=command.Has(GBInput.Brace)&&command.Move.sqrMagnitude>.05f&&(HeldByOpponent||Down||PhysicallyDownForPin||PinControlled);
+        UpdateScrambleRecovery(scrambleRequested);
+        if(!ScrambleReady){command.flags&=~GBInput.Brace;if(scrambleRequested)Feedback("Scramble exhausted - recovering",.2f);}
+        SprawlRefresh();var tuning=GBApp.I.Tuning;float dt=Time.fixedDeltaTime;
         grounded=Physics.Raycast(bodies[11].position+Vector3.up*.12f,Vector3.down,.37f,1,QueryTriggerInteraction.Ignore)||Physics.Raycast(bodies[14].position+Vector3.up*.12f,Vector3.down,.37f,1,QueryTriggerInteraction.Ignore);
         if(grounded)lastFootSupport=Time.time;
         if(!grounded&&HeldByOpponent)carriedFlight=true;
@@ -134,7 +138,7 @@ public partial class GBWrestler:MonoBehaviour {
         int edges=command.flags&~oldFlags;oldFlags=command.flags;
         facing=Vector3.Slerp(facing,Shooting?ShotDirection:command.Aim,Mathf.Clamp01(dt*12));facingRotation=Quaternion.LookRotation(facing,Vector3.up);
         bool brace=command.Has(GBInput.Brace)&&!Down&&stamina>1;bool pinning=command.Has(GBInput.Pin)&&GBApp.I.CurrentMode==1;
-        bool groundEscape=command.Has(GBInput.Brace)&&command.Move.sqrMagnitude>.05f&&(Down||PinControlled);
+        bool groundEscape=ScrambleReady&&command.Has(GBInput.Brace)&&command.Move.sqrMagnitude>.05f&&(Down||PinControlled);
         bool effort=command.Has(GBInput.Lift)&&GripCount>0||command.Has(GBInput.Sprint)&&command.Move.magnitude>.1f||GripCount>0||brace||groundEscape||Sprawling;
         bool scrambling=groundEscape||(HeldByOpponent&&command.Has(GBInput.Brace)&&command.Move.sqrMagnitude>.08f&&stamina>8);
         float cost=GripCount*2.0f+(command.Has(GBInput.Lift)&&GripCount>0?tuning.liftCost:0)+(command.Has(GBInput.Sprint)&&command.Move.magnitude>.1f?12:0)+(brace?7*(scrambling?ScrambleStaminaMultiplier:1):0)+(Sprawling?10:0);
@@ -213,7 +217,8 @@ public partial class GBWrestler:MonoBehaviour {
         if(Time.time<climbUntil&&!Down&&stamina>1){if(Time.time>climbUntil-1.9f&&GripCount>0){Release(0);Release(1);foreach(var hand in hands)hand.releaseRequired=true;}Vector3 goal=climbGoal;if(Root.position.y<climbGoal.y-.3f){goal.x=Root.position.x;goal.z=Root.position.z;}Vector3 acceleration=Vector3.ClampMagnitude((goal-Root.position)*18-Root.linearVelocity*7+Vector3.up*9.81f,25);foreach(var part in bodies)part.AddForce(acceleration*part.mass,ForceMode.Force);stamina=Mathf.Max(0,stamina-dt*24);}
         if(command.Has(GBInput.Lift)&&GripCount>0&&!Down&&stamina>3&&!pinTarget){if(command.Has(GBInput.Brace))Slam();else Lift();}
         if((edges&GBInput.Strike)!=0&&!Down&&Time.time>strikeAt){strikeAt=Time.time+.45f;Shot();}
-        if(brace&&pressured){bodies[1].AddForce(Vector3.up*280,ForceMode.Force);bodies[1].AddTorque(facing*90,ForceMode.Force);}
+        UpdateScrambleRecovery(scrambleRequested);
+        if(brace&&ScrambleReady&&pressured){bodies[1].AddForce(Vector3.up*280,ForceMode.Force);bodies[1].AddTorque(facing*90,ForceMode.Force);}
         moveDistance+=Vector3.Distance(Root.position,lastRoot);lastRoot=Root.position;
         foreach(var b in bodies){if(b.linearVelocity.magnitude>18)b.linearVelocity=Vector3.ClampMagnitude(b.linearVelocity,18);if(!Finite(b.position)){GBApp.I.Issue("Invalid body state");ResetTo(spawn);break;}}
     }

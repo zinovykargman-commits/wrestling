@@ -5,6 +5,7 @@ using System.Collections.Generic;
 
 public class GBApp:MonoBehaviour {
     public static GBApp I;
+    public const float PinSeconds=2.5f;
     public enum GamePhase {Menu,Countdown,Fighting,RoundOver,MatchOver}
     public GBTuning Tuning=new GBTuning();
     public GBSound Sfx;public GBNetwork Network;public GBUpdater Updater;
@@ -44,7 +45,7 @@ public class GBApp:MonoBehaviour {
     Dictionary<string,int> padCodes=new Dictionary<string,int>();bool capturePad;float captureStart;
     GUIStyle title,heading,body,small,button,label;Texture2D pixel;Font font;
     string[] arenaNames={"FREIGHT TRAIN","FURNITURE STORE","CRUMBLING TOWER","THE RING"};
-    string[] arenaDetails={"Moving freight cars, breakaway rails, low beams.","Tables, chairs, display shelves and a loading pit.","A rooftop that gives way under your feet.","Control both shoulders for the three-count."};
+    string[] arenaDetails={"Moving freight cars, breakaway rails, low beams.","Tables, chairs, display shelves and a loading pit.","A rooftop that gives way under your feet.","Control both shoulders for a 2.5-second count."};
     string[] actions={"Left hand","Right hand","Sprint","Jump / climb","Lift","Strike","Brace / escape","Pin","Shove","Sprawl","Forward","Back","Left","Right"};
     public float MeasuredFPS {get{return fpsSeconds>0?fpsFrames/fpsSeconds:0;}}
     public float MinFPS {get{return fpsMin;}}
@@ -61,7 +62,7 @@ public class GBApp:MonoBehaviour {
         Views=gameObject.AddComponent<GBPlayerCameraRig>();Views.Setup(this,cam);
         BuildWorld(3,1,false);cam.transform.position=new Vector3(12,12,-19);cam.transform.LookAt(new Vector3(0,.5f,0));
         pixel=Texture2D.whiteTexture;font=Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
-        string[] args=Environment.GetCommandLineArgs();if(Array.IndexOf(args,"--carry-test")>=0||Array.IndexOf(args,"--pin-test")>=0||Array.IndexOf(args,"--momentum-test")>=0||Array.IndexOf(args,"--throw-test")>=0||Array.IndexOf(args,"--input-test")>=0||Array.IndexOf(args,"--ai-test")>=0||Array.IndexOf(args,"--updater-test")>=0||Array.IndexOf(args,"--overhaul-test")>=0||Array.IndexOf(args,"--audit")>=0||Array.IndexOf(args,"--camera-test")>=0||Array.IndexOf(args,"--moves")>=0||Array.IndexOf(args,"--host-test")>=0||Array.IndexOf(args,"--client-test")>=0||Array.IndexOf(args,"--soak")>=0||Array.IndexOf(args,"--record")>=0||Array.IndexOf(args,"--menu-shot")>=0){Automated=true;gameObject.AddComponent<GBAudit>();}
+        string[] args=Environment.GetCommandLineArgs();if(Array.IndexOf(args,"--pin-rules-test")>=0||Array.IndexOf(args,"--carry-test")>=0||Array.IndexOf(args,"--pin-test")>=0||Array.IndexOf(args,"--momentum-test")>=0||Array.IndexOf(args,"--throw-test")>=0||Array.IndexOf(args,"--input-test")>=0||Array.IndexOf(args,"--ai-test")>=0||Array.IndexOf(args,"--updater-test")>=0||Array.IndexOf(args,"--overhaul-test")>=0||Array.IndexOf(args,"--audit")>=0||Array.IndexOf(args,"--camera-test")>=0||Array.IndexOf(args,"--moves")>=0||Array.IndexOf(args,"--host-test")>=0||Array.IndexOf(args,"--client-test")>=0||Array.IndexOf(args,"--soak")>=0||Array.IndexOf(args,"--record")>=0||Array.IndexOf(args,"--menu-shot")>=0){Automated=true;gameObject.AddComponent<GBAudit>();}
     }
     void Defaults() {
         KeyCode[] defaults={KeyCode.Mouse0,KeyCode.Mouse1,KeyCode.LeftShift,KeyCode.Space,KeyCode.R,KeyCode.Q,KeyCode.LeftControl,KeyCode.C,KeyCode.X,KeyCode.E,KeyCode.W,KeyCode.S,KeyCode.A,KeyCode.D};
@@ -132,14 +133,13 @@ public class GBApp:MonoBehaviour {
         for(int p=0;p<2;p++){
             var a=Wrestlers[p];var d=a.PinTarget;
             if(!a.command.Has(GBInput.Pin)||!d)continue;
-            if(Arena.RopeBreak(d)){PinStatus="ROPE BREAK • MOVE AWAY FROM THE ROPES";continue;}
             bool left,right;d.ShoulderContact(out left,out right);
             PinStatus=!a.IsCovering?"MAINTAIN A CONTROLLING GRIP":!left||!right?"HOLD BOTH SHOULDERS DOWN":"BOTH SHOULDERS DOWN";
             if(a.IsCovering&&left&&right&&a.GripCount>0&&a.stamina>3){attacker=p;break;}
         }
         if(attacker!=PinAttacker)PinCount=0;
         PinAttacker=attacker;
-        if(attacker>=0){PinCount+=Time.fixedDeltaTime;if(PinCount>=3)RoundWin(attacker);}else PinCount=0;
+        if(attacker>=0){PinCount+=Time.fixedDeltaTime;if(PinCount>=PinSeconds)RoundWin(attacker);}else PinCount=0;
     }
     public void RoundWin(int winner) {
         if(Phase!=GamePhase.Fighting)return;
@@ -221,7 +221,7 @@ public class GBApp:MonoBehaviour {
     }
     void Home() {
         Label(new Rect(61,211,535,35),"PIN WRESTLING",heading);
-        Label(new Rect(61,260,535,93),"Work for a grip. Control your rival chest-down or on their back, keep both shoulders on the mat and hold the three-count. First to three pins wins.",body);
+        Label(new Rect(61,260,535,93),"Work for a grip. Control your rival chest-down or on their back, keep both shoulders on the mat and hold for 2.5 seconds. First to three pins wins.",body);
         if(Button(new Rect(61,370,535,46),"YOUR INPUT: "+(LocalDevice==1?"CONTROLLER":"KEYBOARD + MOUSE")+"   ›"))LocalDevice=LocalDevice==1?0:1;
         if(Button(new Rect(61,430,535,44),"AI: "+new[]{"EASY","NORMAL","HARD"}[AIDifficulty]+"   ›")){AIDifficulty=(AIDifficulty+1)%3;SavePrefs();}
         if(Button(new Rect(61,502,535,59),"PLAY AGAINST AI   →",true)){Network.Stop();BeginMatch(3,1);}
@@ -254,7 +254,7 @@ public class GBApp:MonoBehaviour {
     public bool CopyInvite(){if(!Network.InviteReady)return false;GUIUtility.systemCopyBuffer=Network.InviteLink;Toast("INVITE COPIED • send it to your friend",2);return true;}
     void How() {
         Label(new Rect(61,206,540,35),"GET THE PIN",heading);
-        Label(new Rect(61,263,535,280),"1. Aim your hands with the mouse. Hold left / right click to grip; release to let go. Aim low for legs.\n\n2. Pull back or pivot sideways to unbalance your rival. Q takes a forward shot; grab yourself.\n\n3. Hold C with a grip to control a grounded rival. Chest-down or back-down both count: keep both shoulders on the mat for three seconds. Ropes break the count.",body);
+        Label(new Rect(61,263,535,280),"1. Aim your hands with the mouse. Hold left / right click to grip; release to let go. Aim low for legs.\n\n2. Pull back or pivot sideways to unbalance your rival. Q takes a forward shot; grab yourself.\n\n3. Hold C with a grip to control a grounded rival. Chest-down or back-down both count: keep both shoulders on the mat for 2.5 seconds. Pins against the ropes count.",body);
         Label(new Rect(61,557,535,150),"DEFEND: Hold E to sprawl against a shot.\nCtrl + move bridges / rolls; raise a shoulder to escape.\n\nWASD move • Mouse aim • Clicks grip\nC pin • E sprawl • R lift • Q shot\nX shove • Space jump • Shift sprint",body);
         Label(new Rect(61,704,535,31),"Controller: left stick move, right stick aim hands. See Keybinds.",small);
         if(Button(new Rect(61,752,260,48),"BACK"))screen="home";if(Button(new Rect(337,752,260,48),"PLAY AI",true)){Network.Stop();BeginMatch(3,1);}
@@ -289,7 +289,7 @@ public class GBApp:MonoBehaviour {
         if(Button(new Rect(660,846,280,44),"F1 • CONTROLS"))ControlsVisible=!ControlsVisible;
         if(Phase==GamePhase.Countdown){Label(new Rect(550,355,500,125),Mathf.Max(1,Mathf.CeilToInt(phaseUntil-Time.time)).ToString(),new GUIStyle(title){alignment=TextAnchor.MiddleCenter,fontSize=110});}
         if(Phase==GamePhase.RoundOver){Panel(new Rect(350,365,900,100),new Color(.03f,.05f,.08f,.92f));Label(new Rect(365,390,870,60),RoundMessage,new GUIStyle(heading){alignment=TextAnchor.MiddleCenter});}
-        if(PinCount>0){Label(new Rect(650,220,300,130),PinCount<1?"COVER":Mathf.Min(3,Mathf.FloorToInt(PinCount)).ToString(),new GUIStyle(title){alignment=TextAnchor.MiddleCenter});Bar(new Rect(590,348,420,10),PinCount/3,new Color(1,.4f,.1f));}
+        if(PinCount>0){Label(new Rect(650,220,300,130),Mathf.Max(0,PinSeconds-PinCount).ToString("0.0"),new GUIStyle(title){alignment=TextAnchor.MiddleCenter});Bar(new Rect(590,348,420,10),PinCount/PinSeconds,new Color(1,.4f,.1f));}
         var pinVictim=controlled.PinTarget;
         if(!pinVictim&&controlled.IsBeingPinned)pinVictim=controlled;
         if(pinVictim){bool left,right;pinVictim.ShoulderContact(out left,out right);Panel(new Rect(540,365,520,79),new Color(.025f,.04f,.065f,.86f));Label(new Rect(560,376,480,25),"LEFT SHOULDER: "+(left?"DOWN":"UP")+"    RIGHT: "+(right?"DOWN":"UP"),new GUIStyle(small){alignment=TextAnchor.MiddleCenter});Label(new Rect(550,411,500,25),PinStatus,new GUIStyle(small){alignment=TextAnchor.MiddleCenter});}
@@ -340,7 +340,7 @@ public class GBApp:MonoBehaviour {
         var text=new GUIStyle(body){fontSize=20};
         Label(new Rect(195,310,560,35),mine==0?"YOU • ORANGE":"YOU • BLUE",heading);
         Label(new Rect(195,354,565,363),ControlSummary(mine),text);
-        Label(new Rect(845,354,550,355),"L / R markers show each hand's real reach.\nHighlighted body parts are held by that hand.\nAim high for shoulders or low for legs.\nEach click grips; release that click to let go.\nMove back to pull; sideways to pivot.\nQ: forward shot, then grab yourself.\nHold "+(LocalDevice==1?PadName(padCodes["Sprawl"]):KeyName(keys["Sprawl"]))+" to sprawl against a shot.\nC + move: shift pressure onto a shoulder.\nHold both shoulders down for 3 seconds.\nCtrl + move: bridge / roll; costs stamina.\nRopes stop the count. First to 3 pins wins.",text);
+        Label(new Rect(845,354,550,355),"L / R markers show each hand's real reach.\nHighlighted body parts are held by that hand.\nAim high for shoulders or low for legs.\nEach click grips; release that click to let go.\nMove back to pull; sideways to pivot.\nQ: forward shot, then grab yourself.\nHold "+(LocalDevice==1?PadName(padCodes["Sprawl"]):KeyName(keys["Sprawl"]))+" to sprawl against a shot.\nC + move: shift pressure onto a shoulder.\nHold both shoulders down for 2.5 seconds.\nCtrl + move: bridge / roll; costs stamina. Exhaustion: 1.2s recovery.\nPins against ropes still count. First to 3 pins wins.",text);
         Label(new Rect(195,735,820,57),"F1 controls • Esc pause • F11 fullscreen\nYour camera stays locked to your wrestler.",small);
         if(Button(new Rect(1090,742,310,50),"CLOSE • F1",true))ControlsVisible=false;
     }

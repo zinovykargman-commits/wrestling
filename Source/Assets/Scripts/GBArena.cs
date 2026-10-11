@@ -137,7 +137,7 @@ public class GBArena:MonoBehaviour {
         if(kind==1)return Mathf.Abs(p.x)>9.5f||Mathf.Abs(p.z)>7;
         float limit=sudden?Mathf.Lerp(6.8f,1.2f,Mathf.Clamp01(suddenTime/30)):12;return Mathf.Abs(p.x)>limit||Mathf.Abs(p.z)>limit;
     }
-    public bool RopeBreak(GBWrestler w) {if(kind!=3)return false;foreach(var b in w.bodies)if(Mathf.Abs(b.position.x)>4.0f||Mathf.Abs(b.position.z)>4.0f)return true;return false;}
+    public bool TouchesRopes(GBWrestler w) {if(kind!=3)return false;foreach(var b in w.bodies)if(Mathf.Abs(b.position.x)>4.0f||Mathf.Abs(b.position.z)>4.0f)return true;return false;}
     public void Tick(float dt) {
         elapsed+=dt;if(sudden)suddenTime+=dt;
         if(kind==0){for(int i=0;i<sweepers.Count;i++){float phase=(elapsed*4.5f+i*22)%44;var p=new Vector3(0,1.55f,22-phase);sweepers[i].MovePosition(p);if(sudden)sweepers[i].MovePosition(new Vector3(0,Mathf.Lerp(1.55f,.4f,suddenTime/30),p.z));}}

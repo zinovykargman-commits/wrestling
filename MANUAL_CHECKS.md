@@ -2,7 +2,7 @@
 
 1. Open PLAY.cmd and confirm only Pin Wrestling. AI and private host/join use the same rules/version.
 2. Aim high/low/sideways before clicking and while gripping. Check useful hand response, body-region selection, independent clicks/releases and absence of F/Y Throw action.
-3. Work opponent off balance, grip, hold C, cover both chest-down and back-down positions on the mat. Check both shoulder indicators and continuous count, interruptions by shoulder/grip/C/ropes; complete three pins/rematch.
+3. Work opponent off balance, grip, hold C, cover both chest-down and back-down positions on the mat. Check both shoulder indicators and continuous count, 2.5-second count, interruptions by shoulder/grip/C; valid pins at ropes still count; complete three pins/rematch.
 4. Defend with Ctrl + WASD bridge/roll. Compare fresh/exhausted stamina and loose one-hand vs two-hand control. Both players should have meaningful chances.
 5. Run Q shots and manually grip afterward; rotate/release for momentum. Check connected bodies/nonadjacent arm contact during sustained play.
 6. Physical keyboard/controller buttons, rebind/save/reset, disconnect/rumble, F1/Escape/focus and F11. Scripted polling is not a hardware-event check.

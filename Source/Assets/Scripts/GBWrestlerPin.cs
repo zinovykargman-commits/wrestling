@@ -147,7 +147,7 @@ public partial class GBWrestler {
         // automatic relocation or required chest-over-chest pose.
         Vector3 direction=facing;
         float strength=Mathf.Lerp(.45f,1,StaminaFraction);
-        bool resisting=victim.command.Has(GBInput.Brace)&&victim.command.Move.sqrMagnitude>.05f&&victim.stamina>4;
+        bool resisting=victim.ScrambleReady&&victim.command.Has(GBInput.Brace)&&victim.command.Move.sqrMagnitude>.05f&&victim.stamina>4;
         bool leftShoulder,rightShoulder;
         if(victim.ShoulderContact(out leftShoulder,out rightShoulder))pinFront=Vector3.Dot(victim.bodies[1].rotation*Vector3.forward,Vector3.up)<0;
         float control=strength*(GripCount>1?1:.9f)*(resisting?.30f:1);
@@ -186,7 +186,7 @@ public partial class GBWrestler {
         stamina=Mathf.Max(0,stamina-dt*3);Feedback(IsCovering?"Controlling - keep both shoulders on the mat":"Maintain your grip and control",.2f);
     }
     void BridgeAndRoll(float dt){
-        if(!command.Has(GBInput.Brace)||command.Move.sqrMagnitude<.05f||stamina<4||eliminated||(!Down&&!PinControlled&&Vector3.Dot(bodies[1].rotation*Vector3.up,Vector3.up)>.5f))return;
+        if(!ScrambleReady||!command.Has(GBInput.Brace)||command.Move.sqrMagnitude<.05f||stamina<4||eliminated||(!Down&&!PinControlled&&Vector3.Dot(bodies[1].rotation*Vector3.up,Vector3.up)>.5f))return;
         RaycastHit floor;if(!PinFloor(Root.position,out floor))return;
         float effort=Mathf.Lerp(.35f,1,StaminaFraction),height=Mathf.Clamp01((floor.point.y+.70f-Root.position.y)/.45f);
         // A fresh bridge must lift against the coverer's weight as well as

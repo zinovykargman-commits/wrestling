@@ -4,7 +4,7 @@
 
 This repository contains the editable Unity source, update installer, and build instructions. The playable Windows build is distributed as a release asset.
 
-# GRIP BREAK 0.4.2
+# GRIP BREAK 0.4.3
 
 Extract GRIP_BREAK-Windows.zip and open **PLAY.cmd**. Only **Pin Wrestling** in the ring is active. **PLAY AGAINST AI** and **PRIVATE ONLINE** enter the same rules. First to three pins wins. Training and other rule/arena choices are retired for now.
 
@@ -31,7 +31,7 @@ The **KEYBINDS** page changes/saves keyboard, mouse and controller actions. RESE
 
 Aim before clicking: high for shoulders, low for legs. Each click holds its own physical hand. A target must be in reach. Moving the cursor with a grip physically works against the target rather than teleporting it.
 
-Pull backward, pivot sideways, or take a forward Q shot and manually grip to work your rival off balance. Hold C while gripping a physically low, lying rival to settle their chest or back onto the mat and use a low controlling stance. The grounded rival's chest/back and both shoulders against the mat, with your live controlling grip, are required for **three continuous seconds**. Shoulder indicators/count show progress. Releasing C, losing control/contact, raising a shoulder or touching ropes interrupts the count. Leaving the ring resets the round.
+Pull backward, pivot sideways, or take a forward Q shot and manually grip to work your rival off balance. Hold C while gripping a physically low, lying rival to settle their chest or back onto the mat and use a low controlling stance. The grounded rival's chest/back and both shoulders against the mat, with your live controlling grip, are required for **2.5 continuous seconds**. Shoulder indicators/count show progress. Releasing C, losing control/contact, raising a shoulder interrupts the count. Touching ropes does not interrupt a valid pin. Leaving the ring resets the round.
 
 Hold **E** to sprawl: lower your hips, send the legs back and resist a shot with your body weight. Arms and manual grips remain independent; release E to recover. Sprawl drains stamina and cannot turn into a shot while held. Lift uses R; old default lift bindings migrate automatically.
 
@@ -59,7 +59,7 @@ Walking uses alternating physical foot targets and coordinated thigh/knee motors
 
 Current pin rule: the grounded wrestler may be chest-down or back-down, with both actual shoulders on the mat and a live nearby controlling grip while C is held. The attacker does not need to place their chest over the rival. Multiplayer omits the mat motivational slogan and bottom coaching prompt.
 
-Tackle has been removed from keyboard/controller bindings, control legends, AI decisions and physics. The retired network input bit is rejected. Both players need 0.4.2 (protocol 10).
+Tackle has been removed from keyboard/controller bindings, control legends, AI decisions and physics. The retired network input bit is rejected. Both players need 0.4.3 (protocol 11).
 Jump requires 8 stamina (climb 16) and is unavailable while under pin control. C requires a physically low, lying opponent before pin control; low balance or a Down timer while upright is insufficient. Ctrl + movement still bridges/rolls.
 
 
@@ -67,3 +67,5 @@ Jump requires 8 stamina (climb 16) and is unavailable while under pin control. C
 Single-grip pin control is stronger in 0.4.0 so a live one-hand hold can settle a raised shoulder. Two-hand control, real shoulder requirements and the three-count are unchanged.
 
 0.4.2: slightly more forgiving general grip break limits, without stronger pulling forces or higher stamina costs. Carried/released bodies preserve physical orientation through flight and briefly settle on impact before automatic standing recovery; tilted releases can land on their core instead of always on boots.
+
+0.4.3: pins against ropes count for2.5 seconds; active lift/pivot/slam/shove leverage reduced slightly, with weaker one-arm, grounded and pinned leverage. Scramble costs an additional10% and has1.2 seconds recovery after usable stamina runs out.
