@@ -1,0 +1,19 @@
+{
+  "version": "0.4.3",
+  "passed": true,
+  "manifestMatches": true,
+  "assets": [
+    {
+      "asset": "GRIP_BREAK-Windows.zip",
+      "sha256": "461a91aa6136ee039e754858e221562fe01e92d65ac8163da884b08e31f2f624",
+      "size": 59812175,
+      "passed": true
+    },
+    {
+      "asset": "GRIP_BREAK-Source.zip",
+      "sha256": "5635c9535813d7ca5985a27004fe27e6cb7b6e56cc2a8ba6e54fb6cba977aa0a",
+      "size": 18719707,
+      "passed": true
+    }
+  ]
+}

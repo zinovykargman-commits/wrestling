@@ -1,5 +1,7 @@
-# GRIP BREAK 0.4.2 public verification
+# GRIP BREAK 0.4.3 public verification
 
-Actual public Windows/Source ZIP bytes match the local packaged SHA-256 hashes and sizes; the public updater manifest matches. The current native game passed 15 public updater checks and identifies 0.4.2 as current.
+Actual public Windows/Source ZIP bytes match the packaged hashes and sizes; the updater manifest matches. The native menu updater passed15 checks and identifies0.4.3 as current.
 
-Grip strain tolerance is slightly increased; force caps, reciprocal reaction, stamina costs, manual release and escape remain. Stamina capacity is 155.25 (+15% over 135); both peers must update to protocol10/0.4.2. Carried/released bodies preserve orientation until real core/boot landing and a 0.35-second settle interval. Actual native tilted/upright landing screenshots were inspected. Prepared held-flight fixtures isolate recovery; they do not establish all player throws or human balance. Native momentum, input and same-PC two-peer protocol10 checks are recorded in VALIDATION.md; separate-PC internet is not rerun for this patch. Historical 0.4.1 pin scenario failures remain documented.
+Pins against ropes count; both real shoulders, a nearby live grip and C remain required for2.5 continuous seconds. Applied powered lift/pivot/slam/shove assistance is slightly weaker, with substantial grounded/pinned leverage disadvantage and actual same-target hand counting. Physical earned momentum is unchanged. Ctrl scramble costs another10% over0.4.2; falling below the usable4-stamina threshold starts1.2s recovery, even if stamina regenerates early.
+
+Native prepared geometry/count and accumulated-force fixtures, live scramble drain/timer tests, normal input and same-PC two-peer protocol11 tests passed. Native screenshots were inspected. These isolated fixtures do not prove all human pin exchanges; historical broader pin scenario failures are retained. Human balance and separate-PC internet were not revalidated.

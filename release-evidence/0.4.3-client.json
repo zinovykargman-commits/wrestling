@@ -1,0 +1,76 @@
+{
+    "build": "0.4.3",
+    "engine": "6000.3.7f1",
+    "hardware": "Intel(R) Core(TM) i5-14400F / 16173 MB",
+    "graphics": "NVIDIA GeForce RTX 5060",
+    "startedUtc": "2026-10-11T19:27:59.4873840Z",
+    "duration": 20.541845321655275,
+    "averageFps": 119.91635131835938,
+    "minFps": 108.07772827148438,
+    "bodies": 92,
+    "issues": 0,
+    "screenWidth": 1600,
+    "screenHeight": 900,
+    "checks": [
+        {
+            "name": "test_inputs_not_serialized",
+            "passed": true,
+            "evidence": "runtime-only input; scene cannot install an empty test array"
+        },
+        {
+            "name": "network_handshake",
+            "passed": true,
+            "evidence": "Connected to HOST"
+        },
+        {
+            "name": "connected_camera_owner",
+            "passed": true,
+            "evidence": "connected peer owns its wrestler camera"
+        },
+        {
+            "name": "connected_wrestler_centered",
+            "passed": true,
+            "evidence": "player=1 viewport=(0.50, 0.50, 7.60)"
+        },
+        {
+            "name": "pin_only_network_world",
+            "passed": true,
+            "evidence": "both peers run ring pins"
+        },
+        {
+            "name": "physical_grip_state_stream",
+            "passed": true,
+            "evidence": "maximum simultaneous hand targets=4"
+        },
+        {
+            "name": "prop_break_stream",
+            "passed": true,
+            "evidence": "observed broken prop state"
+        },
+        {
+            "name": "round_reset_stream",
+            "passed": true,
+            "evidence": "epoch=1 â†’ 2"
+        },
+        {
+            "name": "host_disconnect_returns_to_menu",
+            "passed": true,
+            "evidence": "Friend disconnected: The connection was closed"
+        },
+        {
+            "name": "state_stream",
+            "passed": true,
+            "evidence": "sent=0 received=521"
+        },
+        {
+            "name": "network_finite",
+            "passed": true,
+            "evidence": "registry=92"
+        },
+        {
+            "name": "connected_body_joints",
+            "passed": true,
+            "evidence": "missing frames=0 maximum physical anchor separation=0.0000 m"
+        }
+    ]
+}
