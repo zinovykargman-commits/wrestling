@@ -294,7 +294,41 @@ public class GBApp:MonoBehaviour {
         if(!pinVictim&&controlled.IsBeingPinned)pinVictim=controlled;
         if(pinVictim){bool left,right;pinVictim.ShoulderContact(out left,out right);Panel(new Rect(540,365,520,79),new Color(.025f,.04f,.065f,.86f));Label(new Rect(560,376,480,25),"LEFT SHOULDER: "+(left?"DOWN":"UP")+"    RIGHT: "+(right?"DOWN":"UP"),new GUIStyle(small){alignment=TextAnchor.MiddleCenter});Label(new Rect(550,411,500,25),PinStatus,new GUIStyle(small){alignment=TextAnchor.MiddleCenter});}
         if(Phase==GamePhase.Fighting&&Network.role==GBNetwork.Role.Offline){Label(new Rect(560,813,490,25),controlled.IsBeingPinned?"CTRL + MOVE • BRIDGE / ROLL TO ESCAPE":"AIM HANDS • CLICK TO GRIP • HOLD C TO PIN",new GUIStyle(small){alignment=TextAnchor.MiddleCenter});}
-        if(controlled.command.HasHandAim){Vector3 at=Views.Primary.WorldToScreenPoint(controlled.Root.position+controlled.command.HandOffset);if(at.z>0){float x=at.x*1600/Screen.width,y=900-at.y*900/Screen.height;Label(new Rect(x-12,y-12,30,30),"+",new GUIStyle(heading){fontSize=23,normal={textColor=new Color(1,.82f,.27f)}});}}
+        DrawArmAim(controlled);
+        if(controlled.PinTarget&&Mathf.Abs(controlled.PinPressureBias)>.08f)Label(new Rect(550,451,500,25),(controlled.PinPressureBias<0?"LEFT":"RIGHT")+" SHOULDER PRESSURE",new GUIStyle(small){alignment=TextAnchor.MiddleCenter});
+    }
+    public bool ShowsArmAimFor(GBWrestler wrestler){return InMatch&&Wrestlers.Count>Views.PrimaryPlayer&&wrestler==Wrestlers[Views.PrimaryPlayer]&&wrestler.command.HasHandAim;}
+    bool AimScreenPoint(Vector3 point,out Vector2 screenPoint){
+        Vector3 screen=Views.Primary.WorldToScreenPoint(point);screenPoint=new Vector2(screen.x*1600/Screen.width,900-screen.y*900/Screen.height);return screen.z>Views.Primary.nearClipPlane;
+    }
+    void GripRegionOutline(GBTarget target,Color color,int hand){
+        if(!target)return;var shape=target.GetComponent<Collider>();if(!shape||!shape.enabled)return;
+        Bounds bounds=shape.bounds;Vector2 min=new Vector2(1600,900),max=Vector2.zero;
+        for(int n=0;n<8;n++){Vector3 corner=bounds.center+Vector3.Scale(bounds.extents,new Vector3((n&1)==0?-1:1,(n&2)==0?-1:1,(n&4)==0?-1:1));Vector2 point;if(!AimScreenPoint(corner,out point))return;min=Vector2.Min(min,point);max=Vector2.Max(max,point);}
+        float margin=4+hand*3;min-=Vector2.one*margin;max+=Vector2.one*margin;
+        float length=Mathf.Min(18,Mathf.Min(max.x-min.x,max.y-min.y)*.3f);
+        // Screen-space brackets identify the physical body being held; they
+        // never recolor the other player's materials or change colliders.
+        for(int x=0;x<2;x++)for(int y=0;y<2;y++){
+            float px=x==0?min.x:max.x,py=y==0?min.y:max.y;
+            Panel(new Rect(x==0?px:px-length,py,length,2),color);
+            Panel(new Rect(px,y==0?py:py-length,2,length),color);
+        }
+    }
+    void DrawArmAim(GBWrestler controlled){
+        if(!ShowsArmAimFor(controlled))return;
+        for(int h=0;h<2;h++){
+            var hand=controlled.hands[h];bool held=hand.target;
+            Color tint=h==0?new Color(.28f,.91f,1):new Color(1,.78f,.27f);
+            if(held)GripRegionOutline(hand.target,tint,h);
+            Vector2 point;if(!AimScreenPoint(controlled.ArmAimGoal(h),out point))continue;
+            if(controlled.ArmAimClamped(h)&&!held)tint=Color.Lerp(tint,new Color(.7f,.72f,.76f),.6f);
+            float x=point.x,y=point.y;Panel(new Rect(x-9,y-9,18,2),tint);Panel(new Rect(x-9,y+7,18,2),tint);Panel(new Rect(x-9,y-9,2,18),tint);Panel(new Rect(x+7,y-9,2,18),tint);
+            Label(new Rect(x-7,y-8,16,17),h==0?"L":"R",new GUIStyle(small){fontSize=12,alignment=TextAnchor.MiddleCenter,normal={textColor=tint}});
+            var target=controlled.ArmMarkedTarget(h);string state=held?"HOLD "+target.region:target?"REACH "+target.region:controlled.ArmAimClamped(h)?"MAX REACH":"AIM";
+            float textY=h==0?y-34:y+14;Panel(new Rect(x-83,textY,166,20),new Color(.025f,.04f,.065f,.78f));
+            Label(new Rect(x-81,textY,162,20),(h==0?"L  ":"R  ")+state,new GUIStyle(small){fontSize=12,alignment=TextAnchor.MiddleCenter,normal={textColor=tint}});
+        }
     }
     public string ControlSummary(int player){
         bool pad=LocalDevice==1;
@@ -309,7 +343,7 @@ public class GBApp:MonoBehaviour {
         var text=new GUIStyle(body){fontSize=20};
         Label(new Rect(195,310,560,35),mine==0?"YOU • ORANGE":"YOU • BLUE",heading);
         Label(new Rect(195,354,565,363),ControlSummary(mine),text);
-        Label(new Rect(845,354,550,335),"Aim high for shoulders or low for legs.\nEach click grips with its own hand.\nRelease that click to let go.\nMove back to pull; sideways to pivot.\nQ: forward shot, then grab yourself.\nHold "+(LocalDevice==1?PadName(padCodes["Sprawl"]):KeyName(keys["Sprawl"]))+" to sprawl against a shot.\nC: control a grounded rival.\nHold both shoulders down for 3 seconds.\nCtrl + movement: bridge / roll / escape.\nRopes stop the count. First to 3 pins wins.",text);
+        Label(new Rect(845,354,550,355),"L / R markers show each hand's real reach.\nHighlighted body parts are held by that hand.\nAim high for shoulders or low for legs.\nEach click grips; release that click to let go.\nMove back to pull; sideways to pivot.\nQ: forward shot, then grab yourself.\nHold "+(LocalDevice==1?PadName(padCodes["Sprawl"]):KeyName(keys["Sprawl"]))+" to sprawl against a shot.\nC + move: shift pressure onto a shoulder.\nHold both shoulders down for 3 seconds.\nCtrl + move: bridge / roll; costs stamina.\nRopes stop the count. First to 3 pins wins.",text);
         Label(new Rect(195,735,820,57),"F1 controls • Esc pause • F11 fullscreen\nYour camera stays locked to your wrestler.",small);
         if(Button(new Rect(1090,742,310,50),"CLOSE • F1",true))ControlsVisible=false;
     }

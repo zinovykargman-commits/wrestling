@@ -146,7 +146,12 @@ public class GBContact:MonoBehaviour {
             bool core=bodyIndex>=0&&bodyIndex<=2;bool otherWrestler=c.collider.GetComponent<GBTarget>() is GBTarget target&&target.wrestler&&target.wrestler!=wrestler;
             bool upwardSurface=false;for(int n=0;n<c.contactCount;n++)if(c.GetContact(n).normal.y>.55f){upwardSurface=true;break;}
             bool damagingLanding=core&&upwardSurface&&speed>7.0f;
-            if(core&&(otherWrestler||!upwardSurface||damagingLanding))wrestler.Contact(speed,c.impulse.magnitude);
+            // A paid shot/jump has one measured impact budget. Suppress the
+            // generic opponent bump on both sides for its complete window,
+            // even after the explicit callback consumed it or caused Down.
+            // Environment impacts/landings and ordinary movement stay normal.
+            bool actionContact=otherWrestler&&(wrestler.MomentumActionWindow||contacted.wrestler.MomentumActionWindow);
+            if(core&&!actionContact&&(otherWrestler||!upwardSurface||damagingLanding))wrestler.Contact(speed,c.impulse.magnitude);
         }
         if(prop)prop.Hit(speed,c.impulse.magnitude);
         if(speed>1.3f&&Time.time-last>.18f){last=Time.time;GBApp.I.Sfx.Play(sound,Mathf.Clamp01(speed/7));if(speed>4)GBApp.I.Shake(.07f);}

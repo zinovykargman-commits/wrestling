@@ -94,13 +94,12 @@ public partial class GBWrestler {
         MomentumTick(dt);
         int edges=command.flags&~combatFlags;combatFlags=command.flags;
         if((edges&GBInput.Shove)!=0&&!Down&&Time.time>=shoveUntil)Shove();
-        if(Shooting&&!shotImpactDone)ShotContact();
         bool escaping=HeldByOpponent&&command.Has(GBInput.Brace)&&command.Move.sqrMagnitude>.08f&&stamina>8&&!Down;
         escapeCharge=escaping?escapeCharge+dt:Mathf.Max(0,escapeCharge-dt*2);
-        if(escaping){stamina=Mathf.Max(0,stamina-dt*5);Feedback("Escaping - brace and keep moving",.2f);}
+        if(escaping){stamina=Mathf.Max(0,stamina-dt*5*ScrambleStaminaMultiplier);Feedback("Escaping - brace and keep moving",.2f);}
         if(escapeCharge>=.7f){
             foreach(var opponent in GBApp.I.Wrestlers)if(opponent!=this)for(int h=0;h<2;h++)if(opponent.hands[h].joint&&opponent.hands[h].target&&opponent.hands[h].target.wrestler==this){opponent.Release(h);opponent.hands[h].releaseRequired=true;opponent.Feedback("Opponent broke your hold",.85f);}
-            EscapeUntil=Time.time+.65f;escapeCharge=0;stamina=Mathf.Max(0,stamina-9);foreach(var part in bodies)part.AddForce(command.Move.normalized*1.35f,ForceMode.VelocityChange);Feedback("Escaped - move into the opening",.85f);
+            EscapeUntil=Time.time+.65f;escapeCharge=0;stamina=Mathf.Max(0,stamina-9*ScrambleStaminaMultiplier);foreach(var part in bodies)part.AddForce(command.Move.normalized*1.35f,ForceMode.VelocityChange);Feedback("Escaped - move into the opening",.85f);
         }
         if(Down||GripCount==0||command.Has(GBInput.Lift)||Time.time<shoveUntil||stamina<6)return;
         float backward=Mathf.Max(0,-Vector3.Dot(command.Move,facing));Vector3 side=Vector3.Cross(Vector3.up,facing);float lateral=Vector3.Dot(command.Move,side);
@@ -108,8 +107,12 @@ public partial class GBWrestler {
         foreach(var hand in hands){
             if(!hand.joint||!hand.target||!hand.target.wrestler||!affected.Add(hand.target.wrestler))continue;
             var victim=hand.target.wrestler;bool braced=victim.command.Has(GBInput.Brace)&&victim.grounded&&victim.stamina>8;float resistance=braced?.35f:1;
-            Vector3 force=(-facing*backward*230+side*lateral*165)*resistance;victim.Root.AddForce(force,ForceMode.Force);Root.AddForce(-force*.18f,ForceMode.Force);
-            if(Mathf.Abs(lateral)>.2f)hand.target.Body.AddForceAtPosition(side*lateral*65*resistance,hand.target.transform.TransformPoint(hand.localAnchor),ForceMode.Force);
+            Vector3 force=(-facing*backward*230+side*lateral*165)*resistance;victim.Root.AddForce(force,ForceMode.Force);Root.AddForce(-force,ForceMode.Force);
+            if(Mathf.Abs(lateral)>.2f){
+                Vector3 pivot=side*lateral*65*resistance,contact=hand.target.transform.TransformPoint(hand.localAnchor);
+                hand.target.Body.AddForceAtPosition(pivot,contact,ForceMode.Force);
+                Root.AddForceAtPosition(-pivot,contact,ForceMode.Force);
+            }
             float legBonus=hand.target.region.Contains("thigh")||hand.target.region.Contains("shin")?1.35f:1;
             victim.balance=Mathf.Max(0,victim.balance-dt*(backward*32+Mathf.Abs(lateral)*24)*resistance*legBonus);if(victim.balance<20)victim.Knock(22,.55f);
             stamina=Mathf.Max(0,stamina-dt*2);Feedback(braced?"Opponent bracing - pivot or wait for stamina":backward>.35f?"Pulling opponent off balance":"Pivoting around the hold",.2f);
@@ -145,22 +148,10 @@ public partial class GBWrestler {
         if(Time.time<shotAt){Feedback("Shot recovering - reposition",.3f);return;}
         if(stamina<12){Feedback("Exhausted - shot needs stamina");return;}
         if(Down||hanging||Sprawling||Time.time<pressureUntil||!Physics.Raycast(Root.position+Vector3.up*.1f,Vector3.down,1.8f,1,QueryTriggerInteraction.Ignore)){Feedback(Sprawling?"Release sprawl before shooting":"Plant your feet before shooting",.5f);return;}
-        shotDirection=facing.normalized;shotUntil=Time.time+.45f;shotAt=Time.time+.9f;shotImpactDone=false;LastShotApproachSpeed=0;stamina=Mathf.Max(0,stamina-12);
+        shotDirection=facing.normalized;shotUntil=Time.time+.58f;shotAt=Time.time+.9f;shotImpactDone=false;LastShotApproachSpeed=0;stamina=Mathf.Max(0,stamina-12);
         BeginShotMomentum();
         foreach(var part in bodies)part.AddForce(shotDirection*2.8f+Vector3.down*.15f,ForceMode.VelocityChange);
         Feedback("Forward shot - grab manually to follow through",.7f);
-    }
-    void ShotContact(){
-        Vector3 contactOrigin=Root.position+shotDirection*.48f-Vector3.up*.12f;
-        foreach(var collider in Physics.OverlapSphere(contactOrigin,.42f,1<<8,QueryTriggerInteraction.Ignore)){
-            var target=collider.GetComponent<GBTarget>();if(!target||!target.wrestler||target.wrestler==this||target.wrestler.eliminated)continue;
-            if(target.region!="pelvis"&&!target.region.Contains("thigh")&&!target.region.Contains("shin"))continue;
-            Vector3 point=collider.ClosestPoint(contactOrigin),delta=target.wrestler.Root.position-Root.position;
-            if(Vector3.Dot(delta,shotDirection)<.05f||Vector3.Distance(point,contactOrigin)>.3f)continue;
-            var victim=target.wrestler;bool braced=(victim.command.Has(GBInput.Brace)||victim.Sprawling)&&victim.grounded&&victim.stamina>8;
-            ShotMomentum(target,point,braced);
-            shotImpactDone=true;GBApp.I.Sfx.Play("hit",.6f);GBApp.I.Burst(point,color);Feedback(braced?"Shot resisted - change angle":"Shot connected - grab to finish",.7f);return;
-        }
     }
     public void Shove(){
         if(GripCount==0){Feedback("Shove needs a manual grip - grab first");return;}

@@ -5,7 +5,7 @@ public partial class GBWrestler {
         public float mass,inertia,yawMomentum;
         public Vector3 center,velocity;
     }
-    float spinBudget,spinSampleAt=-10,grabMomentumAt,shotPressureUntil,shotForwardPeak;
+    float spinBudget,spinSampleAt=-10,grabMomentumAt,shotPressureUntil,shotForwardPeak,jumpImpactUntil;bool jumpImpactConsumed;
     public float ShotDriveSpeed {get;private set;}=4.2f;
     public float RecentSpinMomentum {get{return Time.time-spinSampleAt<.9f?spinBudget:0;}}
     public float SpinCarry {get{return Mathf.Clamp01(Mathf.Abs(RecentSpinMomentum)/48);}}
@@ -14,6 +14,14 @@ public partial class GBWrestler {
     public float LastGrabApproachSpeed {get;private set;}
     public float LastShotApproachSpeed {get;private set;}
     public float LastThrowSpinCarry {get;private set;}
+    public float LastShotPhysicalImpulse {get;private set;}
+    public int ShotImpactCount {get;private set;}
+    public float LastBodyImpactApproachSpeed {get;private set;}
+    public float LastBodyPhysicalImpulse {get;private set;}
+    public int BodyImpactCount {get;private set;}
+    public bool JumpImpactActive {get{return Time.time<jumpImpactUntil&&!jumpImpactConsumed;}}
+    public bool MomentumActionWindow {get{return Time.time<shotUntil||Time.time<jumpImpactUntil;}}
+    internal bool JumpFlightWindow {get{return Time.time<jumpImpactUntil;}}
 
     static float YawInertia(Rigidbody body){
         Quaternion principal=body.rotation*body.inertiaTensorRotation;
@@ -37,10 +45,18 @@ public partial class GBWrestler {
         if(target.wrestler)return MeasureMomentum(target.wrestler);
         return new MomentumState{mass=Mathf.Max(1,target.Body.mass),center=target.Body.worldCenterOfMass,velocity=target.Body.linearVelocity,inertia=YawInertia(target.Body)};
     }
-    void MomentumReset(){spinBudget=shotForwardPeak=0;spinSampleAt=-10;grabMomentumAt=shotPressureUntil=0;ShotDriveSpeed=4.2f;LastGrabMomentumImpulse=LastGrabApproachSpeed=LastShotApproachSpeed=LastThrowSpinCarry=0;}
+    void MomentumReset(){
+        spinBudget=shotForwardPeak=0;spinSampleAt=-10;grabMomentumAt=shotPressureUntil=jumpImpactUntil=0;jumpImpactConsumed=false;ShotDriveSpeed=4.2f;
+        LastGrabMomentumImpulse=LastGrabApproachSpeed=LastShotApproachSpeed=LastThrowSpinCarry=LastShotPhysicalImpulse=LastBodyImpactApproachSpeed=LastBodyPhysicalImpulse=0;ShotImpactCount=BodyImpactCount=0;
+        // Listen on the two weight-bearing bodies, not hands, head or feet.
+        // Unity resolves the actual surface collision before we change stance.
+        for(int n=0;n<2;n++){var relay=bodies[n].GetComponent<GBMomentumContact>();if(!relay)relay=bodies[n].gameObject.AddComponent<GBMomentumContact>();relay.owner=this;}
+    }
+    internal void BeginJumpMomentum(){jumpImpactUntil=Time.time+.9f;jumpImpactConsumed=false;}
+
     void BeginShotMomentum(){
         float forward=Mathf.Max(0,Vector3.Dot(MeasureMomentum(this).velocity,shotDirection));
-        ShotDriveSpeed=Mathf.Clamp(forward+2.8f,4.2f,7);shotForwardPeak=forward;
+        ShotDriveSpeed=Mathf.Clamp(forward+2.8f,4.7f,7.2f);shotForwardPeak=forward;
     }
     void MomentumTick(float dt){
         if(Shooting)shotForwardPeak=Mathf.Max(shotForwardPeak,Vector3.Dot(MeasureMomentum(this).velocity,shotDirection));
@@ -129,24 +145,53 @@ public partial class GBWrestler {
         carry*=safe;
         LastThrowSpinCarry=carry.magnitude;spinBudget=0;grabMomentumAt=Time.time+.9f;return carry;
     }
-    void ShotMomentum(GBTarget target,Vector3 point,bool braced){
-        Vector3 relative=Root.GetPointVelocity(point)-target.Body.GetPointVelocity(point);
-        MomentumState source=MeasureMomentum(this),victim=MeasureTarget(target);
-        // Contact can already have absorbed velocity before this callback.
-        // Use the measured approach peak, never a commanded or wished speed.
-        float closing=Mathf.Clamp(Mathf.Max(Vector3.Dot(relative,shotDirection),shotForwardPeak-Vector3.Dot(victim.velocity,shotDirection)),0,8);LastShotApproachSpeed=closing;
-        float reducedMass=source.mass*victim.mass/(source.mass+victim.mass);
-        float impulseMagnitude=Mathf.Min(180,70+closing*reducedMass*.5f)*(braced?.45f:1);
-        Vector3 impulse=shotDirection*impulseMagnitude;
-        float safe=MomentumImpulseLimit(this,-impulse,point);if(target.wrestler)safe=Mathf.Min(safe,MomentumImpulseLimit(target.wrestler,impulse,point));impulse*=safe;
-        TargetMomentumImpulse(target,impulse,point);BodyMomentumImpulse(this,-impulse,point);
-        if(!braced){
-            // A faster real collision unloads the target's planted stance for
-            // a short stumble, allowing earned momentum to carry through.
-            float pressure=Mathf.Clamp((closing-2.5f)*.075f,0,.32f);
-            target.wrestler.shotPressureUntil=Time.time+pressure;
-            target.wrestler.pressureUntil=Mathf.Max(target.wrestler.pressureUntil,target.wrestler.shotPressureUntil);
+    // Only a real torso/hip collision opens this path. Collision.impulse is
+    // already delivered by PhysX: never add it again or mint a base impulse.
+    internal void PhysicalMomentumContact(Collision collision){
+        if(!GBApp.I||!GBApp.I.Authority||collision.contactCount==0||eliminated)return;
+        var target=collision.rigidbody?collision.rigidbody.GetComponent<GBTarget>():null;
+        if(!target||!target.wrestler||target.wrestler==this||target.wrestler.eliminated)return;
+        var victim=target.wrestler;Vector3 point=collision.GetContact(0).point;
+        var source=MeasureMomentum(this);var other=MeasureMomentum(victim);
+        bool braced=(victim.command.Has(GBInput.Brace)||victim.Sprawling)&&victim.grounded&&victim.stamina>8;
+        float actualImpulse=collision.impulse.magnitude;
+        if(Shooting&&!shotImpactDone){
+            // A low core drive can meet the opponent's hanging/guarding arms
+            // before its trunk. These are still attached physical mass, and
+            // must not shield an unbraced rival from the earned contact.
+            if(target.region!="pelvis"&&target.region!="torso"&&!target.region.Contains("thigh")&&!target.region.Contains("shin")&&!target.region.Contains("arm")&&!target.region.Contains("hand"))return;
+            if(Vector3.Dot(victim.Root.position-Root.position,shotDirection)<.05f)return;
+            float closing=Mathf.Clamp(Mathf.Max(0,Mathf.Max(Vector3.Dot(source.velocity-other.velocity,shotDirection),shotForwardPeak-Vector3.Dot(other.velocity,shotDirection))),0,8);
+            if(closing<.65f||actualImpulse<.3f)return;
+            shotImpactDone=true;ShotImpactCount++;LastShotApproachSpeed=closing;LastShotPhysicalImpulse=actualImpulse;
+            // The incoming speed was earned through ground drive. For a short
+            // time neutral posture yields, so it cannot erase that collision.
+            // Planted brace/sprawl keeps its footing motors and low support.
+            float pressure=braced?0:Mathf.Clamp(.16f+closing*.055f,.20f,.55f);
+            if(!braced){victim.shotPressureUntil=Time.time+pressure;victim.pressureUntil=Mathf.Max(victim.pressureUntil,victim.shotPressureUntil);}
+            float loss=Mathf.Clamp(26+closing*5.2f,29,68)*(braced?.32f:1);
+            victim.Knock(loss,Mathf.Clamp(.25f+closing*.045f,.30f,.6f));
+            GBApp.I.Sfx.Play("hit",.6f);GBApp.I.Burst(point,color);Feedback(braced?"Shot resisted - change angle":"Shot connected - grab to finish",.7f);return;
         }
-        target.wrestler.Knock(Mathf.Min(48,20+closing*3)*(braced?.45f:1),.35f);
+        if(!JumpImpactActive||Shooting||Down)return;
+        // One genuine body impact per paid jump. Compare full mass velocity,
+        // not a fast loose hand, and include descent onto the rival's trunk.
+        Vector3 toward=(other.center-source.center).normalized;
+        float closingJump=Mathf.Max(0,Vector3.Dot(source.velocity-other.velocity,toward));
+        float collisionClosing=Mathf.Abs(Vector3.Dot(collision.relativeVelocity,toward));
+        closingJump=Mathf.Min(8,Mathf.Max(closingJump,collisionClosing));
+        if(closingJump<1.8f||actualImpulse<1)return;
+        jumpImpactConsumed=true;BodyImpactCount++;LastBodyImpactApproachSpeed=closingJump;LastBodyPhysicalImpulse=actualImpulse;
+        if(!braced){victim.pressureUntil=Mathf.Max(victim.pressureUntil,Time.time+Mathf.Clamp((closingJump-1.2f)*.08f,.08f,.35f));}
+        victim.Knock(Mathf.Clamp((closingJump-1.2f)*7+Mathf.Min(actualImpulse,80)*.05f,5,38)*(braced?.35f:1),.3f);
+        Feedback(braced?"Body momentum met planted resistance":"Jump momentum carried into contact",.7f);
     }
 }
+
+// A real contact carries its existing momentum; this relay never applies force.
+public sealed class GBMomentumContact:MonoBehaviour {
+    public GBWrestler owner;
+    void OnCollisionEnter(Collision collision){if(owner)owner.PhysicalMomentumContact(collision);}
+    void OnCollisionStay(Collision collision){if(owner)owner.PhysicalMomentumContact(collision);}
+}
+

@@ -1,4 +1,4 @@
-# Hands-on acceptance — 0.3.2
+# Hands-on acceptance — 0.4.0
 
 1. Open PLAY.cmd and confirm only Pin Wrestling. AI and private host/join use the same rules/version.
 2. Aim high/low/sideways before clicking and while gripping. Check useful hand response, body-region selection, independent clicks/releases and absence of F/Y Throw action.
@@ -10,9 +10,9 @@
 8. Older installation: CHECK FOR UPDATE → UPDATE & RESTART; confirm saved prefs/Source/version/logs. Isolated installer/restart evidence differs from this full button-driven upgrade.
 9. Full matches/all AI difficulties/long two-player sessions: assess aiming, pin setup/escape, stamina balance, camera comfort and enjoyment.
 
-10. Check visible alternating steps, knee bends and recovery from E sprawl while moving in each direction. Stamina begins at 135 and existing action costs remain unchanged.
+10. Check visible alternating steps, knee bends and recovery from E sprawl while moving in each direction. Stamina begins at 135 and Ctrl scramble effort costs 30% more; other action costs remain unchanged.
 
 Current pin rule: the grounded wrestler may be chest-down or back-down, with both actual shoulders on the mat and a live nearby controlling grip while C is held. The attacker does not need to place their chest over the rival. Multiplayer omits the mat motivational slogan and bottom coaching prompt.
 
-Tackle has been removed from keyboard/controller bindings, control legends, AI decisions and physics. The retired network input bit is rejected. Both players need 0.3.2 (protocol 9).
+Tackle has been removed from keyboard/controller bindings, control legends, AI decisions and physics. The retired network input bit is rejected. Both players need 0.4.0 (protocol 9).
 Jump requires 8 stamina (climb 16) and is unavailable while under pin control. C requires a physically low, lying opponent before pin control; low balance or a Down timer while upright is insufficient. Ctrl + movement still bridges/rolls.

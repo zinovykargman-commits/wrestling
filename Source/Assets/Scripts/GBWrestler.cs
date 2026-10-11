@@ -14,6 +14,7 @@ public partial class GBWrestler:MonoBehaviour {
     public int[] parents={-1,0,1,1,3,4,1,6,7,0,9,10,0,12,13};
     public GBInput command;
     public const float MaxStamina=135;
+    public const float ScrambleStaminaMultiplier=1.3f;
     public float StaminaFraction {get{return Mathf.Clamp01(stamina/MaxStamina);}}
     public float stamina=MaxStamina,balance=100,downUntil,recoveryUntil,pinProgress;
     public bool dummy,grounded,hanging,eliminated;
@@ -23,7 +24,7 @@ public partial class GBWrestler:MonoBehaviour {
     public bool Stumbling {get{return !Down&&Time.time<stumbleUntil;}}
     readonly Vector3[] plantedFeet=new Vector3[2],stepStarts=new Vector3[2],stepGoals=new Vector3[2];
     readonly float[] stepBegin={-10,-10};bool feetInitialized;int nextStep;float totalMass;
-    int oldFlags;float strikeAt,jumpAt,climbUntil,liftCharge;Vector3 spawn,lastRoot,climbGoal;Quaternion facingRotation;
+    int oldFlags;float strikeAt,jumpAt,jumpRequestUntil,lastFootSupport=-10,climbUntil,liftCharge;Vector3 spawn,lastRoot,climbGoal;Quaternion facingRotation;
     PhysicsMaterial standingBoots,groundCloth;
     public SphereCollider[] shoulderPads=new SphereCollider[4];
     public class Hand {
@@ -115,18 +116,20 @@ public partial class GBWrestler:MonoBehaviour {
     }
     public void ResetTo(Vector3 at) {
         Release(0);Release(1);for(int n=0;n<15;n++){bodies[n].position=at+initial[n];bodies[n].rotation=Quaternion.identity;bodies[n].linearVelocity=Vector3.zero;bodies[n].angularVelocity=Vector3.zero;}
-        stamina=MaxStamina;balance=100;downUntil=recoveryUntil=pressureUntil=climbUntil=liftCharge=stumbleUntil=EscapeUntil=jumpAt=strikeAt=0;lastImpact=-1;eliminated=false;oldFlags=0;facing=Vector3.forward;facingRotation=Quaternion.identity;command=default;pinProgress=0;lastRoot=at+initial[0];feetInitialized=false;nextStep=0;stepBegin[0]=stepBegin[1]=-10;foreach(var hand in hands){hand.releaseRequired=false;hand.candidate=null;}CombatReset();PinReset();SprawlReset();
+        stamina=MaxStamina;balance=100;downUntil=recoveryUntil=pressureUntil=climbUntil=liftCharge=stumbleUntil=EscapeUntil=jumpAt=strikeAt=jumpRequestUntil=0;lastFootSupport=-10;lastImpact=-1;eliminated=false;oldFlags=0;facing=Vector3.forward;facingRotation=Quaternion.identity;command=default;pinProgress=0;lastRoot=at+initial[0];feetInitialized=false;nextStep=0;stepBegin[0]=stepBegin[1]=-10;foreach(var hand in hands){hand.releaseRequired=false;hand.candidate=null;}CombatReset();PinReset();SprawlReset();
     }
     public void Simulate(GBInput input) {
         if(eliminated)return;command=input.Sanitize();SprawlRefresh();var tuning=GBApp.I.Tuning;float dt=Time.fixedDeltaTime;
         grounded=Physics.Raycast(bodies[11].position+Vector3.up*.12f,Vector3.down,.37f,1,QueryTriggerInteraction.Ignore)||Physics.Raycast(bodies[14].position+Vector3.up*.12f,Vector3.down,.37f,1,QueryTriggerInteraction.Ignore);
+        if(grounded)lastFootSupport=Time.time;
         hanging=false;for(int h=0;h<2;h++)if(hands[h].joint&&hands[h].target&&!hands[h].target.wrestler&&hands[h].target.GetComponent<Collider>().bounds.max.y>Root.position.y+.6f&&bodies[h==0?5:8].position.y>Root.position.y+.2f)hanging=true;
         int edges=command.flags&~oldFlags;oldFlags=command.flags;
         facing=Vector3.Slerp(facing,Shooting?ShotDirection:command.Aim,Mathf.Clamp01(dt*12));facingRotation=Quaternion.LookRotation(facing,Vector3.up);
         bool brace=command.Has(GBInput.Brace)&&!Down&&stamina>1;bool pinning=command.Has(GBInput.Pin)&&GBApp.I.CurrentMode==1;
         bool groundEscape=command.Has(GBInput.Brace)&&command.Move.sqrMagnitude>.05f&&(Down||PinControlled);
         bool effort=command.Has(GBInput.Lift)&&GripCount>0||command.Has(GBInput.Sprint)&&command.Move.magnitude>.1f||GripCount>0||brace||groundEscape||Sprawling;
-        float cost=GripCount*2.0f+(command.Has(GBInput.Lift)&&GripCount>0?tuning.liftCost:0)+(command.Has(GBInput.Sprint)&&command.Move.magnitude>.1f?12:0)+(brace?7:0)+(Sprawling?10:0);
+        bool scrambling=groundEscape||(HeldByOpponent&&command.Has(GBInput.Brace)&&command.Move.sqrMagnitude>.08f&&stamina>8);
+        float cost=GripCount*2.0f+(command.Has(GBInput.Lift)&&GripCount>0?tuning.liftCost:0)+(command.Has(GBInput.Sprint)&&command.Move.magnitude>.1f?12:0)+(brace?7*(scrambling?ScrambleStaminaMultiplier:1):0)+(Sprawling?10:0);
         for(int h=0;h<2;h++)if(hands[h].target&&hands[h].target.wrestler&&hands[h].target.wrestler.command.Has(GBInput.Brace))cost+=12;
         stamina=Mathf.Clamp(stamina+(effort?-cost:tuning.staminaRegen)*dt,0,MaxStamina);
         if(stamina<=.1f){Release(0);Release(1);}
@@ -141,7 +144,7 @@ public partial class GBWrestler:MonoBehaviour {
         float upright=Vector3.Dot(bodies[1].transform.up,Vector3.up);
         bool nearFloor=Physics.Raycast(Root.position+Vector3.up*.1f,Vector3.down,1.5f,1,QueryTriggerInteraction.Ignore);
         bool pressured=Time.time<pressureUntil;
-        bool canStand=!Down&&!pressured&&!PinControlled&&(grounded||nearFloor)&&!hanging&&Time.time>jumpAt-.2f;
+        bool canStand=!Down&&!pressured&&!PinControlled&&(grounded||nearFloor)&&(!JumpFlightWindow||grounded)&&!hanging&&Time.time>jumpAt-.2f;
         bool lowAim=false;
         if(canStand) {
             Vector3 locomotion=Shooting?ShotDirection:command.Move;
@@ -193,7 +196,12 @@ public partial class GBWrestler:MonoBehaviour {
             // must let elbows fold instead of propping the torso above contact.
             float armPower=coverArm?.075f:lifting&&n>=3&&n<=8?2.5f:1;var d=joints[n].slerpDrive;d.maximumForce=(n==1?260:n>=9?140:85)*muscle*armPower;d.positionSpring=(n==1?2100:n>=9?1050:700)*muscle*armPower;d.positionDamper=(n==1?130:n>=9?65:48)*(coverArm?armPower:1);joints[n].slerpDrive=d;
         }
-        if((edges&GBInput.Jump)!=0&&!Down&&!PinControlled&&stamina>=(hanging?16:8)&&Time.time>jumpAt){jumpAt=Time.time+.45f;if(hanging){stamina-=16;climbUntil=Time.time+2.2f;foreach(var hand in hands)if(hand.target){climbGoal=hand.target.transform.TransformPoint(hand.localAnchor)+facing*.85f;climbGoal.y=hand.target.GetComponent<Collider>().bounds.max.y+1.08f;break;}}else if(grounded){stamina-=8;foreach(var b in bodies)b.AddForce(Vector3.up*3.8f,ForceMode.VelocityChange);}}
+        if((edges&GBInput.Jump)!=0)jumpRequestUntil=Time.time+.14f;
+        // A stride briefly raises both boots beyond the strict contact probe.
+        // Buffer the press and allow a small planted-foot grace, but never
+        // allow the paid-flight window to become an airborne second jump.
+        bool jumpSupport=grounded||(!JumpFlightWindow&&Root.linearVelocity.y<.75f&&(Time.time-lastFootSupport<.12f||Physics.Raycast(bodies[11].position+Vector3.up*.12f,Vector3.down,.49f,1,QueryTriggerInteraction.Ignore)||Physics.Raycast(bodies[14].position+Vector3.up*.12f,Vector3.down,.49f,1,QueryTriggerInteraction.Ignore)));
+        if(jumpRequestUntil>=Time.time&&jumpRequestUntil>0&&!Down&&!PinControlled&&stamina>=(hanging?16:8)&&Time.time>jumpAt&&(hanging||jumpSupport)){jumpRequestUntil=0;jumpAt=Time.time+.45f;if(hanging){stamina-=16;climbUntil=Time.time+2.2f;foreach(var hand in hands)if(hand.target){climbGoal=hand.target.transform.TransformPoint(hand.localAnchor)+facing*.85f;climbGoal.y=hand.target.GetComponent<Collider>().bounds.max.y+1.08f;break;}}else{stamina-=8;lastFootSupport=-10;foreach(var b in bodies)b.AddForce(Vector3.up*3.8f,ForceMode.VelocityChange);BeginJumpMomentum();}}
         if(Time.time<climbUntil&&!Down&&stamina>1){if(Time.time>climbUntil-1.9f&&GripCount>0){Release(0);Release(1);foreach(var hand in hands)hand.releaseRequired=true;}Vector3 goal=climbGoal;if(Root.position.y<climbGoal.y-.3f){goal.x=Root.position.x;goal.z=Root.position.z;}Vector3 acceleration=Vector3.ClampMagnitude((goal-Root.position)*18-Root.linearVelocity*7+Vector3.up*9.81f,25);foreach(var part in bodies)part.AddForce(acceleration*part.mass,ForceMode.Force);stamina=Mathf.Max(0,stamina-dt*24);}
         if(command.Has(GBInput.Lift)&&GripCount>0&&!Down&&stamina>3&&!pinTarget){if(command.Has(GBInput.Brace))Slam();else Lift();}
         if((edges&GBInput.Strike)!=0&&!Down&&Time.time>strikeAt){strikeAt=Time.time+.45f;Shot();}
