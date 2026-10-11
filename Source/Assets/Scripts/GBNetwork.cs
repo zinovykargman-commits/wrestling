@@ -36,7 +36,7 @@ public class GBNetwork:MonoBehaviour {
     readonly List<Delayed> delayed=new List<Delayed>();
     class Delayed {public float at;public byte[] bytes;}
     string password,nonce;double lastSnapshot;int inputSequence;float heartbeat;
-    public const int Protocol=6;
+    public const int Protocol=8;
     public bool Authority {get{return role!=Role.Client;}}
     void Awake(){role=Role.Offline;}
     public void Host(int port,string secret) {
@@ -158,7 +158,7 @@ public class GBNetwork:MonoBehaviour {
     public void SetReady(bool value){ready=value;if(role==Role.Client)Send(Packet(2,w=>w.Write(value)));}
     public void StartMatch(){if(role==Role.Host&&connected&&ready&&peerReady){GBApp.I.BeginMatch(GBApp.I.SelectedArena,GBApp.I.SelectedMode);}}
     public void Lobby(){if(role==Role.Host&&connected)Send(Packet(6,w=>{w.Write(GBApp.I.SelectedArena);w.Write(GBApp.I.SelectedMode);w.Write(ready);w.Write(GBApp.I.PlayerName);}),false);}
-    public void SendInput(GBInput i){if(role!=Role.Client||!connected)return;i.sequence=++inputSequence;i.stamp=Time.realtimeSinceStartupAsDouble;Send(Packet(3,w=>{w.Write(i.sequence);w.Write(i.stamp);w.Write(i.x);w.Write(i.z);w.Write(i.ax);w.Write(i.az);w.Write(i.flags);}),true);}
+    public void SendInput(GBInput i){if(role!=Role.Client||!connected)return;i=i.Sanitize();i.sequence=++inputSequence;i.stamp=Time.realtimeSinceStartupAsDouble;Send(Packet(3,w=>{w.Write(i.sequence);w.Write(i.stamp);w.Write(i.x);w.Write(i.z);w.Write(i.ax);w.Write(i.az);w.Write(i.hx);w.Write(i.hy);w.Write(i.hz);w.Write(i.flags);}),true);}
     public void Pump() {
         string diagnostic;while(diagnostics.TryDequeue(out diagnostic)){LastConnectionDiagnostic=diagnostic;Debug.Log("GRIP_NETWORK "+diagnostic);}
         if(role==Role.Host&&tunnel!=null){if(!string.IsNullOrEmpty(tunnel.Error))errors.Enqueue(tunnel.Error);else if(!connected)status=tunnel.Ready?"Invite ready • share it with your friend":tunnel.Status;}
@@ -176,7 +176,7 @@ public class GBNetwork:MonoBehaviour {
                 else if(type==5&&role==Role.Client){peerName=r.ReadString();if(r.ReadInt32()!=Protocol)throw new IOException("Different game versions");connected=true;GBApp.I.ClientSnapshotAt=Time.realtimeSinceStartup;status="Connected to "+peerName;}
                 else if(!connected)continue;
                 else if(type==2&&role==Role.Host){peerReady=r.ReadBoolean();Lobby();}
-                else if(type==3&&role==Role.Host){var cmd=new GBInput{sequence=r.ReadInt32(),stamp=r.ReadDouble(),x=r.ReadSingle(),z=r.ReadSingle(),ax=r.ReadSingle(),az=r.ReadSingle(),flags=r.ReadInt32()};if(cmd.sequence>remoteInput.sequence){remoteInput=cmd.Sanitize();lastInput=Time.realtimeSinceStartup;inputsReceived++;}}
+                else if(type==3&&role==Role.Host){var cmd=new GBInput{sequence=r.ReadInt32(),stamp=r.ReadDouble(),x=r.ReadSingle(),z=r.ReadSingle(),ax=r.ReadSingle(),az=r.ReadSingle(),hx=r.ReadSingle(),hy=r.ReadSingle(),hz=r.ReadSingle(),flags=r.ReadInt32()}.Sanitize();if(cmd.sequence>remoteInput.sequence){remoteInput=cmd;lastInput=Time.realtimeSinceStartup;inputsReceived++;}}
                 else if(type==4&&role==Role.Client){ReadSnapshot(r);snapshotsReceived++;}
                 else if(type==6&&role==Role.Client){GBApp.I.SelectedArena=Mathf.Clamp(r.ReadInt32(),0,3);GBApp.I.SelectedMode=Mathf.Clamp(r.ReadInt32(),0,2);peerReady=r.ReadBoolean();peerName=r.ReadString();}
             }}catch(Exception e){if(role==Role.Host&&!connected&&socket!=null){DropPendingPeer();GBApp.I.Toast("Room authentication failed • waiting for your friend",4);}else errors.Enqueue("Session error: "+e.Message);}
@@ -190,21 +190,22 @@ public class GBNetwork:MonoBehaviour {
     }
     void SendSnapshot() {
         var a=GBApp.I;Send(Packet(4,w=>{
-            w.Write(Protocol);w.Write(a.Epoch);w.Write(Time.realtimeSinceStartupAsDouble);w.Write(a.CurrentArena);w.Write(a.CurrentMode);w.Write((int)a.Phase);w.Write(a.Scores[0]);w.Write(a.Scores[1]);w.Write(a.Remaining);w.Write(a.PinCount);w.Write(a.Arena.sudden);w.Write(a.Arena.suddenTime);w.Write(a.RoundMessage??"");
+            w.Write(Protocol);w.Write(a.Epoch);w.Write(Time.realtimeSinceStartupAsDouble);w.Write(a.CurrentArena);w.Write(a.CurrentMode);w.Write((int)a.Phase);w.Write(a.Scores[0]);w.Write(a.Scores[1]);w.Write(a.Remaining);w.Write(a.PinCount);w.Write(Mathf.Clamp(a.PinAttacker,-1,1));string pinStatus=a.PinStatus??"";w.Write(pinStatus.Length>100?pinStatus.Substring(0,100):pinStatus);w.Write(a.Arena.sudden);w.Write(a.Arena.suddenTime);w.Write(a.RoundMessage??"");
             w.Write(a.Registry.Count);foreach(var rb in a.Registry){w.Write(rb!=null&&rb.gameObject.activeSelf);Write(w,rb?rb.position:Vector3.zero);var q=rb?rb.rotation:Quaternion.identity;w.Write(q.x);w.Write(q.y);w.Write(q.z);w.Write(q.w);}
-            w.Write(a.Wrestlers.Count);foreach(var p in a.Wrestlers){w.Write(p.stamina);w.Write(p.balance);w.Write(p.Down);w.Write(p.eliminated);w.Write(p.ActionFeedback);w.Write(p.GripStrain);w.Write(p.TargetMode=="Legs");for(int h=0;h<2;h++){var target=p.hands[h].target;w.Write(target?a.Registry.IndexOf(target.Body):-1);Write(w,p.hands[h].localAnchor);}}
+            w.Write(a.Wrestlers.Count);foreach(var p in a.Wrestlers){w.Write(p.stamina);w.Write(p.balance);w.Write(p.Down);w.Write(p.eliminated);w.Write(p.ActionFeedback);w.Write(p.GripStrain);w.Write(p.TargetMode=="Legs");bool leftShoulder,rightShoulder;p.ShoulderContact(out leftShoulder,out rightShoulder);w.Write(p.IsCovering);w.Write(p.PinTarget?p.PinTarget.player:-1);w.Write(leftShoulder);w.Write(rightShoulder);for(int h=0;h<2;h++){var target=p.hands[h].target;w.Write(target?a.Registry.IndexOf(target.Body):-1);Write(w,p.hands[h].localAnchor);}}
             w.Write(a.Arena.elapsed);w.Write(a.Arena.breakables.Count);foreach(var prop in a.Arena.breakables){w.Write(prop.broken);w.Write(prop.health);}w.Write(a.Arena.WarningSection);w.Write(a.PhaseSeconds);
         }),true);snapshotsSent++;
     }
     public static void Write(BinaryWriter w,Vector3 p){w.Write(p.x);w.Write(p.y);w.Write(p.z);}
-    public static Vector3 Read(BinaryReader r){return new Vector3(r.ReadSingle(),r.ReadSingle(),r.ReadSingle());}
+    static bool Finite(float value){return !float.IsNaN(value)&&!float.IsInfinity(value);}
+    public static Vector3 Read(BinaryReader r){var value=new Vector3(r.ReadSingle(),r.ReadSingle(),r.ReadSingle());if(!Finite(value.x)||!Finite(value.y)||!Finite(value.z)||Mathf.Abs(value.x)>100000||Mathf.Abs(value.y)>100000||Mathf.Abs(value.z)>100000)throw new IOException("Invalid snapshot position");return value;}
     void ReadSnapshot(BinaryReader r) {
-        if(r.ReadInt32()!=Protocol)throw new IOException("Snapshot version mismatch");int epoch=r.ReadInt32();double hostTime=r.ReadDouble();int arena=r.ReadInt32();int mode=r.ReadInt32();int phase=r.ReadInt32();int s0=r.ReadInt32();int s1=r.ReadInt32();float remaining=r.ReadSingle();float pin=r.ReadSingle();bool sudden=r.ReadBoolean();float st=r.ReadSingle();string message=r.ReadString();
+        if(r.ReadInt32()!=Protocol)throw new IOException("Snapshot version mismatch");int epoch=r.ReadInt32();double hostTime=r.ReadDouble();int arena=r.ReadInt32();int mode=r.ReadInt32();int phase=r.ReadInt32();int s0=r.ReadInt32();int s1=r.ReadInt32();float remaining=r.ReadSingle();float pin=r.ReadSingle();int pinAttacker=r.ReadInt32();string pinStatus=r.ReadString();if(pinAttacker<-1||pinAttacker>1||pinStatus.Length>100||!Finite(pin)||!Finite(remaining)||double.IsNaN(hostTime)||double.IsInfinity(hostTime))throw new IOException("Invalid pin match state");bool sudden=r.ReadBoolean();float st=r.ReadSingle();string message=r.ReadString();
         var a=GBApp.I;if(a.Epoch!=epoch||a.World==null){a.BuildWorld(arena,mode,true);a.Epoch=epoch;}
-        a.Phase=(GBApp.GamePhase)phase;a.InMatch=a.Phase!=GBApp.GamePhase.Menu;a.Scores[0]=s0;a.Scores[1]=s1;a.Remaining=remaining;a.PinCount=pin;a.Arena.sudden=sudden;a.Arena.suddenTime=st;a.RoundMessage=message;
+        a.Phase=(GBApp.GamePhase)phase;a.InMatch=a.Phase!=GBApp.GamePhase.Menu;a.Scores[0]=s0;a.Scores[1]=s1;a.Remaining=remaining;a.PinCount=pin;a.PinAttacker=pinAttacker;a.PinStatus=pinStatus;a.Arena.sudden=sudden;a.Arena.suddenTime=st;a.RoundMessage=message;
         int count=r.ReadInt32();if(count!=a.Registry.Count)throw new IOException("Arena objects differ; use the same build");
-        for(int i=0;i<count;i++){bool active=r.ReadBoolean();var p=Read(r);var q=new Quaternion(r.ReadSingle(),r.ReadSingle(),r.ReadSingle(),r.ReadSingle());a.Registry[i].gameObject.SetActive(active);a.TargetPositions[i]=p;a.TargetRotations[i]=q;}
-        int players=r.ReadInt32();if(players!=a.Wrestlers.Count)throw new IOException("Player state mismatch");foreach(var p in a.Wrestlers){p.stamina=r.ReadSingle();p.balance=r.ReadSingle();bool down=r.ReadBoolean();p.downUntil=down?Time.time+.2f:0;p.eliminated=r.ReadBoolean();p.ApplyCombatSnapshot(r.ReadString(),r.ReadSingle(),r.ReadBoolean());for(int h=0;h<2;h++){int target=r.ReadInt32();p.hands[h].localAnchor=Read(r);p.hands[h].target=target>=0&&target<a.Registry.Count?a.Registry[target].GetComponent<GBTarget>():null;}}
+        for(int i=0;i<count;i++){bool active=r.ReadBoolean();var p=Read(r);var q=new Quaternion(r.ReadSingle(),r.ReadSingle(),r.ReadSingle(),r.ReadSingle());float norm=q.x*q.x+q.y*q.y+q.z*q.z+q.w*q.w;if(!Finite(q.x)||!Finite(q.y)||!Finite(q.z)||!Finite(q.w)||!Finite(norm)||norm<.0001f||norm>4)throw new IOException("Invalid snapshot rotation");a.Registry[i].gameObject.SetActive(active);a.TargetPositions[i]=p;a.TargetRotations[i]=q;}
+        int players=r.ReadInt32();if(players!=a.Wrestlers.Count)throw new IOException("Player state mismatch");foreach(var p in a.Wrestlers){p.stamina=r.ReadSingle();p.balance=r.ReadSingle();if(!Finite(p.stamina)||p.stamina<0||p.stamina>GBWrestler.MaxStamina||!Finite(p.balance)||p.balance<0||p.balance>100)throw new IOException("Invalid wrestler state");bool down=r.ReadBoolean();p.downUntil=down?Time.time+.2f:0;p.eliminated=r.ReadBoolean();p.ApplyCombatSnapshot(r.ReadString(),r.ReadSingle(),r.ReadBoolean());bool covering=r.ReadBoolean();int targetPlayer=r.ReadInt32();bool leftShoulder=r.ReadBoolean(),rightShoulder=r.ReadBoolean();if(targetPlayer<-1||targetPlayer>=a.Wrestlers.Count||targetPlayer==p.player)throw new IOException("Invalid pin target");p.RemotePinState(covering,targetPlayer,leftShoulder,rightShoulder);for(int h=0;h<2;h++){int target=r.ReadInt32();p.hands[h].localAnchor=Read(r);p.hands[h].target=target>=0&&target<a.Registry.Count?a.Registry[target].GetComponent<GBTarget>():null;}}
         a.Arena.elapsed=r.ReadSingle();int propCount=r.ReadInt32();if(propCount!=a.Arena.breakables.Count)throw new IOException("Prop state mismatch");foreach(var prop in a.Arena.breakables){bool broken=r.ReadBoolean();prop.health=r.ReadSingle();if(broken&&!prop.broken)prop.ReplicateBreak();}a.Arena.WarnSection(r.ReadInt32());a.SetPhaseSeconds(r.ReadSingle());
         if(a.Wrestlers.Count>=2){a.Wrestlers[0].playerName=peerName;a.Wrestlers[1].playerName=a.PlayerName;}
         a.ClientSnapshotAt=Time.realtimeSinceStartup;a.LastHostTime=hostTime;

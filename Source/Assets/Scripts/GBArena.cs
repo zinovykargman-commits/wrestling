@@ -119,7 +119,7 @@ public class GBArena:MonoBehaviour {
         spawns[0]=new Vector3(-1.1f,.28f,0);spawns[1]=new Vector3(1.1f,.28f,0);
         Surface("ring mat",new Vector3(0,0,0),new Vector3(8.8f,.4f,8.8f),GBArt.Mat("Ring canvas",new Color(.15f,.2f,.24f),0,.15f),true,"cloth");
         Box("Ring base",new Vector3(0,-.6f,0),new Vector3(9.1f,1,9.1f),black,false);Box("Gym floor",new Vector3(0,-1.15f,0),new Vector3(27,.2f,20),concrete);
-        GBArt.Text(transform,"GRIP BREAK",new Vector3(0,.212f,1.5f),.48f,Color.white,Quaternion.Euler(90,0,0));GBArt.Text(transform,"TRAIN / FIGHT / REPEAT",new Vector3(0,.215f,2.35f),.13f,new Color(1,.48f,.12f),Quaternion.Euler(90,0,0));
+        GBArt.Text(transform,"GRIP BREAK",new Vector3(0,.212f,1.5f),.48f,Color.white,Quaternion.Euler(90,0,0));
         for(int x=-1;x<=1;x+=2)for(int z=-1;z<=1;z+=2){Surface("ring post",new Vector3(x*4.5f,1,z*4.5f),new Vector3(.17f,1.9f,.17f),orange,true);for(int h=0;h<3;h++)GBArt.Ball(transform,"Corner pad",new Vector3(x*4.34f,.62f+h*.38f,z*4.34f),new Vector3(.3f,.22f,.3f),black);}
         for(int level=0;level<3;level++)for(int side=0;side<4;side++){
             float y=.62f+level*.38f;Vector3 a=side<2?new Vector3(-4.4f,y,side==0?-4.4f:4.4f):new Vector3(side==2?-4.4f:4.4f,y,-4.4f);Vector3 b=side<2?new Vector3(4.4f,y,a.z):new Vector3(a.x,y,4.4f);

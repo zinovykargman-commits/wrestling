@@ -1,39 +1,26 @@
-# GRIP BREAK acceptance ledger
+# Acceptance ledger — 0.3.0
 
-This ledger preserves the original scope, subsequent corrections and the authorized overhaul by exactly five agents total: one integration lead and four specialists. Source implementation, current packaged-runtime verification and human acceptance are separate. **VALIDATION.md owns the exact test results and build identity**; this ledger does not claim that tests or GitHub publication are finished.
+Latest user correction supersedes prior Training/ring-out/arena quantities: only Pin Wrestling in the ring is playable for now. AI Local and Private Online enter these same rules. Inactive old arena authorship can remain in source. Continued five-agent overhaul uses one lead and four specialists.
 
-| Area | Acceptance requirement and implementation |
-|---|---|
-| Delivery | Windows executable, editable Unity 6000.3.7f1 source, PLAY.cmd, instructions, licenses, screenshots, recording and SHA256 package manifests. Current artifact presence and hashes require final delivery verification. |
-| Entrances | Exactly AI Local, Private Online and Training. One human versus AI offline; two remote human competitors online; one controlled human in Training. |
-| View quantity | Exactly one full-window camera in every mode, including Training. No split screen and no second local human input. |
-| Camera ownership | Controlled orange wrestler offline/host, blue wrestler for a client. Opponent/dummy never drives framing. Wobble filtering, stable aiming focus, obstacle checks and side selection are implemented; extreme cases require hands-on acceptance. |
-| Connected bodies | Fifteen physical regions, permanent anatomical joints, bounded spring hand grips, rounded torso/hips and continuous collars/seams. Native integrity measurements and inspected renders are separate evidence requirements. |
-| Self collision | Only directly connected anatomical pairs ignore each other. Nonadjacent hands, limbs and torso use physical contacts. Persistent clipping/unstable self contact must be evaluated in current runtime and renders. |
-| Movement | Planted-foot support, responsive finite-force movement against opponents, turning, small-impact stumbling and reliable recovery. Resistance, repeated contact and recovery need behavioral checks. |
-| Grappling | Independent manual hands, physical reach/contact, obstruction checks, upper-body/leg targeting, visible target rings, two-hand control and grip strain. C selects legs outside pin rules and performs pin within pin rules. |
-| Forward shot | Q / controller X performs a forward wrestling shot with stance and momentum. It never acquires a grip automatically; hand controls remain manual. |
-| Shove | Keyboard X / controller D-pad up shoves from a manual grip, releases hands and creates space. |
-| Moves | Push/pull, lateral pivot, lift, momentum throw, shot, tackle, lower-limb trip, slam, ledge catch/climb, pin and brace/escape remain implemented. Distinct input/action behavior needs current checks. |
-| Counterplay | Brace costs stamina and resists attacks/lifts. Direction plus brace charges escape and creates a brief period against immediate recapture. Missed tackles expose the attacker. Subjective competitive balance requires playtesting. |
-| Feedback | Stamina, balance, target mode, grip strain and messages for reach, brace, exhaustion, recovery and escape. HUD readability requires actual window inspection. |
-| Keybinds | Dedicated KEYBINDS page for keyboard/mouse and controller action rebinding, saved preferences and RESET BINDINGS. Keyboard movement keys can change; controller sticks remain axes. |
-| Utility controls | F1 saved-controls legend, Escape pause, F11 fullscreen, T quick Training reset. These are reserved utility keys. Controller disconnect falls back to keyboard/mouse. |
-| Input integrity | Runtime-only test inputs cannot override normal polling through serialized empty arrays. Buffered presses and offline focus recovery retained. Physical hardware/rebinding acceptance remains explicit. |
-| AI | Easy/Normal/Hard alter reactions, openings, stamina decisions and tactics through ordinary commands, without strength bonuses. Edge/hazard steering retained. Private Online never substitutes local AI for the remote player. |
-| Training | Passive, resisting and attacking blue partner choices, separate passive brown dummy, no score/timer, six lessons, immediate T/button reset, physical ropes, ledge and props. |
-| Arena quantity | Exactly three ring-out arenas plus a separate gym used for Training and pin rules. |
-| Train | Freight decks, connection/gap, cargo, breakaway rails, moving scenery, beams and crouch warnings; descending sudden-death beams. |
-| Store | Furniture, shelves, counter, movable stock, breakable tables, marked pit, storefront exits and shrinking sudden-death boundary. |
-| Tower | Central roof, weak outer sections, scaffold, swinging sign, six-second collapse warning and closing sudden-death boundary. |
-| Rules | First to three ring-outs or pins; 120-second rounds, quarter-second simultaneous draw window and 30-second ring-out sudden death. Reset/rematch restore state. |
-| Pin | Controlled shoulders-down three-count; shoulder, grip, range and rope interruptions; first to three; out-of-ring reset. |
-| Network | One-click host creates a temporary public invite with random room authentication; Copy Invite and paste-to-Join, ready states, selections, match transitions, disconnect handling, sequenced input, host physics authority and interpolated state. |
-| Internet | Bundled official cloudflared host helper and secure WebSocket client; no friend helper/VPN/router/port setup. Verify an actual public tunnel route; separate-PC environments and true packet loss need external acceptance. |
-| Momentum | Earned movement/spin momentum transfers through manual grips, shots and throws; faster approaches have measurable advantage, brace resistance, finite carry and no repeated-grab energy farming. Q remains manual-grip-free. |
-| Updater | Main-menu CHECK FOR UPDATE followed by UPDATE & RESTART for a newer published release. GitHub manifest version/URL/size/SHA verification, safe extraction, staged-byte checks, local helper, same-volume backup, rollback and restart are implemented. Release availability and successful update need separate verification. |
-| Repository | Requested GitHub destination is https://github.com/zinovykargman-commits/wrestling with source version 0.2.0. Publication is an external action and is not inferred from local source or this ledger. |
-| Presentation | Original bodies, menus, sounds, lighting and distinct arenas. Rounded torso/hip geometry, camera comfort and HUD must be inspected in actual native captures. |
-| QA/performance | Final source/build hash consistency, current runtime checks, actual screenshots and measured performance. Earlier reports and soaks do not automatically apply to changed source. |
+- Manual control with both shoulders against the mat, chest-down or back-down for three continuous seconds; first to three pins; rematch/reset and rope interruption.
+- Mouse truly moves arms vertically/laterally before clicks; independent manual hand grips/releases and bounded effort while holding. Aim selects reachable body regions, including legs.
+- No Throw keyboard/controller binding, legend, AI activation or live input trigger. Physical motion and grip release retain earned momentum.
+- C with a real nearby grounded/offbalance rival grip physically turns/controls. No teleports, freezes or indefinitely extended knockdown to force a pin.
+- Ctrl + movement bridges/rolls even down; losing shoulder/grip/control, releasing C, exhaustion or ropes stops count.
+- Clear shoulder/count/position/rope/escape feedback, updated How to Play/F1 and saved Keybinds page.
+- Preserve connected fifteen-region bodies, permanent joints, nonadjacent self collision, rounded torso/hips, responsive movement, bounded momentum, forward Q without auto-grabbing.
+- Exactly one controlled-player camera; no split screen/second local human. F11, F1, Escape/focus recovery, controller mappings/rebinding/fallback.
+- Three AI difficulty settings use ordinary physical aiming/grip/pin/escape commands; remote opponent is human.
+- Copied temporary tunnel invite/paste Join, authentication/ready/start/disconnect/helper cleanup; protocol8 streams arm/shoulder/pin state with host authority.
+- Native Windows build, editable Unity source, PLAY.cmd, instructions, inspected captures/recording and hash/CRC archives; next release at requested GitHub repository works with updater.
+- Current-source behavioral/visual/network/public-byte verification. Hardware, two-PC internet and human enjoyment remain separate acceptance.
 
-Remaining acceptance includes physical keyboard/controller and rumble, complete tutorial walkthrough, human wrestling feel, sustained competitive matches, unusual obstruction/contact cases and separate-PC internet play. MANUAL_CHECKS.md provides concrete checks.
+VALIDATION.md owns completed evidence; source alone does not prove behavior/public parity.
+
+- Hold E for physical sprawl (R3 controller): low hips, legs back, stamina cost, shot resistance, independent manual arms and normal recovery on release. Lift R and Tackle V avoid binding conflicts.
+
+Stamina capacity is 135 (+35%) with unchanged action costs, allowing longer holds. Strength and the meter use the new capacity.
+
+Walking uses alternating physical foot targets and coordinated thigh/knee motors, with raised foot clearance and knee straightening on landing. No body animation teleports; idle and special wrestling stances remain separate.
+
+Current pin rule: the grounded wrestler may be chest-down or back-down, with both actual shoulders on the mat and a live nearby controlling grip while C is held. The attacker does not need to place their chest over the rival. Multiplayer omits the mat motivational slogan and bottom coaching prompt.

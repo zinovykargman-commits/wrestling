@@ -8,7 +8,7 @@ public partial class GBWrestler {
     public Vector3 ShotDirection {get{return shotDirection;}}
     readonly LineRenderer[] targetRings=new LineRenderer[2];
     bool LegTargeting {get{return GBApp.I.CurrentMode!=1&&command.Has(GBInput.Pin);}}
-    public string TargetMode {get{return (GBApp.I.Authority?LegTargeting:remoteLegs)?"Legs":"Upper body";}}
+    public string TargetMode {get{return GBApp.I.CurrentMode==1?"Cursor / body":(GBApp.I.Authority?LegTargeting:remoteLegs)?"Legs":"Upper body";}}
     public string ActionFeedback {get{return Time.time<feedbackUntil?(GBApp.I.Authority?actionFeedback:remoteFeedback):"";}}
     public float GripStrain {get{if(!GBApp.I.Authority)return remoteStrain;float strain=0;foreach(var hand in hands)if(hand!=null&&hand.joint)strain=Mathf.Max(strain,hand.joint.Strain);return strain;}}
     public bool HeldByOpponent {get{foreach(var wrestler in GBApp.I.Wrestlers)if(wrestler!=this)foreach(var hand in wrestler.hands)if(hand!=null&&hand.joint&&hand.target&&hand.target.wrestler==this)return true;return false;}}
@@ -36,13 +36,14 @@ public partial class GBWrestler {
 
     // Target selection uses actual collider surfaces. Reaching hands remain physical.
     void UpdateHand(int h,bool holding) {
+        if(command.HasHandAim){UpdateMouseHand(h,holding);return;}
         Hand hand=hands[h];int upper=h==0?3:6,fore=h==0?4:7,index=h==0?5:8;var arm=bodies[index];
         if(hand.releaseRequired){if(!holding)hand.releaseRequired=false;hand.candidate=null;return;}
         if(hand.target&&(!hand.target.gameObject.activeInHierarchy||!hand.target.grabbable||!hand.target.GetComponent<Collider>().enabled))Release(h);
         if(Down||stamina<4){Release(h);hand.candidate=null;if(holding&&stamina<4)Feedback("Exhausted - release grips to recover stamina",.25f);return;}
         if(!holding)Release(h);if(hand.target&&!hand.joint)hand.target=null;
         if(hand.joint){
-            hand.joint.breakForce=GBApp.I.Tuning.gripStrength*Mathf.Lerp(.45f,1,stamina/100);
+            hand.joint.breakForce=GBApp.I.Tuning.gripStrength*Mathf.Lerp(.45f,1,StaminaFraction);
             Vector3 shoulderPoint=bodies[1].position+facingRotation*new Vector3(h==0?-.27f:.27f,.15f,0);Vector3 toGrip=hand.target.transform.TransformPoint(hand.localAnchor)-shoulderPoint;
             bool ledge=!hand.target.wrestler&&hand.target.Body.isKinematic&&toGrip.y>.2f;
             float angle=command.Has(GBInput.Lift)&&!command.Has(GBInput.Brace)?-145:Mathf.Clamp(-Mathf.Atan2(Vector3.Dot(toGrip,facing),-toGrip.y)*Mathf.Rad2Deg,ledge?-165:-145,-10);
@@ -54,7 +55,7 @@ public partial class GBWrestler {
         GBTarget best=null;Vector3 point=preferred;float score=float.MaxValue;bool protectedTarget=false;
         foreach(var c in Physics.OverlapSphere(shoulder,GBApp.I.Tuning.gripReach,~0,QueryTriggerInteraction.Ignore)){
             var target=c.GetComponent<GBTarget>();if(!target||!target.grabbable||target.wrestler==this||!target.Body)continue;
-            if(target.wrestler){bool leg=target.region.Contains("thigh")||target.region.Contains("shin")||target.region.Contains("foot");if(leg!=LegTargeting)continue;if(Time.time<target.wrestler.EscapeUntil){protectedTarget=true;continue;}}
+            if(target.wrestler){bool leg=target.region.Contains("thigh")||target.region.Contains("shin")||target.region.Contains("foot");if(GBApp.I.CurrentMode!=1&&leg!=LegTargeting)continue;if(Time.time<target.wrestler.EscapeUntil){protectedTarget=true;continue;}}
             Vector3 p=c.ClosestPoint(arm.position);
             if(!target.wrestler&&target.Body.isKinematic&&c.bounds.max.y>shoulder.y+.3f&&c.bounds.max.y<shoulder.y+1.1f){var edge=arm.position;edge.y=c.bounds.max.y-.04f;p=c.ClosestPoint(edge);}
             Vector3 dir=p-shoulder;if(dir.magnitude>GBApp.I.Tuning.gripReach||Vector3.Dot(dir.normalized,command.Aim)<-.25f)continue;
@@ -79,7 +80,7 @@ public partial class GBWrestler {
         // spring endpoints belong to their real collider surfaces.
         Vector3 handPoint=bodies[index].GetComponent<Collider>().ClosestPoint(point);
         j.anchor=bodies[index].transform.InverseTransformPoint(handPoint);j.connectedAnchor=target.transform.InverseTransformPoint(point);j.breakForce=GBApp.I.Tuning.gripStrength;
-        hands[h].joint=j;hands[h].target=target;hands[h].localAnchor=j.connectedAnchor;if(!GrabMomentum(target,point,bodies[index]))Feedback("Grip: "+target.region,.65f);GBApp.I.Sfx.Play("grip",.5f);return true;
+        hands[h].torsoWrap=false;hands[h].aimBias=Vector3.zero;hands[h].joint=j;hands[h].target=target;hands[h].localAnchor=j.connectedAnchor;if(!GrabMomentum(target,point,bodies[index]))Feedback("Grip: "+target.region,.65f);GBApp.I.Sfx.Play("grip",.5f);return true;
     }
     public void Release(int h){if(hands[h]==null)return;if(hands[h].joint){hands[h].joint.enabled=false;Destroy(hands[h].joint);}hands[h].joint=null;hands[h].target=null;}
     public void GripBroke(int h){
@@ -129,41 +130,10 @@ public partial class GBWrestler {
                 // movement, manually held grips and directional escapes remain.
                 if(!braced&&GripCount==2&&liftCharge>.18f)target.pressureUntil=Mathf.Max(target.pressureUntil,Time.time+.08f);
                 float desired=1700+(Root.position.y+.7f-target.Root.position.y)*1800-target.Root.linearVelocity.y*270;
-                target.Root.AddForce(Vector3.up*Mathf.Clamp(desired,0,GripCount==2?2200:750)*resistance*Mathf.Lerp(.4f,1,stamina/100)*Mathf.Lerp(.3f,1,liftCharge),ForceMode.Force);
-                target.balance=Mathf.Max(0,target.balance-Time.fixedDeltaTime*(braced?7:26));Feedback(braced?"Opponent bracing - pull or pivot first":GripCount==1?"One hand lift - use both grips":"Lifting - hold, then throw",.2f);
+                target.Root.AddForce(Vector3.up*Mathf.Clamp(desired,0,GripCount==2?2200:750)*resistance*Mathf.Lerp(.4f,1,StaminaFraction)*Mathf.Lerp(.3f,1,liftCharge),ForceMode.Force);
+                target.balance=Mathf.Max(0,target.balance-Time.fixedDeltaTime*(braced?7:26));Feedback(braced?"Opponent bracing - pull or pivot first":GripCount==1?"One hand lift - use both grips":"Lifting - position the opponent for a pin",.2f);
             }else if(!target&&!hand.target.Body.isKinematic)hand.target.Body.AddForce(Vector3.up*Mathf.Min(350,hand.target.Body.mass*14),ForceMode.Force);
         }
-    }
-    public void Throw() {
-        if(stamina<12){Feedback("Exhausted - throw needs stamina");return;}
-        int grips=GripCount;var affected=new HashSet<Rigidbody>();bool resisted=false;
-        for(int h=0;h<2;h++){var target=hands[h].target;if(!target)continue;var rb=target.wrestler?target.wrestler.Root:target.Body;
-            if(affected.Add(rb)){
-                Vector3 direction=command.Aim;
-                Vector3 momentum=Vector3.ClampMagnitude(Vector3.ProjectOnPlane(Root.linearVelocity,Vector3.up),5)*.6f;
-                float forwardMomentum=Mathf.Max(0,Vector3.Dot(momentum,direction));
-                Vector3 lateralMomentum=Vector3.ClampMagnitude(momentum-direction*Vector3.Dot(momentum,direction),1.5f);
-                bool braced=target.wrestler&&target.wrestler.command.Has(GBInput.Brace)&&target.wrestler.grounded&&target.wrestler.stamina>8;resisted|=braced;
-                float scale=Mathf.Lerp(.4f,1,stamina/100)*(grips==2?1:.68f)*(braced?.42f:1);
-                // Releasing lift and pressing throw in the same frame retains
-                // the earned launch height instead of resetting it to zero.
-                float charge=Mathf.Max(liftCharge,Time.time-lastLiftAt<.25f?lastLiftCharge:0);
-                Vector3 victimVelocity=rb.linearVelocity;
-                if(target.wrestler){float mass=0;victimVelocity=Vector3.zero;foreach(var part in target.wrestler.bodies){victimVelocity+=part.linearVelocity*part.mass;mass+=part.mass;}victimVelocity/=Mathf.Max(1,mass);}
-                Vector3 contact=target.transform.TransformPoint(hands[h].localAnchor);
-                Vector3 spinCarry=ThrowSpinMomentum(target,contact,victimVelocity);
-                forwardMomentum+=Mathf.Max(0,Vector3.Dot(spinCarry,direction));
-                lateralMomentum=Vector3.ClampMagnitude(lateralMomentum+spinCarry-direction*Vector3.Dot(spinCarry,direction),2.8f);
-                // A bounded impulse establishes forward launch momentum even
-                // during a grapple recoil; every rigid body remains simulated.
-                float launchSpeed=(GBApp.I.Tuning.throwAssist+forwardMomentum)*scale;
-                float forwardDelta=Mathf.Max(0,launchSpeed-Vector3.Dot(victimVelocity,direction));
-                float upwardDelta=Mathf.Max(0,Mathf.Lerp(1.7f,3f,charge)*scale-victimVelocity.y);
-                Vector3 impulse=Vector3.ClampMagnitude(direction*forwardDelta+Vector3.up*upwardDelta+lateralMomentum*scale,9);
-                if(spinCarry.sqrMagnitude>.01f){float victimMass=target.wrestler?MeasureMomentum(target.wrestler).mass:rb.mass;BodyMomentumImpulse(this,-spinCarry*victimMass*scale,contact);}
-                if(target.wrestler){foreach(var b in target.wrestler.bodies)b.AddForce(impulse,ForceMode.VelocityChange);target.wrestler.Knock(braced?24:grips==2?66:38,.8f);target.wrestler.EscapeUntil=Mathf.Max(target.wrestler.EscapeUntil,Time.time+.4f);}else if(!rb.isKinematic)rb.AddForce(impulse,ForceMode.VelocityChange);
-            }Release(h);hands[h].releaseRequired=true;
-        }stamina=Mathf.Max(0,stamina-17);Feedback(resisted?"Throw resisted - unbalance them first":"Thrown - movement adds momentum",.9f);GBApp.I.Shake(.035f);
     }
     public void Slam() {
         var affected=new HashSet<Rigidbody>();for(int h=0;h<2;h++){var t=hands[h].target;if(!hands[h].joint||!t)continue;var r=t.wrestler?t.wrestler.Root:t.Body;if(!affected.Add(r)||r.isKinematic)continue;
@@ -183,7 +153,7 @@ public partial class GBWrestler {
     public void Shot(){
         if(Time.time<shotAt){Feedback("Shot recovering - reposition",.3f);return;}
         if(stamina<12){Feedback("Exhausted - shot needs stamina");return;}
-        if(Down||hanging||Time.time<pressureUntil||!Physics.Raycast(Root.position+Vector3.up*.1f,Vector3.down,1.8f,1,QueryTriggerInteraction.Ignore)){Feedback("Plant your feet before shooting",.5f);return;}
+        if(Down||hanging||Sprawling||Time.time<pressureUntil||!Physics.Raycast(Root.position+Vector3.up*.1f,Vector3.down,1.8f,1,QueryTriggerInteraction.Ignore)){Feedback(Sprawling?"Release sprawl before shooting":"Plant your feet before shooting",.5f);return;}
         shotDirection=facing.normalized;shotUntil=Time.time+.45f;shotAt=Time.time+.9f;shotImpactDone=false;LastShotApproachSpeed=0;stamina=Mathf.Max(0,stamina-12);
         BeginShotMomentum();
         foreach(var part in bodies)part.AddForce(shotDirection*2.8f+Vector3.down*.15f,ForceMode.VelocityChange);
@@ -196,7 +166,7 @@ public partial class GBWrestler {
             if(target.region!="pelvis"&&!target.region.Contains("thigh")&&!target.region.Contains("shin"))continue;
             Vector3 point=collider.ClosestPoint(contactOrigin),delta=target.wrestler.Root.position-Root.position;
             if(Vector3.Dot(delta,shotDirection)<.05f||Vector3.Distance(point,contactOrigin)>.3f)continue;
-            var victim=target.wrestler;bool braced=victim.command.Has(GBInput.Brace)&&victim.grounded&&victim.stamina>8;
+            var victim=target.wrestler;bool braced=(victim.command.Has(GBInput.Brace)||victim.Sprawling)&&victim.grounded&&victim.stamina>8;
             ShotMomentum(target,point,braced);
             shotImpactDone=true;GBApp.I.Sfx.Play("hit",.6f);GBApp.I.Burst(point,color);Feedback(braced?"Shot resisted - change angle":"Shot connected - grab to finish",.7f);return;
         }
@@ -244,8 +214,7 @@ public class GBGrip:MonoBehaviour {
         Vector3 localAcceleration=new Vector3(tensor.x>0?localTorque.x/tensor.x:0,tensor.y>0?localTorque.y/tensor.y:0,tensor.z>0?localTorque.z/tensor.z:0);
         return force/Mathf.Max(.001f,body.mass)+Vector3.Cross(principal*localAcceleration,lever);
     }
-    static Vector3 ImplicitForce(Rigidbody hand,Rigidbody target,Vector3 a,Vector3 b,Vector3 error,Vector3 relative,float dt){
-        const float spring=2800,damping=90;
+    internal static Vector3 SolveSpringForce(Rigidbody hand,Rigidbody target,Vector3 a,Vector3 b,Vector3 error,Vector3 relative,float dt,float spring=2800,float damping=90){
         // Solve F = k*(error + dt*vNext) + c*vNext, where
         // vNext = relative - dt*K*F. K includes each contact's rotational
         // response: a light hand can have much less point mass than body mass.
@@ -264,7 +233,13 @@ public class GBGrip:MonoBehaviour {
         if(!owner||!handBody||!connectedBody||!GBApp.I.Authority)return;
         Vector3 a=handBody.position+handBody.rotation*anchor,b=connectedBody.position+connectedBody.rotation*connectedAnchor;
         Vector3 error=b-a,relative=connectedBody.GetPointVelocity(b)-handBody.GetPointVelocity(a);
-        Vector3 force=ImplicitForce(handBody,connectedBody,a,b,error,relative,Time.fixedDeltaTime);
+        Vector3 force=SolveSpringForce(handBody,connectedBody,a,b,error,relative,Time.fixedDeltaTime);
+        if(owner.command.Has(GBInput.Pin)&&owner.PinTarget&&connectedBody.GetComponent<GBTarget>()&&connectedBody.GetComponent<GBTarget>().wrestler==owner.PinTarget){
+            // A pin commits downward pressure. Let the hand yield toward its
+            // unchanged contact instead of using a strained wrist as an
+            // involuntary lift of the grounded rival. Lateral grip remains.
+            force.y=Mathf.Max(force.y,-65);
+        }
         Strain=Mathf.Clamp01(Mathf.Max(error.magnitude/.5f,force.magnitude/Mathf.Max(1,breakForce*1.6f)));
         bool ledge=connectedBody.isKinematic&&b.y>owner.Root.position.y+.2f;
         if(error.magnitude>(ledge?.65f:.52f)||force.magnitude>breakForce*2.1f)strained+=Time.fixedDeltaTime;else strained=Mathf.Max(0,strained-Time.fixedDeltaTime*2);

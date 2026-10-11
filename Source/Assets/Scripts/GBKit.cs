@@ -10,18 +10,24 @@ using System.Runtime.InteropServices;
 }
 
 [Serializable] public struct GBInput {
-    public float x,z,ax,az;
+    public float x,z,ax,az,hx,hy,hz;
     public int flags,sequence;
     public double stamp;
-    public const int Left=1,Right=2,Sprint=4,Jump=8,Lift=16,Throw=32,Strike=64,Brace=128,Tackle=256,Pin=512,Shove=1024;
+    // Throw is reserved solely so historical audits compile; no live input may
+    // activate it. Throws now follow the player's actual arm/body movement.
+    public const int Left=1,Right=2,Sprint=4,Jump=8,Lift=16,Throw=32,Strike=64,Brace=128,Tackle=256,Pin=512,Shove=1024,HandAim=2048,Sprawl=4096;
     public bool Has(int bit) { return (flags & bit)!=0; }
+    public bool HasHandAim {get{return Has(HandAim);}}
+    public Vector3 HandOffset {get{return Vector3.ClampMagnitude(new Vector3(hx,Mathf.Clamp(hy,-1.10f,1.25f),hz),1.35f);}}
     public Vector3 Move { get { return Vector3.ClampMagnitude(new Vector3(x,0,z),1); } }
     public Vector3 Aim { get { var v=new Vector3(ax,0,az); return v.sqrMagnitude>.05f ? v.normalized:Vector3.forward; } }
     public GBInput Sanitize() {
-        if(float.IsNaN(x)||float.IsInfinity(x)||float.IsNaN(z)||float.IsInfinity(z)||float.IsNaN(ax)||float.IsNaN(az)) return default;
-        x=Mathf.Clamp(x,-1,1); z=Mathf.Clamp(z,-1,1); ax=Mathf.Clamp(ax,-1,1); az=Mathf.Clamp(az,-1,1); flags &=2047;
+        if(!Finite(x)||!Finite(z)||!Finite(ax)||!Finite(az)||!Finite(hx)||!Finite(hy)||!Finite(hz)||double.IsNaN(stamp)||double.IsInfinity(stamp))return default;
+        x=Mathf.Clamp(x,-1,1);z=Mathf.Clamp(z,-1,1);ax=Mathf.Clamp(ax,-1,1);az=Mathf.Clamp(az,-1,1);flags&=8159;
+        Vector3 hand=HasHandAim?HandOffset:Vector3.zero;hx=hand.x;hy=hand.y;hz=hand.z;
         return this;
     }
+    static bool Finite(float value){return !float.IsNaN(value)&&!float.IsInfinity(value);}
 }
 
 public static class GBPad {
@@ -43,9 +49,9 @@ public static class GBPad {
         if((p.buttons&0x100)!=0)i.flags|=GBInput.Left;
         if((p.buttons&0x200)!=0)i.flags|=GBInput.Right;
         if((p.buttons&0x40)!=0)i.flags|=GBInput.Sprint;
+        if((p.buttons&0x80)!=0)i.flags|=GBInput.Sprawl;
         if((p.buttons&0x1000)!=0)i.flags|=GBInput.Jump;
         if(p.rightTrigger>90)i.flags|=GBInput.Lift;
-        if((p.buttons&0x8000)!=0)i.flags|=GBInput.Throw;
         if((p.buttons&0x4000)!=0)i.flags|=GBInput.Strike;
         if(p.leftTrigger>90)i.flags|=GBInput.Brace;
         if((p.buttons&0x2000)!=0)i.flags|=GBInput.Tackle;
@@ -66,7 +72,7 @@ public static class GBArt {
     }
     public static GameObject Shape(Transform parent,string name,PrimitiveType type,Vector3 pos,Vector3 scale,Material mat,bool collider=false) {
         var go=GameObject.CreatePrimitive(type); go.name=name;go.transform.SetParent(parent,false);go.transform.localPosition=pos;go.transform.localScale=scale;
-        go.GetComponent<Renderer>().sharedMaterial=mat;if(!collider)UnityEngine.Object.Destroy(go.GetComponent<Collider>());return go;
+        go.GetComponent<Renderer>().sharedMaterial=mat;if(!collider){var shapeCollider=go.GetComponent<Collider>();shapeCollider.enabled=false;UnityEngine.Object.Destroy(shapeCollider);}return go;
     }
     public static GameObject Box(Transform p,string n,Vector3 at,Vector3 size,Material m,bool solid=true) {return Shape(p,n,PrimitiveType.Cube,at,size,m,solid);}
     public static GameObject Ball(Transform p,string n,Vector3 at,Vector3 size,Material m) {return Shape(p,n,PrimitiveType.Sphere,at,size,m);}
@@ -122,6 +128,13 @@ public class GBTarget:MonoBehaviour {
 
 public class GBContact:MonoBehaviour {
     public GBWrestler wrestler;public GBBreakable prop;public int bodyIndex=-1; public string sound="cloth"; float last;
+    public string AuditContacts="";float auditContactAt=-1;
+    void OnCollisionStay(Collision c){
+        if(!GBApp.I||!GBApp.I.Automated)return;
+        if(auditContactAt!=Time.fixedTime){auditContactAt=Time.fixedTime;AuditContacts="";}
+        Vector3 normal=Vector3.zero;for(int n=0;n<c.contactCount;n++)normal+=c.GetContact(n).normal;
+        AuditContacts+=c.collider.name+":"+normal.normalized.ToString("F2")+" ";
+    }
     void OnCollisionEnter(Collision c) {
         if(!GBApp.I||!GBApp.I.Authority)return;
         var contacted=c.collider.GetComponent<GBTarget>();

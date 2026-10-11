@@ -7,7 +7,7 @@ public static class GBBodyVisual {
     public static GameObject Body(Transform parent,bool torso,Material material){
         float[] y=torso?new[]{-.27f,-.235f,-.16f,-.04f,.10f,.19f,.245f,.27f}:new[]{-.20f,-.165f,-.08f,.04f,.135f,.175f,.19f};
         float[] x=torso?new[]{.09f,.165f,.185f,.22f,.25f,.255f,.21f,.105f}:new[]{.105f,.185f,.225f,.23f,.205f,.145f,.08f};
-        float[] z=torso?new[]{.08f,.145f,.16f,.18f,.205f,.19f,.16f,.105f}:new[]{.095f,.15f,.175f,.18f,.165f,.12f,.07f};
+        float[] z=torso?new[]{.08f,.18f,.23f,.26f,.275f,.275f,.20f,.105f}:new[]{.095f,.15f,.175f,.18f,.165f,.12f,.07f};
         return Loft(parent,torso?"Rounded chest and waist":"Rounded wrestling shorts",y,x,z,material);
     }
     public static GameObject Waistband(Transform parent,Material material){return Loft(parent,"Soft waistband",new[]{.012f,.02f,.064f,.071f},new[]{.227f,.233f,.229f,.222f},new[]{.177f,.184f,.181f,.174f},material);}
