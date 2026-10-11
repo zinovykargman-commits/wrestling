@@ -325,9 +325,6 @@ public class GBApp:MonoBehaviour {
             if(controlled.ArmAimClamped(h)&&!held)tint=Color.Lerp(tint,new Color(.7f,.72f,.76f),.6f);
             float x=point.x,y=point.y;Panel(new Rect(x-9,y-9,18,2),tint);Panel(new Rect(x-9,y+7,18,2),tint);Panel(new Rect(x-9,y-9,2,18),tint);Panel(new Rect(x+7,y-9,2,18),tint);
             Label(new Rect(x-7,y-8,16,17),h==0?"L":"R",new GUIStyle(small){fontSize=12,alignment=TextAnchor.MiddleCenter,normal={textColor=tint}});
-            var target=controlled.ArmMarkedTarget(h);string state=held?"HOLD "+target.region:target?"REACH "+target.region:controlled.ArmAimClamped(h)?"MAX REACH":"AIM";
-            float textY=h==0?y-34:y+14;Panel(new Rect(x-83,textY,166,20),new Color(.025f,.04f,.065f,.78f));
-            Label(new Rect(x-81,textY,162,20),(h==0?"L  ":"R  ")+state,new GUIStyle(small){fontSize=12,alignment=TextAnchor.MiddleCenter,normal={textColor=tint}});
         }
     }
     public string ControlSummary(int player){
