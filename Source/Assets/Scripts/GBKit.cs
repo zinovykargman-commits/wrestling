@@ -102,8 +102,10 @@ public static class GBArt {
 public class GBSound:MonoBehaviour {
     public float volume=.7f;
     public AudioSource source,ambience;
-    public AudioClip wood,metal,cloth,hit,grip,win,wind,beat,cheer;
+    public AudioClip wood,metal,cloth,hit,grip,win,wind,beat,cheer,whistle;
+    public string LastPlayed {get;private set;}
     void Awake() {
+        whistle=Whistle();
         source=gameObject.AddComponent<AudioSource>();source.spatialBlend=0; source.priority=64;
         ambience=gameObject.AddComponent<AudioSource>();ambience.loop=true;ambience.spatialBlend=0;
         wood=Noise("Wood crack",.16f,180,.8f);metal=Noise("Metal clang",.35f,730,.35f);cloth=Noise("Mat thump",.12f,70,.12f);hit=Noise("Impact",.16f,105,.45f);grip=Noise("Grip latch",.07f,420,.07f);win=Noise("Round bell",.9f,650,.05f);wind=Noise("Train wind",3.0f,40,.45f,true);beat=Noise("Arena pulse",2f,65,.035f,true);cheer=Noise("Crowd swell",1.3f,210,1.6f);
@@ -113,7 +115,8 @@ public class GBSound:MonoBehaviour {
         for(int i=0;i<n;i++){float t=(float)i/rate;float env=loop?.45f:Mathf.Exp(-t/(secs*.22f));smooth=Mathf.Lerp(smooth,(float)(rng.NextDouble()*2-1),.18f);v[i]=env*(Mathf.Sin(t*freq*Mathf.PI*2)*.38f+Mathf.Sin(t*freq*1.52f*Mathf.PI*2)*.13f+smooth*noise);}
         var c=AudioClip.Create(name,n,1,rate,false);c.SetData(v,0);return c;
     }
-    public void Play(string type,float strength=1) {if(volume<=0)return;source.pitch=UnityEngine.Random.Range(.88f,1.1f);source.PlayOneShot(type=="wood"?wood:type=="metal"?metal:type=="cloth"?cloth:type=="grip"?grip:type=="win"?win:type=="crowd"?cheer:hit,Mathf.Clamp(strength,.12f,1)*volume);}
+    AudioClip Whistle(){int rate=22050;float[] samples=new float[(int)(rate*.32f)];for(int n=0;n<samples.Length;n++){float t=(float)n/rate;float envelope=Mathf.Min(1,t/.015f)*Mathf.Clamp01((.32f-t)/.06f);samples[n]=envelope*(Mathf.Sin(2*Mathf.PI*2350*t+1.8f*Mathf.Sin(2*Mathf.PI*36*t))*.35f+Mathf.Sin(2*Mathf.PI*3100*t)*.12f);}var clip=AudioClip.Create("Referee whistle",samples.Length,1,rate,false);clip.SetData(samples,0);return clip;}
+    public void Play(string type,float strength=1) {LastPlayed=type;if(volume<=0)return;source.pitch=type=="whistle"?1:UnityEngine.Random.Range(.88f,1.1f);source.PlayOneShot(type=="whistle"?whistle:type=="wood"?wood:type=="metal"?metal:type=="cloth"?cloth:type=="grip"?grip:type=="win"?win:type=="crowd"?cheer:hit,Mathf.Clamp(strength,.12f,1)*volume);}
     public void SetArena(int arena) {ambience.clip=arena==0?wind:beat;ambience.volume=volume*.16f;ambience.Play();}
     void Update(){ambience.volume=volume*.16f;}
 }

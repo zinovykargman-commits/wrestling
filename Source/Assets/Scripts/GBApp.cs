@@ -3,7 +3,7 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 
-public class GBApp:MonoBehaviour {
+public partial class GBApp:MonoBehaviour {
     public static GBApp I;
     public const float PinSeconds=2.5f;
     public enum GamePhase {Menu,Countdown,Fighting,RoundOver,MatchOver}
@@ -62,7 +62,7 @@ public class GBApp:MonoBehaviour {
         Views=gameObject.AddComponent<GBPlayerCameraRig>();Views.Setup(this,cam);
         BuildWorld(3,1,false);cam.transform.position=new Vector3(12,12,-19);cam.transform.LookAt(new Vector3(0,.5f,0));
         pixel=Texture2D.whiteTexture;font=Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
-        string[] args=Environment.GetCommandLineArgs();if(Array.IndexOf(args,"--scramble-test")>=0||Array.IndexOf(args,"--stamina-test")>=0||Array.IndexOf(args,"--pin-rules-test")>=0||Array.IndexOf(args,"--carry-test")>=0||Array.IndexOf(args,"--pin-test")>=0||Array.IndexOf(args,"--momentum-test")>=0||Array.IndexOf(args,"--throw-test")>=0||Array.IndexOf(args,"--input-test")>=0||Array.IndexOf(args,"--ai-test")>=0||Array.IndexOf(args,"--updater-test")>=0||Array.IndexOf(args,"--overhaul-test")>=0||Array.IndexOf(args,"--audit")>=0||Array.IndexOf(args,"--camera-test")>=0||Array.IndexOf(args,"--moves")>=0||Array.IndexOf(args,"--host-test")>=0||Array.IndexOf(args,"--client-test")>=0||Array.IndexOf(args,"--soak")>=0||Array.IndexOf(args,"--record")>=0||Array.IndexOf(args,"--menu-shot")>=0){Automated=true;gameObject.AddComponent<GBAudit>();}
+        string[] args=Environment.GetCommandLineArgs();if(Array.IndexOf(args,"--ringout-test")>=0||Array.IndexOf(args,"--scramble-test")>=0||Array.IndexOf(args,"--stamina-test")>=0||Array.IndexOf(args,"--pin-rules-test")>=0||Array.IndexOf(args,"--carry-test")>=0||Array.IndexOf(args,"--pin-test")>=0||Array.IndexOf(args,"--momentum-test")>=0||Array.IndexOf(args,"--throw-test")>=0||Array.IndexOf(args,"--input-test")>=0||Array.IndexOf(args,"--ai-test")>=0||Array.IndexOf(args,"--updater-test")>=0||Array.IndexOf(args,"--overhaul-test")>=0||Array.IndexOf(args,"--audit")>=0||Array.IndexOf(args,"--camera-test")>=0||Array.IndexOf(args,"--moves")>=0||Array.IndexOf(args,"--host-test")>=0||Array.IndexOf(args,"--client-test")>=0||Array.IndexOf(args,"--soak")>=0||Array.IndexOf(args,"--record")>=0||Array.IndexOf(args,"--menu-shot")>=0){Automated=true;gameObject.AddComponent<GBAudit>();}
     }
     void Defaults() {
         KeyCode[] defaults={KeyCode.Mouse0,KeyCode.Mouse1,KeyCode.LeftShift,KeyCode.Space,KeyCode.R,KeyCode.Q,KeyCode.LeftControl,KeyCode.C,KeyCode.X,KeyCode.E,KeyCode.W,KeyCode.S,KeyCode.A,KeyCode.D};
@@ -82,6 +82,7 @@ public class GBApp:MonoBehaviour {
     public void Register(Rigidbody rb){Registry.Add(rb);}
     public void Register(GBWrestler w){Wrestlers.Add(w);foreach(var rb in w.bodies)Register(rb);}
     public void BuildWorld(int arena,int mode,bool client) {
+        RingRestartBottom=-1;
         arena=3;mode=1;
         Array.Clear(inputs,0,inputs.Length);Array.Clear(lastPoll,0,lastPoll.Length);Array.Clear(buffered,0,buffered.Length);
         if(World){World.SetActive(false);Destroy(World);}Registry.Clear();Wrestlers.Clear();CurrentArena=arena;CurrentMode=mode;
@@ -113,6 +114,7 @@ public class GBApp:MonoBehaviour {
     }
     void FixedUpdate() {
         if(!Authority||!World)return;
+        if(RingRestartHeld){if(Time.time>=phaseUntil)FinishRingRestart();return;}
         for(int p=0;p<Wrestlers.Count;p++) {
             GBInput i=default;
             if(InMatch&&Phase==GamePhase.Fighting){if(Wrestlers[p].dummy)i=new GBInput{ax=0,az=-1};else if(Network.role==GBNetwork.Role.Host&&p==1)i=Network.remoteInput;else if(!Paused){if(p==1&&Network.role==GBNetwork.Role.Offline&&!Scripted(p))i=bot.Tick(this,Wrestlers[1],Wrestlers[0]);else if(p<inputs.Length){i=inputs[p];i.flags|=buffered[p];buffered[p]=0;}}}
@@ -124,7 +126,7 @@ public class GBApp:MonoBehaviour {
         if(Phase==GamePhase.Countdown&&Time.time>=phaseUntil){Phase=GamePhase.Fighting;Sfx.Play("win",.6f);}
         if(Phase==GamePhase.Fighting) {
             CheckPin();
-            foreach(var w in Wrestlers)if(Mathf.Abs(w.Root.position.x)>5.3f||Mathf.Abs(w.Root.position.z)>5.3f||w.Root.position.y<-1.3f){ResetRound(false);Toast("OUT OF THE RING • RESET",2);break;}
+            if(Phase==GamePhase.Fighting)CheckRingOut();
         }
         if(Phase==GamePhase.RoundOver&&Time.time>=phaseUntil)ResetRound(true);
     }
@@ -287,7 +289,7 @@ public class GBApp:MonoBehaviour {
         var controlled=Wrestlers[Views.PrimaryPlayer];
         Panel(new Rect(30,715,485,88),new Color(.025f,.04f,.065f,.84f));Label(new Rect(43,726,460,23),"TARGET: "+controlled.TargetMode+"   •   GRIP STRAIN "+Mathf.RoundToInt(controlled.GripStrain*100)+"%",small);Bar(new Rect(43,753,460,7),controlled.GripStrain,new Color(1,.55f,.18f));Label(new Rect(43,768,460,30),controlled.ActionFeedback,small);
         if(Button(new Rect(660,846,280,44),"F1 • CONTROLS"))ControlsVisible=!ControlsVisible;
-        if(Phase==GamePhase.Countdown){Label(new Rect(550,355,500,125),Mathf.Max(1,Mathf.CeilToInt(phaseUntil-Time.time)).ToString(),new GUIStyle(title){alignment=TextAnchor.MiddleCenter,fontSize=110});}
+        if(Phase==GamePhase.Countdown){Label(new Rect(550,355,500,125),CountdownNumber.ToString(),new GUIStyle(title){alignment=TextAnchor.MiddleCenter,fontSize=110});}
         if(Phase==GamePhase.RoundOver){Panel(new Rect(350,365,900,100),new Color(.03f,.05f,.08f,.92f));Label(new Rect(365,390,870,60),RoundMessage,new GUIStyle(heading){alignment=TextAnchor.MiddleCenter});}
         if(PinCount>0){Label(new Rect(650,220,300,130),Mathf.Max(0,PinSeconds-PinCount).ToString("0.0"),new GUIStyle(title){alignment=TextAnchor.MiddleCenter});Bar(new Rect(590,348,420,10),PinCount/PinSeconds,new Color(1,.4f,.1f));}
         var pinVictim=controlled.PinTarget;

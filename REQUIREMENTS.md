@@ -37,3 +37,5 @@ Current update acceptance: effective physical Q shots; real earned jump/run/spin
 - Opponent bracing never adds stamina drain to the gripping wrestler, against AI or another person.
 
 - Scramble never script-releases opponent grips; physical strain still may release. Rapid Ctrl tapping cannot repeat scramble bursts;0.4s release recovery.
+
+- Windows0.4.6: exited wrestler is bottom even when thrown; connected hands-and-knees pose with opponent behind, 1.5-second 3/2/1 then whistle, inputs frozen until start, scores preserved and grips cleared. Rope pins unchanged. Mac updates paused. Arena visual changes remain suggestions pending direction.

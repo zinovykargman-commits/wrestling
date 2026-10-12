@@ -116,6 +116,7 @@ public partial class GBWrestler:MonoBehaviour {
         GBApp.I.Register(this);
     }
     public void ResetTo(Vector3 at) {
+        restartPoseUntil=0;
         Release(0);Release(1);for(int n=0;n<15;n++){bodies[n].position=at+initial[n];bodies[n].rotation=Quaternion.identity;bodies[n].linearVelocity=Vector3.zero;bodies[n].angularVelocity=Vector3.zero;}
         stamina=MaxStamina;balance=100;downUntil=recoveryUntil=pressureUntil=climbUntil=liftCharge=stumbleUntil=EscapeUntil=jumpAt=strikeAt=jumpRequestUntil=carriedRecoveryUntil=0;carriedFlight=false;lastFootSupport=-10;lastImpact=-1;eliminated=false;oldFlags=0;facing=Vector3.forward;facingRotation=Quaternion.identity;command=default;pinProgress=0;lastRoot=at+initial[0];feetInitialized=false;nextStep=0;stepBegin[0]=stepBegin[1]=-10;foreach(var hand in hands){hand.releaseRequired=false;hand.candidate=null;}CombatReset();PinReset();SprawlReset();
     }
@@ -199,6 +200,7 @@ public partial class GBWrestler:MonoBehaviour {
         CombatTick(dt);
         SprawlTick();
         PinTick(dt);
+        ApplyBottomRestartPose();
         float muscle=Down?.045f:PinControlled?(command.Has(GBInput.Brace)?.12f:.025f):pressured?.18f:Mathf.Lerp(.65f,1,StaminaFraction)*(Stumbling?.82f:1);
         bool lifting=command.Has(GBInput.Lift)&&!command.Has(GBInput.Brace)&&GripCount>0&&!Down&&!pinTarget;liftCharge=lifting?Mathf.Min(1,liftCharge+dt*1.25f):0;
         for(int n=1;n<15;n++) {
