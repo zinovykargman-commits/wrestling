@@ -1,0 +1,151 @@
+{
+    "build": "0.4.6",
+    "engine": "6000.3.7f1",
+    "hardware": "Intel(R) Core(TM) i5-14400F / 16173 MB",
+    "graphics": "NVIDIA GeForce RTX 5060",
+    "startedUtc": "2026-10-12T00:33:16.4308387Z",
+    "duration": 3.6680359840393068,
+    "averageFps": 119.97864532470703,
+    "minFps": 117.31024169921875,
+    "bodies": 92,
+    "issues": 0,
+    "screenWidth": 1920,
+    "screenHeight": 1080,
+    "checks": [
+        {
+            "name": "test_inputs_not_serialized",
+            "passed": true,
+            "evidence": "runtime-only input; scene cannot install an empty test array"
+        },
+        {
+            "name": "offender_0_bottom",
+            "passed": true,
+            "evidence": "actual boundary-crossing wrestler; airborne launch allowed"
+        },
+        {
+            "name": "offender_0_connected_pose",
+            "passed": true,
+            "evidence": "gap=5.960464E-08"
+        },
+        {
+            "name": "offender_0_kneeling",
+            "passed": true,
+            "evidence": "hips=(0.00, 0.72, 0.00) hand=(-0.40, 0.30, 0.97) knee=(-0.17, 0.33, -0.14)"
+        },
+        {
+            "name": "offender_0_above_canvas",
+            "passed": true,
+            "evidence": "no body collider initially penetrates mat top .2"
+        },
+        {
+            "name": "offender_0_scores_unchanged",
+            "passed": true,
+            "evidence": "no score, free grip or free pin on restart"
+        },
+        {
+            "name": "offender_0_1_5_seconds",
+            "passed": true,
+            "evidence": "seconds=1.5 number=3"
+        },
+        {
+            "name": "offender_0_count_2",
+            "passed": true,
+            "evidence": "seconds=0.9188477"
+        },
+        {
+            "name": "offender_0_count_1",
+            "passed": true,
+            "evidence": "seconds=0.4187922"
+        },
+        {
+            "name": "offender_0_input_locked",
+            "passed": true,
+            "evidence": "gameplay inputs cannot move bodies or spend stamina before whistle"
+        },
+        {
+            "name": "offender_0_whistle",
+            "passed": true,
+            "evidence": "countdown ends, whistle clip issued and physics resumes"
+        },
+        {
+            "name": "offender_0_stays_low",
+            "passed": true,
+            "evidence": "hips=(0.00, 0.83, 0.16) gap=0.0001542351"
+        },
+        {
+            "name": "offender_1_bottom",
+            "passed": true,
+            "evidence": "actual boundary-crossing wrestler; airborne launch allowed"
+        },
+        {
+            "name": "offender_1_connected_pose",
+            "passed": true,
+            "evidence": "gap=5.960464E-08"
+        },
+        {
+            "name": "offender_1_kneeling",
+            "passed": true,
+            "evidence": "hips=(0.00, 0.72, 0.00) hand=(-0.40, 0.30, 0.97) knee=(-0.17, 0.33, -0.14)"
+        },
+        {
+            "name": "offender_1_above_canvas",
+            "passed": true,
+            "evidence": "no body collider initially penetrates mat top .2"
+        },
+        {
+            "name": "offender_1_scores_unchanged",
+            "passed": true,
+            "evidence": "no score, free grip or free pin on restart"
+        },
+        {
+            "name": "offender_1_1_5_seconds",
+            "passed": true,
+            "evidence": "seconds=1.5 number=3"
+        },
+        {
+            "name": "offender_1_count_2",
+            "passed": true,
+            "evidence": "seconds=0.9190669"
+        },
+        {
+            "name": "offender_1_count_1",
+            "passed": true,
+            "evidence": "seconds=0.4190533"
+        },
+        {
+            "name": "offender_1_input_locked",
+            "passed": true,
+            "evidence": "gameplay inputs cannot move bodies or spend stamina before whistle"
+        },
+        {
+            "name": "offender_1_whistle",
+            "passed": true,
+            "evidence": "countdown ends, whistle clip issued and physics resumes"
+        },
+        {
+            "name": "offender_1_stays_low",
+            "passed": true,
+            "evidence": "hips=(0.00, 0.86, 0.15) gap=0.0001343568"
+        },
+        {
+            "name": "rope_contact_does_not_reset",
+            "passed": true,
+            "evidence": "contact at ropes stays in ring; boundary is outside rope perimeter"
+        },
+        {
+            "name": "ordinary_start_preserved",
+            "passed": true,
+            "evidence": "normal start remains 3 seconds; ring-out alone is 1.5 seconds"
+        },
+        {
+            "name": "restart_no_runtime_issues",
+            "passed": true,
+            "evidence": ""
+        },
+        {
+            "name": "connected_body_joints",
+            "passed": true,
+            "evidence": "missing frames=0 maximum physical anchor separation=0.0050 m"
+        }
+    ]
+}
