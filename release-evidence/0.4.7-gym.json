@@ -1,0 +1,86 @@
+{
+    "build": "0.4.7",
+    "engine": "6000.3.7f1",
+    "hardware": "Intel(R) Core(TM) i5-14400F / 16173 MB",
+    "graphics": "NVIDIA GeForce RTX 5060",
+    "startedUtc": "2026-10-12T00:54:48.1809345Z",
+    "duration": 5.608674049377441,
+    "averageFps": 119.73584747314453,
+    "minFps": 78.7104263305664,
+    "bodies": 92,
+    "issues": 0,
+    "screenWidth": 1920,
+    "screenHeight": 1080,
+    "checks": [
+        {
+            "name": "test_inputs_not_serialized",
+            "passed": true,
+            "evidence": "runtime-only input; scene cannot install an empty test array"
+        },
+        {
+            "name": "gym_decorations_present",
+            "passed": true,
+            "evidence": "detail objects=288"
+        },
+        {
+            "name": "gym_scenery_has_no_colliders_or_targets",
+            "passed": true,
+            "evidence": "ringside decor cannot obstruct, grip or alter movement"
+        },
+        {
+            "name": "gym_registry_compatible",
+            "passed": true,
+            "evidence": "unchanged registered bodies=92 rope segments=48"
+        },
+        {
+            "name": "gym_rope_skins_follow_physics",
+            "passed": true,
+            "evidence": "48 cylindrical skins parent to original rigid ropes; original colliders/constraints stay enabled"
+        },
+        {
+            "name": "gym_textured_canvas",
+            "passed": true,
+            "evidence": "cached1024px printed canvas with mipmaps"
+        },
+        {
+            "name": "gym_corner_cushions",
+            "passed": true,
+            "evidence": "three rounded cushions per corner=12"
+        },
+        {
+            "name": "gym_benches_banners_equipment",
+            "passed": true,
+            "evidence": "benches=6 banners=2 bags=3 dumbbells=12"
+        },
+        {
+            "name": "gym_owned_camera_centered",
+            "passed": true,
+            "evidence": "player=0 viewport=(0.50, 0.50, 7.60)"
+        },
+        {
+            "name": "gym_one_camera",
+            "passed": true,
+            "evidence": "full-screen owned-player view retained"
+        },
+        {
+            "name": "gym_movement_remains_playable",
+            "passed": true,
+            "evidence": "distance=1.694731"
+        },
+        {
+            "name": "gym_performance",
+            "passed": true,
+            "evidence": "native mean FPS=119.7358 minimum=78.71043 GPU=NVIDIA GeForce RTX 5060"
+        },
+        {
+            "name": "gym_runtime_clean",
+            "passed": true,
+            "evidence": ""
+        },
+        {
+            "name": "connected_body_joints",
+            "passed": true,
+            "evidence": "missing frames=0 maximum physical anchor separation=0.0040 m"
+        }
+    ]
+}

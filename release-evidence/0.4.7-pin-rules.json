@@ -1,0 +1,106 @@
+{
+    "build": "0.4.7",
+    "engine": "6000.3.7f1",
+    "hardware": "Intel(R) Core(TM) i5-14400F / 16173 MB",
+    "graphics": "Null Device",
+    "startedUtc": "2026-10-12T00:55:02.4940006Z",
+    "duration": 1.671034574508667,
+    "averageFps": 0.0,
+    "minFps": 1000.0,
+    "bodies": 92,
+    "issues": 0,
+    "screenWidth": 1424,
+    "screenHeight": 714,
+    "checks": [
+        {
+            "name": "test_inputs_not_serialized",
+            "passed": true,
+            "evidence": "runtime-only input; scene cannot install an empty test array"
+        },
+        {
+            "name": "rope_fixture_has_both_actual_shoulders",
+            "passed": true,
+            "evidence": "no target C=False hands=0 down=True root=(3.90, 0.46, 0.00) chest=(3.90, 0.46, -0.35) frontDown=-1.000 shoulders=True/True"
+        },
+        {
+            "name": "rope_pin_count_advances",
+            "passed": true,
+            "evidence": "native rule count=0.08333335"
+        },
+        {
+            "name": "releasing_C_still_resets_pin",
+            "passed": true,
+            "evidence": "count=0"
+        },
+        {
+            "name": "lifting_shoulders_still_resets_pin",
+            "passed": true,
+            "evidence": "actual shoulder contacts lost"
+        },
+        {
+            "name": "losing_grip_still_resets_pin",
+            "passed": true,
+            "evidence": "live hold removed"
+        },
+        {
+            "name": "pin_does_not_win_early",
+            "passed": true,
+            "evidence": "count=2.495838"
+        },
+        {
+            "name": "rope_pin_wins_at_2_5_seconds",
+            "passed": true,
+            "evidence": "score=1 count=2.500005"
+        },
+        {
+            "name": "one_hand_lift_weaker_than_two",
+            "passed": true,
+            "evidence": "actual accumulated native forces: one=540 two=1782"
+        },
+        {
+            "name": "ground_lift_weaker",
+            "passed": true,
+            "evidence": "ground one=297 standing one=540"
+        },
+        {
+            "name": "pinned_one_hand_lift_is_weakest",
+            "passed": true,
+            "evidence": "pinned=True force=135 ground=297"
+        },
+        {
+            "name": "scramble_cost_additional_ten_percent",
+            "passed": true,
+            "evidence": "actual ground drain=18.26023/s (previous16.9/s)"
+        },
+        {
+            "name": "exhaustion_starts_1_2_second_timer",
+            "passed": true,
+            "evidence": "remaining=1.2"
+        },
+        {
+            "name": "funded_scramble_still_blocked_during_timer",
+            "passed": true,
+            "evidence": "remaining=0.5999761 stamina=20.07917"
+        },
+        {
+            "name": "scramble_resumes_after_timer",
+            "passed": true,
+            "evidence": "remaining=0 stamina=20.00171"
+        },
+        {
+            "name": "round_reset_clears_scramble_cooldown",
+            "passed": true,
+            "evidence": "reset restores full stamina and timer"
+        },
+        {
+            "name": "rules_patch_no_runtime_issues",
+            "passed": true,
+            "evidence": ""
+        },
+        {
+            "name": "connected_body_joints",
+            "passed": true,
+            "evidence": "missing frames=0 maximum physical anchor separation=0.0050 m"
+        }
+    ]
+}
