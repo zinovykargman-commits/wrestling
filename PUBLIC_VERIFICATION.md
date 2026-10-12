@@ -1,5 +1,3 @@
-# GRIP BREAK 0.4.4 public verification
+# GRIP BREAK 0.4.5 public verification
 
-Actual public Windows and Source archives match packaged hashes and sizes; the updater manifest matches. The native menu updater passed 15 checks and identifies 0.4.4 as current.
-
-Opponent bracing no longer adds any stamina cost to the gripping wrestler. Ordinary grip/lift/pin/action costs remain; bracers pay their own costs and still resist physically. Native production Simulate fixtures verify identical unresisted/resisted drain for one/two grips, holding/lifting, bracer cost and normal recovery. Same-PC host/client checks passed with protocol 11. This patch retains 0.4.3 pin/scramble rules. Separate-PC internet and human balance were not revalidated; historical pin observations are retained.
+Actual public Windows/Source archives match final packaged hashes and sizes; the update manifest matches. Native public updater passed15 checks. Scramble no longer automatically releases an opponent's grips, grants escape immunity or adds a charged velocity kick. Real movement and grip strain still permit escapes. Release-to-repress recovery is0.4s; holding Ctrl resumes when ready. Exhausted recovery remains1.2s and scramble multiplier1.43. Opponent bracing still adds no stamina penalty to the holder. Both peers require0.4.5/protocol12. Native prepared scramble, stamina, pin rule and same-PC network checks passed. Mac tests and cross-machine checks are separately recorded in the macoswrestling repository. Human balance and broader historic pin observations remain unverified.
