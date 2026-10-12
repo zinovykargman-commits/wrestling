@@ -17,7 +17,7 @@ public partial class GBApp {
         if(!Authority||bottom<0||bottom>=Wrestlers.Count)return;
         ResetRound(false);RingRestartBottom=bottom;
         var low=Wrestlers[bottom];var top=Wrestlers[1-bottom];
-        low.PrepareBottomRestart();top.ResetTo(new Vector3(0,.28f,-1.1f));
+        low.PrepareBottomRestart();top.PrepareTopRestart();
         foreach(var w in Wrestlers)foreach(var rb in w.bodies){var position=rb.position;var rotation=rb.rotation;rb.isKinematic=true;rb.transform.SetPositionAndRotation(position,rotation);rb.position=position;rb.rotation=rotation;}
         Physics.SyncTransforms();
         RoundMessage="OUT OF BOUNDS • "+low.playerName+" STARTS ON BOTTOM";
@@ -26,7 +26,7 @@ public partial class GBApp {
     }
     void FinishRingRestart(){
         foreach(var w in Wrestlers)foreach(var rb in w.bodies){rb.isKinematic=false;rb.WakeUp();}
-        Wrestlers[RingRestartBottom].ReleaseBottomRestart();RingRestartBottom=-1;
+        foreach(var w in Wrestlers)w.ReleaseRingRestart();RingRestartBottom=-1;
         Phase=GamePhase.Fighting;Sfx.Play("whistle",.65f);
         // Inputs pressed during the countdown do not become buffered actions.
         System.Array.Clear(buffered,0,buffered.Length);
@@ -34,12 +34,19 @@ public partial class GBApp {
 }
 
 public partial class GBWrestler {
-    Quaternion[] restartPose;float restartPoseUntil;
+    Quaternion[] restartPose;float restartPoseUntil,restartHipHeight;
     public void PrepareBottomRestart(){
-        ResetTo(Vector3.zero);restartPose=new Quaternion[15];
-        float[] pitch={90,65,35,-20,-65,0,-20,-65,0,0,90,0,0,90,0};
+        PrepareRestartPose(new Vector3(0,.72f,0),new float[]{90,65,35,-20,-65,0,-20,-65,0,0,90,0,0,90,0});
+    }
+    public void PrepareTopRestart(){
+        // Kneeling referee position: chest above and behind the hips, hands
+        // poised outside the waist. The player must still earn manual grips.
+        PrepareRestartPose(new Vector3(0,.86f,-.70f),new float[]{0,30,0,-30,-50,0,-30,-50,0,0,90,0,0,90,0});
+    }
+    void PrepareRestartPose(Vector3 at,float[] pitch){
+        ResetTo(Vector3.zero);restartPose=new Quaternion[15];restartHipHeight=at.y;
         for(int n=0;n<15;n++)restartPose[n]=Quaternion.Euler(pitch[n],0,0);
-        Root.position=new Vector3(0,.72f,0);Root.rotation=restartPose[0];
+        Root.position=at;Root.rotation=restartPose[0];
         for(int n=1;n<15;n++){
             var j=joints[n];var parent=bodies[parents[n]];bodies[n].rotation=restartPose[n];
             // Forward kinematics preserves the real anatomical anchors.
@@ -49,11 +56,11 @@ public partial class GBWrestler {
         foreach(var rb in bodies)rb.transform.SetPositionAndRotation(rb.position,rb.rotation);
         facing=Vector3.forward;restartPoseUntil=0;Physics.SyncTransforms();
     }
-    public void ReleaseBottomRestart(){pressureUntil=Time.time+.75f;restartPoseUntil=Time.time+.75f;feetInitialized=false;}
+    public void ReleaseRingRestart(){pressureUntil=Time.time+.75f;restartPoseUntil=Time.time+.75f;feetInitialized=false;}
     void ApplyBottomRestartPose(){
         if(restartPose==null||Time.time>=restartPoseUntil||Down||PinControlled||command.Has(GBInput.Sprawl)||command.Has(GBInput.Brace))return;
         for(int n=0;n<15;n++)poses[n]=Quaternion.LookRotation(facing,Vector3.up)*restartPose[n];
         ApplyTorque(Root,poses[0],360,60,620);
-        Root.AddForce(Vector3.up*Mathf.Clamp((.72f-Root.position.y)*1200-Root.linearVelocity.y*100,-500,150),ForceMode.Force);
+        Root.AddForce(Vector3.up*Mathf.Clamp((restartHipHeight-Root.position.y)*1200-Root.linearVelocity.y*100,-500,150),ForceMode.Force);
     }
 }

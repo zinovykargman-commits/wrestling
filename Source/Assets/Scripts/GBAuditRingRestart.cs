@@ -15,7 +15,10 @@ public partial class GBAudit {
             low=app.Wrestlers[offender];var top=app.Wrestlers[1-offender];
             Check("offender_"+offender+"_bottom",app.RingRestartBottom==offender&&app.Epoch==epoch+1,"actual boundary-crossing wrestler; airborne launch allowed");
             Check("offender_"+offender+"_connected_pose",low.JointSeparation()<.001f&&top.JointSeparation()<.001f,"gap="+low.JointSeparation());
-            Check("offender_"+offender+"_kneeling",Mathf.Abs(Vector3.Dot(low.bodies[1].transform.up,Vector3.up))<.5f&&low.bodies[5].position.y<.35f&&low.bodies[8].position.y<.35f&&low.bodies[5].position.z>low.Root.position.z+.5f&&top.Root.position.z<low.Root.position.z-.9f,"hips="+low.Root.position+" hand="+low.bodies[5].position+" knee="+(low.bodies[10].position+low.bodies[10].rotation*low.joints[10].anchor));
+            Check("offender_"+offender+"_kneeling",Mathf.Abs(Vector3.Dot(low.bodies[1].transform.up,Vector3.up))<.5f&&low.bodies[5].position.y<.35f&&low.bodies[8].position.y<.35f&&low.bodies[5].position.z>low.Root.position.z+.5f&&top.Root.position.z<low.Root.position.z-.5f,"hips="+low.Root.position+" hand="+low.bodies[5].position+" knee="+(low.bodies[10].position+low.bodies[10].rotation*low.joints[10].anchor));
+            Check("offender_"+offender+"_top_kneels",top.Root.position.y<.9f&&top.bodies[10].position.y<.36f&&top.bodies[13].position.y<.36f&&top.bodies[1].position.y>low.bodies[1].position.y+.25f&&top.bodies[5].position.z>low.Root.position.z-.1f,"top hips="+top.Root.position+" shin="+top.bodies[10].position+" hand="+top.bodies[5].position);
+            float penetration=0;foreach(var a in low.GetComponentsInChildren<Collider>())foreach(var b in top.GetComponentsInChildren<Collider>()){Vector3 direction;float depth;if(Physics.ComputePenetration(a,a.transform.position,a.transform.rotation,b,b.transform.position,b.transform.rotation,out direction,out depth))penetration=Mathf.Max(penetration,depth);}
+            Check("offender_"+offender+"_no_body_overlap",penetration<.015f,"max inter-wrestler penetration="+penetration);
             bool clear=true;foreach(var body in low.bodies)foreach(var c in body.GetComponents<Collider>())clear&=c.bounds.min.y>=.19f;
             Check("offender_"+offender+"_above_canvas",clear,"no body collider initially penetrates mat top .2");
             Check("offender_"+offender+"_scores_unchanged",app.Scores[0]==1&&app.Scores[1]==2&&app.PinCount==0&&low.GripCount==0&&top.GripCount==0,"no score, free grip or free pin on restart");
@@ -34,7 +37,7 @@ public partial class GBAudit {
             Check("offender_"+offender+"_whistle",app.Phase==GBApp.GamePhase.Fighting&&app.Sfx.LastPlayed=="whistle"&&app.Sfx.whistle.length>.25f&&!low.Root.isKinematic,"countdown ends, whistle clip issued and physics resumes");
             yield return Wait(.2f);
             if(offender==0){ScreenCapture.CaptureScreenshot(Path.Combine(directory,"restart-after-whistle.png"));yield return null;}
-            Check("offender_"+offender+"_stays_low",low.Root.position.y<.9f&&low.JointSeparation()<.06f&&app.PinCount==0,"hips="+low.Root.position+" gap="+low.JointSeparation());
+            Check("offender_"+offender+"_stays_low",low.Root.position.y<.9f&&top.Root.position.y<1&&low.JointSeparation()<.06f&&top.JointSeparation()<.06f&&app.PinCount==0,"bottom hips="+low.Root.position+" top hips="+top.Root.position+" gap="+low.JointSeparation());
         }
         app.ResetRound(false);app.Wrestlers[0].ResetTo(new Vector3(4.15f,.28f,0));int before=app.Epoch;app.CheckRingOut();
         Check("rope_contact_does_not_reset",before==app.Epoch,"contact at ropes stays in ring; boundary is outside rope perimeter");

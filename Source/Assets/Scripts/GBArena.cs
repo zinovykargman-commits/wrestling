@@ -23,7 +23,7 @@ public class GBArena:MonoBehaviour {
         if(kind==0)Train();else if(kind==1)Store();else if(kind==2)Tower();else Gym();
         if(kind==1||kind==2)for(int i=0;i<4;i++){boundary[i]=Box("Closing arena warning",Vector3.zero,Vector3.one,GBArt.Mat("Closing warning",new Color(1,.12f,.015f),0,.2f,true),false).transform;boundary[i].gameObject.SetActive(false);}
         var root=new GameObject("Arena accent lights");root.transform.SetParent(transform,false);
-        GBArt.Light(root.transform,new Vector3(-6,4,-4),new Color(.12f,.65f,1),5,17);GBArt.Light(root.transform,new Vector3(6,4,5),new Color(1,.31f,.1f),5,17);
+        GBArt.Light(root.transform,new Vector3(-6,4,-4),new Color(.12f,.65f,1),kind==3?.55f:5,17);GBArt.Light(root.transform,new Vector3(6,4,5),new Color(1,.31f,.1f),kind==3?.45f:5,17);
     }
     GameObject Box(string name,Vector3 at,Vector3 size,Material mat,bool collider=true) {return GBArt.Box(transform,name,at,size,mat,collider);}
     public Rigidbody Surface(string name,Vector3 at,Vector3 size,Material mat,bool grab=true,string sound="metal") {
@@ -129,6 +129,7 @@ public class GBArena:MonoBehaviour {
         Table(new Vector3(-7.4f,-1,1),new Vector3(2.5f,.8f,1.4f));Piece(transform,"training block",new Vector3(-6.6f,-.55f,-2.2f),new Vector3(.8f,.8f,.8f),orange,12,false);
         Box("Gym wall",new Vector3(0,2,10),new Vector3(27,6,.2f),black);GBArt.Text(transform,"THE GYM",new Vector3(0,3.5f,9.85f),.65f,new Color(.35f,.75f,1),Quaternion.identity);
         for(int i=-2;i<=2;i++){Box("Wall acoustic panel",new Vector3(i*4,1.2f,9.8f),new Vector3(2.6f,2,.1f),blue,false);GBArt.Light(transform,new Vector3(i*4,4.1f,6),new Color(.8f,.9f,1),2,10);}
+        GBGymVisual.Apply(this);
     }
     public bool Eliminated(Vector3 p) {
         if(kind==3)return p.y<-4;

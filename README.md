@@ -4,7 +4,7 @@
 
 This repository contains the editable Unity source, update installer, and build instructions. The playable Windows build is distributed as a release asset.
 
-# GRIP BREAK 0.4.6
+# GRIP BREAK 0.4.7
 
 Extract GRIP_BREAK-Windows.zip and open **PLAY.cmd**. Only **Pin Wrestling** in the ring is active. **PLAY AGAINST AI** and **PRIVATE ONLINE** enter the same rules. First to three pins wins. Training and other rule/arena choices are retired for now.
 
@@ -31,7 +31,7 @@ The **KEYBINDS** page changes/saves keyboard, mouse and controller actions. RESE
 
 Aim before clicking: high for shoulders, low for legs. Each click holds its own physical hand. A target must be in reach. Moving the cursor with a grip physically works against the target rather than teleporting it.
 
-Pull backward, pivot sideways, or take a forward Q shot and manually grip to work your rival off balance. Hold C while gripping a physically low, lying rival to settle their chest or back onto the mat and use a low controlling stance. The grounded rival's chest/back and both shoulders against the mat, with your live controlling grip, are required for **2.5 continuous seconds**. Shoulder indicators/count show progress. Releasing C, losing control/contact, raising a shoulder interrupts the count. Touching ropes does not interrupt a valid pin. Leaving the ring puts the exited wrestler on hands and knees at center, with the opponent behind. Both stay still for a 1.5-second 3, 2, 1 countdown, then a whistle restores control. Being thrown out still puts the exited wrestler on bottom; scores do not change.
+Pull backward, pivot sideways, or take a forward Q shot and manually grip to work your rival off balance. Hold C while gripping a physically low, lying rival to settle their chest or back onto the mat and use a low controlling stance. The grounded rival's chest/back and both shoulders against the mat, with your live controlling grip, are required for **2.5 continuous seconds**. Shoulder indicators/count show progress. Releasing C, losing control/contact, raising a shoulder interrupts the count. Touching ropes does not interrupt a valid pin. Leaving the ring puts the exited wrestler on hands and knees at center, with the opponent kneeling behind in top position. Both stay still for a 1.5-second 3, 2, 1 countdown, then a whistle restores control. Being thrown out still puts the exited wrestler on bottom; scores do not change.
 
 Hold **E** to sprawl: lower your hips, send the legs back and resist a shot with your body weight. Arms and manual grips remain independent; release E to recover. Sprawl drains stamina and cannot turn into a shot while held. Lift uses R; old default lift bindings migrate automatically.
 
@@ -59,7 +59,7 @@ Walking uses alternating physical foot targets and coordinated thigh/knee motors
 
 Current pin rule: the grounded wrestler may be chest-down or back-down, with both actual shoulders on the mat and a live nearby controlling grip while C is held. The attacker does not need to place their chest over the rival. Multiplayer omits the mat motivational slogan and bottom coaching prompt.
 
-Tackle has been removed from keyboard/controller bindings, control legends, AI decisions and physics. The retired network input bit is rejected. Windows 0.4.6 retains protocol12. Mac updates are paused at0.4.5; its older countdown display/audio remain unchanged.
+Tackle has been removed from keyboard/controller bindings, control legends, AI decisions and physics. The retired network input bit is rejected. Windows 0.4.7 retains protocol12. Mac updates are paused at0.4.5; its older countdown display/audio remain unchanged.
 Jump requires 8 stamina (climb 16) and is unavailable while under pin control. C requires a physically low, lying opponent before pin control; low balance or a Down timer while upright is insufficient. Ctrl + movement still bridges/rolls.
 
 
@@ -75,3 +75,5 @@ Single-grip pin control is stronger in 0.4.0 so a live one-hand hold can settle 
 0.4.5: scrambling never auto-releases the opponent's grips; actual movement/strain determines escape. Ctrl release has0.4s repress recovery to prevent rapid-tap bursts; exhaustion stays1.2s.
 
 0.4.6: offender-bottom ring-out restarts, 1.5-second 3/2/1 and referee whistle. Ordinary match starts remain three seconds. Mac source/builds are unchanged.
+
+0.4.7: woven printed canvas, soft neutral lighting, padded corners and cylindrical rope covers, stitched apron, windows, benches, club banners, lockers, dumbbells and training bags. Decorations are visual-only; physical ropes and collision geometry are preserved. Top starts kneeling in the referee position, rather than standing behind bottom. Both remain low briefly after the whistle, with normal manual grips and physical control. Mac updates remain paused.

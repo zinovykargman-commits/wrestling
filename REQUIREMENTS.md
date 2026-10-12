@@ -39,3 +39,5 @@ Current update acceptance: effective physical Q shots; real earned jump/run/spin
 - Scramble never script-releases opponent grips; physical strain still may release. Rapid Ctrl tapping cannot repeat scramble bursts;0.4s release recovery.
 
 - Windows0.4.6: exited wrestler is bottom even when thrown; connected hands-and-knees pose with opponent behind, 1.5-second 3/2/1 then whistle, inputs frozen until start, scores preserved and grips cleared. Rope pins unchanged. Mac updates paused. Arena visual changes remain suggestions pending direction.
+
+- Windows0.4.7: implement the accepted gym visual improvements and inspect real frames. Preserve physical registry/targets/colliders, networking and camera. Top also starts kneeling over/behind bottom instead of standing; connected anatomy, no initial body overlap and no automatic grips. Keep Mac updates paused.
