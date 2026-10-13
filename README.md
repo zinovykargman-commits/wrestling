@@ -4,9 +4,11 @@
 
 This repository contains the editable Unity source, update installer, and build instructions. The playable Windows build is distributed as a release asset.
 
-# GRIP BREAK 0.4.9
+# GRIP BREAK 0.4.10
 
 Extract **GRIP_BREAK-Windows.zip** and open **PLAY.cmd**. No Unity installation is needed to play. **PLAY AGAINST AI** and **PRIVATE ONLINE** use the same Pin Wrestling rules: first to three pins wins. There is one full-window camera locked to the wrestler you control. Training, split screen and other modes are inactive.
+
+0.4.10 adds passive ground stamina recovery after 2.5 seconds. This applies under pin control too; paid movement and Ctrl-spam still prevent free recovery.
 
 ## Controls
 
@@ -40,7 +42,7 @@ Hold **C** with live nearby control of a physically low, lying rival. Top positi
 
 Going over the ropes restarts the exited wrestler on hands and knees, with the opponent kneeling behind in top position, even when they were thrown out. A rapid 1.5-second 3, 2, 1 countdown and whistle restore control. Scores remain unchanged.
 
-Stamina capacity remains **155.25**. Holding costs 2 per hand per second; lift adds 26/s. The rival's bracing never adds drain to your stamina. Ground scramble remains 1.43 times its original effort cost. Jump requires 8 stamina, climbing 16; exhausted jumping and jumping under active pin control are blocked. Repeated Ctrl attempts postpone free recovery, and active pin control blocks regeneration.
+Stamina capacity remains **155.25**. Holding costs 2 per hand per second; lift adds 26/s. The rival's bracing never adds drain to your stamina. Ground scramble remains 1.43 times its original effort cost. Jump requires 8 stamina, climbing 16; exhausted jumping and jumping under active pin control are blocked. Repeated Ctrl attempts postpone free recovery, and resting on the ground for 2.5 seconds resumes the original 19 stamina/s regeneration even under pin control. Your own grips, lifting, sprinting, sprawl and active scramble still cost stamina. Repeated raw Ctrl attempts block regeneration; stop actively scrambling to recover. Standing recovery stays unchanged.
 
 ## Graphics and appearance
 
@@ -50,7 +52,7 @@ The realistic athletes use licensed skin, hair and eye textures, fitted cloth si
 
 ## Private online
 
-Use matching **0.4.9** builds on both computers. Protocol 12 retains host authority and the same 92 registered bodies. Windows hosts: **PRIVATE ONLINE → HOST & MAKE LINK → COPY INVITE**. Send the complete copied invite to your friend. They paste it into Join, select **JOIN FRIEND**, ready up, then the host starts.
+Use matching **0.4.10** builds on both computers. Protocol 12 retains host authority and the same 92 registered bodies. Windows hosts: **PRIVATE ONLINE → HOST & MAKE LINK → COPY INVITE**. Send the complete copied invite to your friend. They paste it into Join, select **JOIN FRIEND**, ready up, then the host starts.
 
 The bundled Windows Cloudflare helper creates a temporary authenticated tunnel without router setup, VPN or a Cloudflare account. Closing the room expires the invite. The game streams existing bodies, grips, shoulder contacts and pin state. Mac joins a Windows-hosted invite; native Mac hosting/controllers are outside the current Mac package. Current separate-machine internet play and physical-Mac performance require hands-on verification. Temporary service availability is external.
 
@@ -64,6 +66,8 @@ Mac downloads: https://github.com/zinovykargman-commits/macoswrestling/releases/
 
 The Source archive contains Unity Assets/Packages/ProjectSettings, licensed runtime mesh/texture assets, the installer/network helpers and an editable packed Blender master under **Authoring**. Open Source in Unity **6000.3.7f1** with the platform's build support. **BuildGripBreak.Build** creates the native player. Keep Network and Update beside the Windows Build. The authoring exporter is pipeline source, not a standalone command; see Authoring/README.md.
 
-Windows build **f180** passed **412 of 413 native assertions**, with zero build errors/warnings and zero runtime issues. All new feature checks, the dedicated 20-check locomotion suite, the manual standing pin exchange and 32 host/client checks passed. One older walking fixture still failed its boot-height criterion; the untouched failure remains in the evidence. VALIDATION.md records the category results.
+The previous 0.4.9 Windows build **f180** passed **412 of 413 native assertions**, with zero build errors/warnings and zero runtime issues. All new feature checks, the dedicated 20-check locomotion suite, the manual standing pin exchange and 32 host/client checks passed. One older walking fixture still failed its boot-height criterion; the untouched failure remains in the evidence. VALIDATION.md records the category results.
+
+Current0.4.10 build **f182** passed **125/125 focused native assertions**, with zero build errors/warnings and zero runtime issues: pinned ground recovery, stamina costs, Ctrl-spam protection, pin rules, host/client state and rendered menu. This is a focused follow-up; prior full0.4.9 evidence and its legacy walking-height limitation remain unchanged.
 
 Untouched report JSON and inspected key captures are published in the [repository release evidence](https://github.com/zinovykargman-commits/wrestling/tree/main/release-evidence/0.4.9). Test screenshots, videos and reports are excluded from the playable ZIP. MANUAL_CHECKS.md separates hardware, human feel and independent-network checks. Public archive byte verification and the live updater check are recorded after publication in the repository. Automated evidence does not establish long-session or human-balance acceptance.

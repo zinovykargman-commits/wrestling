@@ -1,0 +1,47 @@
+{
+  "nativeBuild": "f182",
+  "approved": true,
+  "sourceBaselineSha256": "43f09e2791df51fcbf42b67838c30fccaf39d484f3a19406b3d73ab12fa823b5",
+  "reviewedCaptures": [
+    "work/checks/f182-ui/menu.png"
+  ],
+  "nativeChecks": 125,
+  "passedChecks": 125,
+  "counts": {
+    "ground-recovery": 26,
+    "net": 32,
+    "pin-rules": 18,
+    "pin-spam": 37,
+    "stamina": 10,
+    "ui": 2
+  },
+  "changedSourceFiles": [
+    "Source/Assets/Editor/BuildGripBreak.cs",
+    "Source/Assets/Scenes/GripBreak.unity",
+    "Source/Assets/Scripts/GBApp.cs",
+    "Source/Assets/Scripts/GBAudit.cs",
+    "Source/Assets/Scripts/GBAuditGroundRecovery.cs",
+    "Source/Assets/Scripts/GBAuditGroundRecovery.cs.meta",
+    "Source/Assets/Scripts/GBAuditPinSpam.cs",
+    "Source/Assets/Scripts/GBWrestler.cs",
+    "Source/Assets/Scripts/GBWrestlerCombat.cs",
+    "Source/ProjectSettings/ProjectSettings.asset"
+  ],
+  "visualReview": "Root inspected actual visible native0.4.10 menu: roof does not obscure the ring; controls/update button and version fit. All authored meshes, textures, anatomy rendering, gym visuals, camera and presets are byte-identical to reviewed0.4.9 f180. Initial hidden-window capture was black; visible native recapture inspected successfully.",
+  "requirements": {
+    "pinned-ground-recovery": "26 current checks; actual ground contact on chest/back waits2.5s, passive defender recovers at19/s with live opponent C+grip retained",
+    "costs-and-spam": "37 current pin-spam and10 stamina checks; own effort still drains, rawCtrl attempts block recovery, no automatic grip/escape, standing recovery unchanged",
+    "pin-rules": "18 current assertions retain actual shoulders/chest/back/rope/2.5s eligibility and weaker grounded lifts",
+    "network": "32 current host/client assertions; unchanged92-body protocol12",
+    "visuals": "unchanged resources/articulation from reviewed0.4.9, current native menu inspected",
+    "cleanup": "2.37GiB obsolete caches/media removed;1695 protectedfiles rehashed",
+    "delivery": "current publication/public updater/Desktop andMac native proof pending separately"
+  },
+  "baselineEvidence": "https://github.com/zinovykargman-commits/wrestling/tree/main/release-evidence/0.4.9",
+  "remainingLimitations": [
+    "previous0.4.9 legacy walking-height fixture failed; unchanged20-check dedicatedlocomotion passed",
+    "small neckline trim wisps/extreme pose folds",
+    "palms not perfect in every pose",
+    "physicalMac performance/human balance/independent-machine internet unverified"
+  ]
+}

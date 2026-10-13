@@ -40,8 +40,10 @@ public partial class GBAudit {
             string mode=moving?"moving":"stationary";
             Check(mode+"_Ctrl_taps_do_not_recharge",maxGain<.00001f&&b.stamina<initial&&activations==1,"32 rapid tap cycles; stamina="+initial+" -> "+b.stamina+" max gain="+maxGain+" accepted bursts="+activations);
             Check(mode+"_grip_remains_physical",a.GripCount==1&&b.EscapeUntil==0,"no scripted grip release or timed immunity");
-            float rest=b.stamina;float until=Time.time+1;while(Time.time<until){b.Simulate(new GBInput{az=1});yield return new WaitForFixedUpdate();}
-            Check(mode+"_rest_under_pin_cannot_refill",Mathf.Abs(b.stamina-rest)<.00001f&&b.PinControlled,"live C+grip control, stamina="+b.stamina);
+            float rest=b.stamina;float until=Time.time+.7f;while(Time.time<until){b.Simulate(new GBInput{az=1});yield return new WaitForFixedUpdate();}
+            Check(mode+"_rest_under_pin_waits_for_ground_delay",Mathf.Abs(b.stamina-rest)<.00001f&&b.PinControlled&&!b.GroundStaminaRecoveryReady,"live C+grip control, ground seconds="+b.GroundStaminaSeconds+" stamina="+b.stamina);
+            until=Time.time+.4f;while(Time.time<until){b.Simulate(new GBInput{az=1});yield return new WaitForFixedUpdate();}
+            Check(mode+"_rest_under_pin_recovers_after_2_5_seconds",b.stamina>rest&&b.PinControlled&&b.GroundStaminaRecoveryReady,"resting defender recovers without a grip release; ground seconds="+b.GroundStaminaSeconds);
             a.command.flags&=~GBInput.Pin;a.SendMessage("PinRefresh");float beforeRecovery=b.stamina;b.Simulate(new GBInput{az=1});
             Check(mode+"_recovery_after_control_breaks",b.stamina>beforeRecovery&&Mathf.Abs((b.stamina-beforeRecovery)/Time.fixedDeltaTime-19)<.04f,"normal19/s returns after actual control ends and attempt delay expires");
             b.Simulate(new GBInput{az=1,x=1,flags=GBInput.Brace});b.Simulate(new GBInput{az=1});rest=b.stamina;

@@ -1,4 +1,4 @@
-# GRIP BREAK 0.4.9 known limits
+# GRIP BREAK 0.4.10 known limits
 
 Shoulder weights, render-only shoulder volume pivots, shared body/cloth deformation and elbow routing were refined and inspected in native neutral front/back/side, overhead and live-reach views. The original deferred arm defects have been addressed in this pass, but extreme raised/armpit poses can still fold the clothing trim. Small white wisps near Cobalt's neckline remain cosmetic. Do not interpret the checked poses as a guarantee of perfect anatomy in every possible physics configuration.
 
@@ -6,7 +6,7 @@ The near-contact hand fit is deliberately slight: at most 2.8 cm, applied only t
 
 The editable packed Blender master is authoring source. Its static Cycles hair shading can differ from the native game; native captures are the evidence for shipped appearance.
 
-Final Windows build f180 passed 412 of 413 assertions across 19 native reports, with zero runtime issues. The sole remaining failure is `walking_moves_with_alternating_physical_steps`: the legacy fixture measured 4.95 m of travel but did not detect both boot centers clearing its old raised-foot criterion; maximum sampled height difference was 0.024 m. The independent 20-check locomotion suite passed actual supported alternating steps and lower-shot motion. The manual standing pin exchange, every new feature check and all 32 host/client checks passed. The failed legacy report remains unchanged; this is not an all-assertions-passing claim.
+The previous 0.4.9 Windows build f180 passed 412 of 413 assertions across 19 native reports, with zero runtime issues. The sole remaining failure is `walking_moves_with_alternating_physical_steps`: the legacy fixture measured 4.95 m of travel but did not detect both boot centers clearing its old raised-foot criterion; maximum sampled height difference was 0.024 m. The independent 20-check locomotion suite passed actual supported alternating steps and lower-shot motion. The manual standing pin exchange, every new feature check and all 32 host/client checks passed. The failed legacy report remains unchanged; this is not an all-assertions-passing claim.
 
 Earlier rejected f179 measured a normal supported Ctrl stance but missed an arbitrary 13 cm hip-drop threshold by 0.3 mm. Root approved an explicit 5 mm solver/contact tolerance in the final audit, retaining independent knee, head/chest, boot-support and free-cost checks; gameplay was unchanged. The f179 failed report and the earlier f178 client-render failure remain historical evidence, separately from current f180 results.
 

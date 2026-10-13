@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 public partial class GBAudit:MonoBehaviour {
     [Serializable] public class Outcome {public string name;public bool passed;public string evidence;}
-    [Serializable] public class Report {public string build="0.4.9",engine,hardware,graphics,startedUtc;public float duration,averageFps,minFps;public int bodies,issues,screenWidth,screenHeight;public List<Outcome> checks=new List<Outcome>();}
+    [Serializable] public class Report {public string build="0.4.10",engine,hardware,graphics,startedUtc;public float duration,averageFps,minFps;public int bodies,issues,screenWidth,screenHeight;public List<Outcome> checks=new List<Outcome>();}
     Report report=new Report();string directory;float started;GBApp app;
     float maximumJointGap;int missingJointFrames;
     void LateUpdate(){if(app&&app.Authority)foreach(var w in app.Wrestlers){if(measureArmContacts)MeasureArmContacts(w);float gap=w.JointSeparation();if(float.IsInfinity(gap))missingJointFrames++;else maximumJointGap=Mathf.Max(maximumJointGap,gap);}}
@@ -18,6 +18,7 @@ public partial class GBAudit:MonoBehaviour {
         if(Has("--input-test")){yield return InputRun();Finish("input.json");yield break;}
         if(Has("--ai-test")){yield return AIRun();Finish("ai.json");yield break;}
         app.ScriptedInputs=new GBInput[2];
+        if(Has("--ground-recovery-test")){yield return GBAuditGroundRecovery.Run(app,Check);Finish("ground-recovery.json");yield break;}
         if(Has("--top-control-test")){yield return GBAuditTopControl.Run(app,Check);Finish("top-control.json");yield break;}
         if(Has("--hand-contact-test")){yield return GBAuditHandContact.Run(app,directory,Check);Finish("hand-contact.json");yield break;}
         if(Has("--corner-test")){yield return GBAuditCorner.Run(app,directory,Check);Finish("corner.json");yield break;}

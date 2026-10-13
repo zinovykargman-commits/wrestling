@@ -1,0 +1,19 @@
+{
+  "version": "0.4.10",
+  "nativeBuild": "f182",
+  "counts": {
+    "ground-recovery": 26,
+    "net": 32,
+    "pin-rules": 18,
+    "pin-spam": 37,
+    "stamina": 10,
+    "ui": 2
+  },
+  "nativeChecks": 125,
+  "passedNativeChecks": 125,
+  "allPassed": true,
+  "remainingScenarioFailures": [],
+  "issues": 0,
+  "sourceBaselineSha256": "43f09e2791df51fcbf42b67838c30fccaf39d484f3a19406b3d73ab12fa823b5",
+  "visualReview": "work/f182-release-review.json"
+}

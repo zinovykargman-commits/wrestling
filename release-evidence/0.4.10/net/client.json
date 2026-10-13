@@ -1,0 +1,86 @@
+{
+    "build": "0.4.10",
+    "engine": "6000.3.7f1",
+    "hardware": "Intel(R) Core(TM) i5-14400F / 16173 MB",
+    "graphics": "Null Device",
+    "startedUtc": "2026-10-13T19:01:59.4431061Z",
+    "duration": 20.455917358398439,
+    "averageFps": 118.85287475585938,
+    "minFps": 12.357090950012207,
+    "bodies": 92,
+    "issues": 0,
+    "screenWidth": 1424,
+    "screenHeight": 714,
+    "checks": [
+        {
+            "name": "test_inputs_not_serialized",
+            "passed": true,
+            "evidence": "runtime-only input; scene cannot install an empty test array"
+        },
+        {
+            "name": "network_handshake",
+            "passed": true,
+            "evidence": "Connected to HOST"
+        },
+        {
+            "name": "connected_camera_owner",
+            "passed": true,
+            "evidence": "connected peer owns its wrestler camera"
+        },
+        {
+            "name": "connected_wrestler_centered",
+            "passed": true,
+            "evidence": "player=1 viewport=(0.50, 0.50, 7.60)"
+        },
+        {
+            "name": "ringout_countdown_stream",
+            "passed": true,
+            "evidence": "observed 3/2/1 mask=14"
+        },
+        {
+            "name": "ringout_bottom_pose_stream",
+            "passed": true,
+            "evidence": "client wrestler low, host wrestler behind; same protocol12 snapshot"
+        },
+        {
+            "name": "pin_only_network_world",
+            "passed": true,
+            "evidence": "both peers run ring pins"
+        },
+        {
+            "name": "physical_grip_state_stream",
+            "passed": true,
+            "evidence": "maximum simultaneous hand targets=3"
+        },
+        {
+            "name": "prop_break_stream",
+            "passed": true,
+            "evidence": "observed broken prop state"
+        },
+        {
+            "name": "round_reset_stream",
+            "passed": true,
+            "evidence": "epoch=1 â†’ 3"
+        },
+        {
+            "name": "host_disconnect_returns_to_menu",
+            "passed": true,
+            "evidence": "Friend disconnected: The connection was closed"
+        },
+        {
+            "name": "state_stream",
+            "passed": true,
+            "evidence": "sent=0 received=517"
+        },
+        {
+            "name": "network_finite",
+            "passed": true,
+            "evidence": "registry=92"
+        },
+        {
+            "name": "connected_body_joints",
+            "passed": true,
+            "evidence": "missing frames=0 maximum physical anchor separation=0.0000 m"
+        }
+    ]
+}

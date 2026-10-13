@@ -1,4 +1,4 @@
-# GRIP BREAK 0.4.9 hands-on acceptance
+# GRIP BREAK 0.4.10 hands-on acceptance
 
 These checks need a person, real hardware or separate computers; native automated fixtures do not certify them.
 

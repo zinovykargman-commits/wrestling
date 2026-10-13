@@ -27,6 +27,23 @@ public partial class GBWrestler {
     float scrambleUntil,scrambleRepressAt,scrambleRegenAt;bool scrambleExhausted,scrambleInputHeld,scrambleUsed;
     public const float ScrambleRepressSeconds=.4f;
     public const float ScrambleRegenDelay=.8f;
+    public const float GroundStaminaRegenDelay=2.5f;
+    float groundStaminaSeconds;
+    bool restingOnGround;
+    public float GroundStaminaSeconds {get{return groundStaminaSeconds;}}
+    public bool GroundStaminaRecoveryReady {get{return restingOnGround&&groundStaminaSeconds>=GroundStaminaRegenDelay;}}
+    void UpdateGroundStaminaRecovery(float dt){
+        restingOnGround=false;
+        if(Down||PhysicallyDownForPin||PinControlled){
+            foreach(int index in new[]{0,1}){
+                var body=bodies[index];RaycastHit floor;
+                if(!Physics.Raycast(body.position+Vector3.up*.4f,Vector3.down,out floor,1.4f,1,QueryTriggerInteraction.Ignore)||floor.normal.y<.75f)continue;
+                var shape=body.GetComponent<Collider>();
+                if(shape&&Vector3.Distance(shape.ClosestPoint(floor.point),floor.point)<.09f){restingOnGround=true;break;}
+            }
+        }
+        groundStaminaSeconds=restingOnGround?Mathf.Min(GroundStaminaRegenDelay,groundStaminaSeconds+dt):0;
+    }
     void GateScrambleInput(bool requested){
         bool held=command.Has(GBInput.Brace);
         // Read raw defensive input before cooldown masking. A blocked press
@@ -38,7 +55,7 @@ public partial class GBWrestler {
     }
     public float ScrambleCooldown {get{return Mathf.Max(0,Mathf.Max(scrambleUntil,scrambleRepressAt)-Time.time);}}
     public bool ScrambleReady {get{return Time.time>=scrambleUntil&&Time.time>=scrambleRepressAt&&stamina>=4;}}
-    public bool EscapeRecoveryBlocked {get{return Time.time<scrambleRegenAt||PinControlled||IsBeingPinned;}}
+    public bool EscapeRecoveryBlocked {get{return Time.time<scrambleRegenAt||(restingOnGround&&!GroundStaminaRecoveryReady)||((PinControlled||IsBeingPinned)&&!GroundStaminaRecoveryReady);}}
     void UpdateScrambleRecovery(bool requested){
         if(Time.time>=scrambleUntil&&stamina>=4)scrambleExhausted=false;
         if(requested&&stamina<4&&!scrambleExhausted){scrambleUntil=Time.time+1.2f;scrambleExhausted=true;}
@@ -50,7 +67,7 @@ public partial class GBWrestler {
         if(PhysicallyDownForPin||Down)power*=.55f;
         return power;
     }
-    void CombatReset(){scrambleUntil=scrambleRepressAt=scrambleRegenAt=0;scrambleExhausted=scrambleInputHeld=scrambleUsed=false;shotUntil=shotAt=lastLiftCharge=0;lastLiftAt=-10;shotImpactDone=shotLaunchPending=false;shotDirection=Vector3.forward;actionFeedback=remoteFeedback="";feedbackUntil=remoteStrain=feedbackPriorityUntil=0;remoteLegs=false;MomentumReset();for(int h=0;h<2;h++)if(targetRings[h])targetRings[h].enabled=false;}
+    void CombatReset(){groundStaminaSeconds=0;restingOnGround=false;scrambleUntil=scrambleRepressAt=scrambleRegenAt=0;scrambleExhausted=scrambleInputHeld=scrambleUsed=false;shotUntil=shotAt=lastLiftCharge=0;lastLiftAt=-10;shotImpactDone=shotLaunchPending=false;shotDirection=Vector3.forward;actionFeedback=remoteFeedback="";feedbackUntil=remoteStrain=feedbackPriorityUntil=0;remoteLegs=false;MomentumReset();for(int h=0;h<2;h++)if(targetRings[h])targetRings[h].enabled=false;}
 
     void ReachLedge(int h,Vector3 point){
         int upper=h==0?3:6,fore=h==0?4:7,index=h==0?5:8;
