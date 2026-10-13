@@ -1,0 +1,371 @@
+{
+    "build": "0.4.9",
+    "engine": "6000.3.7f1",
+    "hardware": "Intel(R) Core(TM) i5-14400F / 16173 MB",
+    "graphics": "NVIDIA GeForce RTX 5060",
+    "startedUtc": "2026-10-13T03:31:50.6774279Z",
+    "duration": 106.94181060791016,
+    "averageFps": 80.06324005126953,
+    "minFps": 6.372402191162109,
+    "bodies": 92,
+    "issues": 0,
+    "screenWidth": 1920,
+    "screenHeight": 1080,
+    "checks": [
+        {
+            "name": "test_inputs_not_serialized",
+            "passed": true,
+            "evidence": "runtime-only input; scene cannot install an empty test array"
+        },
+        {
+            "name": "neutral_pin_pressure_preserved",
+            "passed": true,
+            "evidence": "neutral movement preserves existing shoulder loads"
+        },
+        {
+            "name": "right_pin_pressure_redistributes_existing_weight",
+            "passed": true,
+            "evidence": "400N total remains400N; right lean shifts120N, left preload retained"
+        },
+        {
+            "name": "left_pin_pressure_symmetric",
+            "passed": true,
+            "evidence": "left lean mirrors right with conserved total pressure"
+        },
+        {
+            "name": "ground_scramble_cost_increased_additional_10_percent",
+            "passed": true,
+            "evidence": "actual funded ground bridge drain=18.59/s vs prior13/s; standing grip escape costs also scaled1.43"
+        },
+        {
+            "name": "only_pin_ring_mode",
+            "passed": true,
+            "evidence": "ring arena=3 pin mode=1 bodies=2; no training dummy"
+        },
+        {
+            "name": "legacy_mode_entry_still_pin_ring",
+            "passed": true,
+            "evidence": "legacy arena/mode entry resolves to current pin rules"
+        },
+        {
+            "name": "native_knee_limit_direction",
+            "passed": true,
+            "evidence": "isolated real X-joint: old range positive bend=10.0 corrected flexion=70.0 bounded extension=-5.0"
+        },
+        {
+            "name": "knee_range_0_10",
+            "passed": true,
+            "evidence": "production knee uses verified joint-frame range with only5 degrees extension"
+        },
+        {
+            "name": "knee_range_0_13",
+            "passed": true,
+            "evidence": "production knee uses verified joint-frame range with only5 degrees extension"
+        },
+        {
+            "name": "knee_range_1_10",
+            "passed": true,
+            "evidence": "production knee uses verified joint-frame range with only5 degrees extension"
+        },
+        {
+            "name": "knee_range_1_13",
+            "passed": true,
+            "evidence": "production knee uses verified joint-frame range with only5 degrees extension"
+        },
+        {
+            "name": "stamina_capacity_increased_extra_15_percent",
+            "passed": true,
+            "evidence": "both fresh wrestlers have155.25 stamina, unchanged costs, normalized full meter/strength"
+        },
+        {
+            "name": "anatomical_self_collisions",
+            "passed": true,
+            "evidence": "ignored connected neighbors=14 ignored nonadjacent pairs=0"
+        },
+        {
+            "name": "physical_shoulders_share_connected_torso",
+            "passed": true,
+            "evidence": "four chest/back shoulder spheres share the existing 14 kg torso Rigidbody and target; no new bodies or joints"
+        },
+        {
+            "name": "shoulder_compound_self_collision_pairs",
+            "passed": true,
+            "evidence": "pad neighbor exclusions=16; forearms/hands/opponent contacts remain enabled"
+        },
+        {
+            "name": "cursor_vertical_moves_real_hands",
+            "passed": true,
+            "evidence": "mean hand root-relative y low/high=-0.136/0.783 m, no click buttons"
+        },
+        {
+            "name": "hand_markers_use_feasible_individual_goals",
+            "passed": true,
+            "evidence": "actual shoulder reach L/R=0.718/0.718 m, goal separation=0.216 m; no raw unreachable shared cursor"
+        },
+        {
+            "name": "hand_markers_only_owned_wrestler",
+            "passed": true,
+            "evidence": "one local camera player=0; opposing aim does not draw"
+        },
+        {
+            "name": "cursor_lateral_moves_real_hands",
+            "passed": true,
+            "evidence": "mean hand x left/right=-0.478/0.444 m"
+        },
+        {
+            "name": "cursor_never_auto_grabs",
+            "passed": true,
+            "evidence": "aim-only hands=0"
+        },
+        {
+            "name": "left_button_independent_natural_grip",
+            "passed": true,
+            "evidence": "left=torso right=reach torso; no Attach calls"
+        },
+        {
+            "name": "hand_highlight_names_actual_manual_grip",
+            "passed": true,
+            "evidence": "marked=torso; contact=(0.65, 1.54, -0.70); existing real manual hold, no material/collider mutation"
+        },
+        {
+            "name": "cursor_grip_physically_pulls",
+            "passed": true,
+            "evidence": "hand travel=1.409 victim travel=1.093 balance loss=23.2"
+        },
+        {
+            "name": "cursor_low_selects_leg_without_C",
+            "passed": true,
+            "evidence": "actual low-target hands=left thigh / pelvis cursor=(0.99, 0.92, -1.04) thigh=(1.11, 0.97, -1.11) hand L/R=(0.87, 0.93, -0.74)/(0.98, 0.99, -0.88) shoulder-cursor L/R=0.945/0.742"
+        },
+        {
+            "name": "obsolete_throw_bit_ignored",
+            "passed": true,
+            "evidence": "reserved bit sanitizes away; no Throw action/binding; target velocity change diagnostic=0.146"
+        },
+        {
+            "name": "Q_running_momentum_stronger",
+            "passed": true,
+            "evidence": "approach stationary/run=-0.03/4.56 target peak=0.03/5.28 travel=0.01/2.47"
+        },
+        {
+            "name": "Q_uses_no_automatic_hands",
+            "passed": true,
+            "evidence": "shot maximum hands stationary/run/brace=0/0/0"
+        },
+        {
+            "name": "brace_resists_running_Q",
+            "passed": true,
+            "evidence": "run/braced peak=5.28/2.63 travel=2.47/1.47"
+        },
+        {
+            "name": "spin_manual_aim_grab_physical",
+            "passed": true,
+            "evidence": "actual root yaw peak=8.49 rad/s natural one-hand grip=1 measured transfer=9.09 Ns; no throw action  hand=(0.30, 1.54, -1.14) reachableGoal=(0.33, 1.53, -0.97) physicalError=0.172 candidate=right upper arm releaseRequired=False clamped=False root=(-0.50, 1.20, -0.99) shoulder=(-0.31, 1.76, -0.94)"
+        },
+        {
+            "name": "face_down_actual_shoulders_valid",
+            "passed": true,
+            "evidence": "face-down front shoulder contacts left/right=True/True torso forward-up=-1.000"
+        },
+        {
+            "name": "one_shoulder_pose_invalid",
+            "passed": true,
+            "evidence": "actual back shoulder contacts left/right=True/False"
+        },
+        {
+            "name": "supine_fixture_actual_shoulders",
+            "passed": true,
+            "evidence": "actual mat back contacts left/right=True/True torso y=0.460"
+        },
+        {
+            "name": "no_C_no_count_with_manual_grip",
+            "passed": true,
+            "evidence": "natural grips=2 peak count=0.00"
+        },
+        {
+            "name": "no_manual_grip_no_count",
+            "passed": true,
+            "evidence": "C alone grips=0 count=0.00"
+        },
+        {
+            "name": "rope_body_contact_detected",
+            "passed": true,
+            "evidence": "prepared connected supine body crosses actual ropes"
+        },
+        {
+            "name": "C_movement_steers_live_physical_pressure",
+            "passed": true,
+            "evidence": "actual manual C grip, both direction signs observed=True/True; shared actual shoulder load peak=353.6 N"
+        },
+        {
+            "name": "steered_pin_remains_achievable",
+            "passed": true,
+            "evidence": "same physical grip after directional pressure reaches normal three-count=2.50"
+        },
+        {
+            "name": "manual_C_physically_covers",
+            "passed": true,
+            "evidence": "manual grips=1 actual cover=True shoulders=True cover duration=2.49 target=1 liveHold=True C=True down=False stamina=142.8 validCover=True deltaY=0.757 horizontal=0.347 surfaceGap=0.257 root=(-0.36, 0.96, -0.03) chest=(-0.19, 1.23, -0.07) frontDown=0.618 victimChest=(0.05, 0.47, -0.32) shoulders=True/True victimEuler=(276.25, 35.84, 335.66) pinStatus=BOTH SHOULDERS DOWN hands=torso/reach torso armEffort=94.5N actualLegChain[0:p(-0.36, 0.96, -0.03) up0.99 euler(5, 129, 6) joint(5, 129, 6) contacts=left forearm:(0.38, -0.19, -0.91) ;1:p(-0.19, 1.23, -0.07) up0.72 euler(38, 142, 24) joint(34, 9, 15) contacts=right forearm:(-0.13, 0.38, 0.92) right thigh:(0.31, 0.80, 0.51) left thigh:(-0.18, 0.95, -0.24) ;3:p(0.14, 1.17, 0.01) up0.66 euler(359, 54, 48) joint(335, 271, 86) contacts=;4:p(0.25, 0.91, -0.17) up0.76 euler(7, 53, 40) joint(4, 353, 351) contacts=torso:(0.07, -0.13, 0.99) ;5:p(0.31, 0.73, -0.29) up0.88 euler(2, 90, 28) joint(19, 32, 351) contacts=torso:(0.67, 0.74, -0.06) ;6:p(-0.21, 1.31, -0.35) up0.99 euler(352, 125, 1) joint(311, 0, 342) contacts=;7:p(-0.19, 0.97, -0.37) up1.00 euler(357, 106, 357) joint(4, 341, 353) contacts=torso:(0.13, -0.38, -0.92) ;8:p(-0.15, 0.77, -0.32) up0.87 euler(339, 69, 339) joint(343, 323, 339) contacts=right thigh:(0.99, 0.11, -0.05) torso:(-0.43, 0.35, 0.83) torso:(-0.54, 0.82, 0.19) ;9:p(-0.19, 0.71, 0.04) up0.89 euler(334, 126, 352) joint(329, 1, 345) contacts=torso:(0.18, -0.95, 0.24) pelvis:(-0.77, 0.61, 0.17) torso:(-0.63, 0.54, 0.56) ;10:p(-0.26, 0.50, 0.13) up0.07 euler(81, 59, 294) joint(68, 183, 181) contacts=left thigh:(-0.73, 0.40, -0.55) pelvis:(-0.96, 0.19, 0.19) ;11:p(-0.43, 0.38, 0.27) up0.48 euler(60, 113, 345) joint(335, 2, 358) contacts=ring mat:(0.00, 1.00, 0.00) ;12:p(-0.39, 0.78, -0.28) up0.70 euler(317, 134, 18) joint(313, 12, 9) contacts=torso:(-0.31, -0.80, -0.51) right hand:(-0.99, -0.11, 0.05) ;13:p(-0.44, 0.55, -0.26) up0.37 euler(67, 167, 18) joint(67, 192, 186) contacts=left hand:(-0.85, 0.06, -0.53) ;14:p(-0.54, 0.37, -0.13) up0.73 euler(43, 150, 2) joint(335, 355, 359) contacts=ring mat:(0.00, 1.00, 0.00) left forearm:(-0.94, -0.22, 0.26) ;]"
+        },
+        {
+            "name": "two_point_five_second_physical_pin_wins",
+            "passed": true,
+            "evidence": "peak continuous count=2.49 round score=1; no count mutation"
+        },
+        {
+            "name": "pin_counts_without_attackers_chest_cover",
+            "passed": true,
+            "evidence": "actual count advanced while attacker torso surfaces were separated; grounded shoulders and manual control define pin"
+        },
+        {
+            "name": "chest_down_physical_pin_wins",
+            "passed": true,
+            "evidence": "chest-down manual cover last sampled count=2.49; production2.5s win=True (winning tick resets count) target=1 liveHold=True C=True down=False stamina=137.9 validCover=True deltaY=0.770 horizontal=0.275 surfaceGap=0.237 root=(-0.33, 0.96, 0.36) chest=(-0.15, 1.24, 0.34) frontDown=0.649 victimChest=(0.12, 0.47, 0.31) shoulders=True/True victimEuler=(86.85, 341.40, 341.28) pinStatus=BOTH SHOULDERS DOWN hands=torso/torso armEffort=96.1N actualLegChain[0:p(-0.33, 0.96, 0.36) up0.97 euler(13, 85, 354) joint(13, 85, 354) contacts=left forearm:(0.95, -0.07, -0.32) ;1:p(-0.15, 1.24, 0.34) up0.75 euler(40, 79, 351) joint(28, 357, 359) contacts=left thigh:(0.11, 0.90, -0.42) left forearm:(-0.51, 0.42, -0.75) right thigh:(0.02, 0.95, 0.32) ;3:p(-0.04, 1.26, 0.60) up0.98 euler(2, 137, 10) joint(333, 62, 339) contacts=;4:p(-0.05, 0.93, 0.63) up0.98 euler(7, 137, 351) joint(5, 360, 340) contacts=torso:(0.51, -0.42, 0.75) ;5:p(-0.06, 0.71, 0.64) up0.98 euler(3, 177, 12) joint(352, 39, 14) contacts=torso:(-0.37, 0.09, 0.93) torso:(-0.51, 0.68, 0.53) left thigh:(0.85, 0.12, 0.52) ;6:p(0.06, 1.22, 0.13) up0.70 euler(360, 146, 315) joint(337, 72, 279) contacts=;7:p(0.23, 0.96, 0.26) up0.76 euler(11, 151, 321) joint(4, 11, 6) contacts=torso:(0.95, -0.27, 0.18) ;8:p(0.33, 0.79, 0.36) up0.78 euler(3, 122, 321) joint(13, 333, 1) contacts=torso:(0.59, 0.81, -0.04) ;9:p(-0.27, 0.73, 0.52) up0.92 euler(338, 87, 354) joint(325, 358, 0) contacts=torso:(-0.11, -0.90, 0.42) left hand:(-0.85, -0.12, -0.52) ;10:p(-0.40, 0.51, 0.51) up0.11 euler(82, 46, 325) joint(74, 178, 182) contacts=left upper arm:(-0.77, 0.48, 0.41) ;11:p(-0.60, 0.38, 0.48) up0.52 euler(58, 85, 4) joint(335, 7, 0) contacts=ring mat:(0.00, 1.00, 0.00) ;12:p(-0.23, 0.72, 0.22) up0.88 euler(333, 76, 9) joint(321, 345, 19) contacts=torso:(-0.84, 0.54, -0.03) torso:(-0.02, -0.95, -0.32) ;13:p(-0.33, 0.51, 0.16) up0.08 euler(80, 140, 63) joint(68, 179, 182) contacts=torso:(-0.99, 0.14, 0.00) left upper arm:(-0.38, 0.59, -0.71) left forearm:(-0.28, 0.95, 0.16) ;14:p(-0.53, 0.38, 0.10) up0.50 euler(58, 96, 18) joint(335, 2, 358) contacts=ring mat:(0.00, 1.00, 0.00) ;]"
+        },
+        {
+            "name": "bridge_roll_breaks_real_pin",
+            "passed": true,
+            "evidence": "started cover=True peak count=0.39 physical shoulder/cover break while standing recovery disabled=True remaining=0.00 escape travel=0.55 torso rotation=43.3 target=1 liveHold=True C=True down=False stamina=152.0 validCover=True deltaY=0.488 horizontal=0.529 surfaceGap=0.171 root=(-0.29, 1.02, 0.02) chest=(-0.17, 1.30, -0.06) frontDown=0.599 victimChest=(0.35, 0.82, -0.17) shoulders=False/False victimEuler=(315.02, 110.25, 247.89) pinStatus=SHOULDER UP • COUNT PAUSED hands=torso/torso armEffort=155.3N actualLegChain[0:p(-0.29, 1.02, 0.02) up1.00 euler(2, 127, 2) joint(2, 127, 2) contacts=left forearm:(0.34, -0.17, -0.92) ;1:p(-0.17, 1.30, -0.06) up0.79 euler(37, 137, 9) joint(35, 8, 7) contacts=left thigh:(-0.33, 0.90, -0.29) right forearm:(-0.28, 0.51, 0.81) right thigh:(0.22, 0.87, 0.44) ;3:p(0.21, 1.33, 0.03) up0.44 euler(326, 52, 58) joint(322, 249, 105) contacts=;4:p(0.47, 1.18, -0.11) up0.41 euler(307, 64, 47) joint(356, 20, 357) contacts=torso:(0.35, 0.91, -0.22) ;5:p(0.62, 1.05, -0.20) up0.88 euler(332, 132, 0) joint(36, 45, 16) contacts=torso:(0.75, 0.62, -0.23) ;6:p(-0.18, 1.35, -0.35) up0.95 euler(342, 91, 360) joint(311, 301, 28) contacts=;7:p(-0.04, 1.06, -0.32) up0.78 euler(324, 85, 344) joint(343, 355, 342) contacts=torso:(0.28, -0.51, -0.81) left upper arm:(-0.58, 0.80, 0.15) ;8:p(0.06, 1.01, -0.20) up-0.41 euler(295, 187, 191) joint(300, 21, 284) contacts=left upper arm:(-0.26, 0.76, 0.59) torso:(-0.83, 0.55, -0.09) ;9:p(-0.08, 0.81, 0.10) up0.77 euler(321, 112, 353) joint(318, 346, 351) contacts=torso:(0.33, -0.90, 0.29) ;10:p(-0.13, 0.57, 0.13) up0.34 euler(70, 98, 350) joint(70, 173, 174) contacts=left forearm:(-0.32, 0.42, 0.85) ;11:p(-0.29, 0.39, 0.19) up0.71 euler(45, 109, 358) joint(335, 4, 357) contacts=left hand:(-0.78, -0.37, 0.51) ring mat:(0.00, 1.00, 0.00) ;12:p(-0.31, 0.82, -0.21) up0.76 euler(323, 126, 17) joint(321, 1, 14) contacts=torso:(-0.22, -0.87, -0.44) ;13:p(-0.38, 0.56, -0.21) up0.42 euler(64, 154, 18) joint(76, 199, 196) contacts=torso:(-0.94, 0.32, 0.09) ;14:p(-0.50, 0.37, -0.11) up0.77 euler(39, 144, 7) joint(335, 1, 356) contacts=ring mat:(0.00, 1.00, 0.00) ;]"
+        },
+        {
+            "name": "rope_allows_actual_live_count",
+            "passed": true,
+            "evidence": "live count before rope=2.49 actual body rope contact resets=False score=1"
+        },
+        {
+            "name": "AI_bridge_roll_responds_to_live_pin",
+            "passed": true,
+            "evidence": "AI uses funded physical bridge with standing recovery disabled=True; escaped=True pinned=False count peak=1.80 travel=0.75; a real defense attempt does not guarantee escape. Independent manual bridge must still break contact. target=1 liveHold=True C=True down=False stamina=142.1 validCover=True deltaY=0.621 horizontal=0.435 surfaceGap=0.163 root=(-0.18, 0.94, -0.40) chest=(-0.04, 1.19, -0.54) frontDown=0.728 victimChest=(0.39, 0.57, -0.59) shoulders=False/False victimEuler=(325.14, 167.62, 197.73) pinStatus=HOLD BOTH SHOULDERS DOWN hands=torso/torso armEffort=159.4N actualLegChain[0:p(-0.18, 0.94, -0.40) up0.96 euler(11, 118, 349) joint(11, 118, 349) contacts=left forearm:(0.39, -0.18, -0.90) ;1:p(-0.04, 1.19, -0.54) up0.66 euler(47, 112, 345) joint(36, 4, 1) contacts=left thigh:(-0.31, 0.74, -0.60) right forearm:(-0.21, 0.70, 0.69) right thigh:(0.17, 0.98, 0.12) ;3:p(0.31, 1.28, -0.49) up0.57 euler(305, 134, 5) joint(284, 188, 192) contacts=;4:p(0.52, 1.08, -0.67) up0.63 euler(311, 149, 344) joint(6, 10, 351) contacts=pelvis:(0.05, 0.64, -0.77) ;5:p(0.64, 0.92, -0.71) up0.83 euler(8, 153, 327) joint(53, 29, 359) contacts=pelvis:(0.43, 0.13, -0.89) ;6:p(-0.06, 1.13, -0.82) up0.90 euler(4, 126, 335) joint(316, 5, 341) contacts=;7:p(-0.02, 0.82, -0.70) up0.91 euler(11, 128, 338) joint(5, 5, 3) contacts=torso:(0.21, -0.70, -0.69) right thigh:(0.68, 0.34, -0.66) ;8:p(0.06, 0.70, -0.58) up-0.03 euler(357, 128, 268) joint(347, 354, 291) contacts=torso:(-0.96, 0.27, -0.07) right thigh:(0.91, 0.34, -0.25) ;9:p(0.04, 0.78, -0.22) up0.68 euler(321, 113, 331) joint(313, 342, 349) contacts=torso:(0.31, -0.74, 0.60) ;10:p(0.00, 0.56, -0.13) up0.34 euler(60, 52, 312) joint(69, 177, 176) contacts=left hand:(-0.86, 0.49, -0.14) ;11:p(-0.16, 0.39, -0.04) up0.67 euler(41, 78, 332) joint(335, 2, 358) contacts=ring mat:(0.00, 1.00, 0.00) ;12:p(-0.17, 0.67, -0.52) up0.93 euler(339, 122, 355) joint(328, 358, 8) contacts=torso:(-0.17, -0.98, -0.12) right hand:(-0.91, -0.34, 0.25) right forearm:(-0.68, -0.34, 0.66) ;13:p(-0.26, 0.48, -0.43) up-0.06 euler(83, 5, 242) joint(66, 184, 181) contacts=left upper arm:(-0.58, 0.58, 0.57) ;14:p(-0.45, 0.38, -0.30) up0.37 euler(67, 102, 338) joint(335, 357, 1) contacts=ring mat:(0.00, 1.00, 0.00) ;]"
+        },
+        {
+            "name": "AI_naturally_grips_and_covers_downed_rival",
+            "passed": true,
+            "evidence": "AI manual reach hands=1 actual cover=True count=2.49 intent=ROLLING / COVERING target=1 liveHold=False C=True down=False stamina=142.6 validCover=False deltaY=0.798 horizontal=0.551 surfaceGap=0.336 root=(-0.39, 0.97, 0.20) chest=(-0.25, 1.27, 0.15) frontDown=0.476 victimChest=(0.04, 0.47, -0.32) shoulders=True/True victimEuler=(272.76, 17.83, 343.89) pinStatus=BOTH SHOULDERS DOWN hands=reach torso/reach pelvis armEffort=37.2N actualLegChain[0:p(-0.39, 0.97, 0.20) up0.98 euler(6, 138, 8) joint(6, 138, 8) contacts=left forearm:(-0.08, -0.16, -0.98) ;1:p(-0.25, 1.27, 0.15) up0.85 euler(28, 144, 16) joint(23, 3, 6) contacts=left thigh:(-0.19, 0.98, -0.09) right thigh:(0.33, 0.81, 0.48) right forearm:(-0.20, 0.35, 0.92) ;3:p(0.07, 1.25, 0.22) up0.67 euler(351, 59, 47) joint(334, 270, 76) contacts=;4:p(0.20, 0.98, 0.06) up0.84 euler(358, 59, 33) joint(4, 355, 346) contacts=torso:(0.11, -0.23, 0.97) ;5:p(0.28, 0.80, -0.05) up0.85 euler(343, 92, 28) joint(4, 35, 1) contacts=pelvis:(0.19, 0.97, 0.13) ;6:p(-0.30, 1.35, -0.11) up0.81 euler(346, 195, 327) joint(343, 63, 294) contacts=;7:p(-0.16, 1.06, -0.20) up0.85 euler(357, 203, 329) joint(5, 13, 3) contacts=torso:(0.20, -0.35, -0.92) ;8:p(-0.06, 0.87, -0.24) up0.90 euler(7, 179, 335) joint(21, 345, 4) contacts=torso:(-0.24, 0.97, 0.05) ;9:p(-0.23, 0.72, 0.19) up0.85 euler(329, 133, 6) joint(323, 1, 357) contacts=torso:(0.19, -0.98, 0.09) pelvis:(-0.73, 0.61, 0.31) ;10:p(-0.33, 0.51, 0.23) up0.10 euler(82, 177, 48) joint(66, 179, 186) contacts=left thigh:(-0.87, 0.47, -0.18) left hand:(-0.09, 0.88, 0.47) ;11:p(-0.51, 0.39, 0.35) up0.51 euler(58, 148, 19) joint(335, 5, 358) contacts=ring mat:(-0.01, 1.00, 0.00) right foot:(0.66, -0.18, 0.73) ;12:p(-0.44, 0.80, -0.04) up0.68 euler(316, 134, 21) joint(310, 4, 10) contacts=torso:(-0.33, -0.81, -0.48) ;13:p(-0.50, 0.56, -0.04) up0.43 euler(63, 168, 19) joint(69, 194, 188) contacts=torso:(-0.96, 0.25, 0.08) ;14:p(-0.58, 0.36, 0.09) up0.78 euler(39, 150, 2) joint(335, 353, 359) contacts=left foot:(-0.66, 0.18, -0.73) ring mat:(0.00, 1.00, 0.00) ;]"
+        },
+        {
+            "name": "standing_manual_exchange_reaches_pin",
+            "passed": true,
+            "evidence": "natural shot/reach/pull/pivot/C: grips=2 actual low horizontal body=True timedDown diagnostic=True actual cover=True peak count=2.49 score=1 minimum balance=20.1 low chestHeight/upright=0.268/-0.004 grip seconds=13.88 target=1 liveHold=False C=True down=False stamina=71.8 validCover=False deltaY=0.821 horizontal=0.803 surfaceGap=0.546 root=(-2.69, 0.97, -0.04) chest=(-2.62, 1.29, -0.05) frontDown=0.272 victimChest=(-1.88, 0.47, -0.36); no prepared lying pose or direct attack/grip call"
+        },
+        {
+            "name": "sprawl_actual_body_lowers",
+            "passed": true,
+            "evidence": "standing hips/chest=1.041/1.375 m above mat, frontDown=0.056 feet forward=0.085 m; held E hips/chest=0.340/0.311 m above mat, frontDown=0.986 feet forward=-0.906 m"
+        },
+        {
+            "name": "sprawl_legs_extend_back_and_chest_turns_down",
+            "passed": true,
+            "evidence": "standing/held feet forward=0.085/-0.906 actual torso frontDown=0.986"
+        },
+        {
+            "name": "sprawl_costs_stamina_without_shot_or_auto_grip",
+            "passed": true,
+            "evidence": "held2.1s stamina=155.3→134.2 max grips=0 shooting=False"
+        },
+        {
+            "name": "sprawl_preserves_manual_arm_motion",
+            "passed": true,
+            "evidence": "actual root-relative mean hand y low/high=-0.429/-0.023 grips=0"
+        },
+        {
+            "name": "release_sprawl_returns_to_standing",
+            "passed": true,
+            "evidence": "released hips/chest=1.044/1.379 m above mat, frontDown=0.065 feet forward=0.070 m; original hips/chest=1.041/1.375 m above mat, frontDown=0.056 feet forward=0.085 m"
+        },
+        {
+            "name": "held_exhausted_sprawl_does_not_rapidly_reenter",
+            "passed": true,
+            "evidence": "naturally exhausted through held E; exhaustion observed=True reentered without release=False stamina after recovery=23.0"
+        },
+        {
+            "name": "exhausted_sprawl_can_restart_after_release",
+            "passed": true,
+            "evidence": "release/repress E after natural recovery; active=True stamina=26.0"
+        },
+        {
+            "name": "sprawl_faces_equally_fast_or_faster_running_shot",
+            "passed": true,
+            "evidence": "same legal sprint/shot input, relative approach neutral/sprawl=4.10/4.93 m/s neutral contact speed=4.13 defender active sprawl=True"
+        },
+        {
+            "name": "sprawl_reduces_running_shot_effect",
+            "passed": true,
+            "evidence": "neutral/sprawl target peak=4.59/0.81 m/s travel=2.26/0.11 m balanceLoss=47.5/0.0 contact=4.13/0.00"
+        },
+        {
+            "name": "sprawl_counter_never_automatically_grips",
+            "passed": true,
+            "evidence": "Q/E only maximum hands neutral/sprawl=0/0"
+        },
+        {
+            "name": "AI_1_reacts_to_observed_shot_with_sprawl",
+            "passed": true,
+            "evidence": "difficulty=1 before-shot sprawl=False observed=True reaction=0.343s intent=SPRAWLING AGAINST THE SHOT"
+        },
+        {
+            "name": "AI_2_reacts_to_observed_shot_with_sprawl",
+            "passed": true,
+            "evidence": "difficulty=2 before-shot sprawl=False observed=True reaction=0.187s intent=SPRAWLING AGAINST THE SHOT"
+        },
+        {
+            "name": "sprawl_bodies_connected_finite",
+            "passed": true,
+            "evidence": "all posture/arms/recovery/shots/AI max joint gap=0.0050m missing=0"
+        },
+        {
+            "name": "sprawl_no_runtime_errors",
+            "passed": true,
+            "evidence": ""
+        },
+        {
+            "name": "walking_moves_with_alternating_physical_steps",
+            "passed": false,
+            "evidence": "root travel=4.95 m, left/right raised=False/False, foot height difference=0.024"
+        },
+        {
+            "name": "walking_knees_bend_without_losing_connected_upright_body",
+            "passed": true,
+            "evidence": "actual knee bend=84.2 degrees, upright=True, joint gap=0.0012 m"
+        },
+        {
+            "name": "AI_uses_real_arm_commands_no_throw",
+            "passed": true,
+            "evidence": "all sampled difficulties aim physical hands and emit no retired Throw or Tackle bit"
+        },
+        {
+            "name": "AI_difficulty_reaction_cadence",
+            "passed": true,
+            "evidence": "easy/normal/hard decisions in matched2s=6/12/20"
+        },
+        {
+            "name": "F11_enters_fullscreen",
+            "passed": true,
+            "evidence": "native screen mode=FullScreenWindow"
+        },
+        {
+            "name": "F11_restores_window",
+            "passed": true,
+            "evidence": "native screen mode=Windowed"
+        },
+        {
+            "name": "pin_arms_bodies_connected_finite",
+            "passed": true,
+            "evidence": "max physical joint gap=0.0050 m missing=0"
+        },
+        {
+            "name": "pin_arm_self_contact_bounded",
+            "passed": true,
+            "evidence": "maximum measured nonadjacent forearm/hand penetration=0.0400 m across cursor, grips, covers and escapes"
+        },
+        {
+            "name": "pin_no_runtime_errors",
+            "passed": true,
+            "evidence": ""
+        },
+        {
+            "name": "connected_body_joints",
+            "passed": true,
+            "evidence": "missing frames=0 maximum physical anchor separation=0.0050 m"
+        }
+    ]
+}

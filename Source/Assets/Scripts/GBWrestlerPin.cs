@@ -11,6 +11,9 @@ public partial class GBWrestler {
     public float PinPressureBias {get;private set;}
     public float LeftPinLoad {get;private set;}
     public float RightPinLoad {get;private set;}
+    public float TopControlLeverage {get;private set;}
+    public float TopControlHipBias {get;private set;}
+    public bool TopControlSupported {get;private set;}
 
     public GBWrestler PinTarget {
         get {
@@ -56,7 +59,7 @@ public partial class GBWrestler {
         }
     }
     public void RemotePinState(bool covering,int targetPlayer,bool left,bool right){remoteCover=covering;remotePinPlayer=targetPlayer;remoteLeftShoulder=left;remoteRightShoulder=right;}
-    void PinReset(){pinTarget=null;pinFront=false;pinApproach=Vector3.forward;pinAlignedGrip=false;remoteCover=remoteLeftShoulder=remoteRightShoulder=false;remotePinPlayer=-1;}
+    void PinReset(){pinTarget=null;pinFront=false;pinApproach=Vector3.forward;pinAlignedGrip=false;remoteCover=remoteLeftShoulder=remoteRightShoulder=false;remotePinPlayer=-1;PinPressureBias=LeftPinLoad=RightPinLoad=TopControlHipBias=0;TopControlLeverage=1;TopControlSupported=false;}
     bool HoldingWrestler(GBWrestler target){foreach(var h in hands)if(h!=null&&h.joint&&h.target&&h.target.wrestler==target)return true;return false;}
 
     public bool PhysicallyDownForPin {
@@ -137,7 +140,7 @@ public partial class GBWrestler {
         return Vector3.ClampMagnitude(principal*raw,cap);
     }
     void PinTick(float dt){
-        PinPressureBias=LeftPinLoad=RightPinLoad=0;
+        PinPressureBias=LeftPinLoad=RightPinLoad=TopControlHipBias=0;TopControlLeverage=1;TopControlSupported=false;
         if(!GBApp.I||GBApp.I.CurrentMode!=1)return;
         PinRefresh();BridgeAndRoll(dt);
         if(!pinTarget)return;
@@ -151,12 +154,14 @@ public partial class GBWrestler {
         bool leftShoulder,rightShoulder;
         if(victim.ShoulderContact(out leftShoulder,out rightShoulder))pinFront=Vector3.Dot(victim.bodies[1].rotation*Vector3.forward,Vector3.up)<0;
         float control=strength*(GripCount>1?1:.9f)*(resisting?.30f:1);
+        UpdateTopControl(victim,floor.point.y);
         Vector3 spine=Vector3.ProjectOnPlane(victim.bodies[1].rotation*Vector3.up,Vector3.up);if(spine.sqrMagnitude<.04f)spine=-direction;spine.Normalize();
         Quaternion faceOnMat=Quaternion.LookRotation(pinFront?Vector3.down:Vector3.up,spine);
-        Vector3 torsoTorque=PinTorque(victim.bodies[1],faceOnMat,2800,65,150*control),hipTorque=PinTorque(victim.Root,faceOnMat,1600,50,95*control);
+        Vector3 torsoTorque=PinTorque(victim.bodies[1],faceOnMat,2800*TopControlLeverage,65,150*control),hipTorque=PinTorque(victim.Root,faceOnMat,1600*TopControlLeverage,50,95*control);
         victim.bodies[1].AddTorque(torsoTorque,ForceMode.Force);victim.Root.AddTorque(hipTorque,ForceMode.Force);bodies[1].AddTorque(-torsoTorque-hipTorque,ForceMode.Force);
         float pressure=Mathf.Clamp((victim.bodies[1].position.y-floor.point.y-.29f)*350+Mathf.Max(0,victim.bodies[1].linearVelocity.y)*35,0,240)*control;
         if(IsCovering)pressure+=70*control;
+        pressure=Mathf.Min(310*control,pressure*TopControlLeverage);
         victim.bodies[1].AddForce(Vector3.down*pressure,ForceMode.Force);bodies[1].AddForce(Vector3.up*pressure,ForceMode.Force);
         if(IsCovering){
             // Apply cover pressure where the actual shoulders rise, rather
@@ -165,12 +170,12 @@ public partial class GBWrestler {
             Vector3 leftPoint=victim.ShoulderPoint(-1,pinFront),rightPoint=victim.ShoulderPoint(1,pinFront);
             float low=Mathf.Min(leftPoint.y,rightPoint.y);
             float preload=Mathf.Clamp((low-floor.point.y)*1600+35,35,220);
-            float leftLoad=Mathf.Clamp(preload+(leftPoint.y-low)*4800+Mathf.Max(0,victim.bodies[1].GetPointVelocity(leftPoint).y)*45,0,600);
-            float rightLoad=Mathf.Clamp(preload+(rightPoint.y-low)*4800+Mathf.Max(0,victim.bodies[1].GetPointVelocity(rightPoint).y)*45,0,600);
+            float leftLoad=Mathf.Clamp((preload+(leftPoint.y-low)*4800+Mathf.Max(0,victim.bodies[1].GetPointVelocity(leftPoint).y)*45)*TopControlLeverage,0,600);
+            float rightLoad=Mathf.Clamp((preload+(rightPoint.y-low)*4800+Mathf.Max(0,victim.bodies[1].GetPointVelocity(rightPoint).y)*45)*TopControlLeverage,0,600);
             // Movement steers existing pressure toward the chosen shoulder.
             // Keep the neutral preload and shared weight limit: leaning does
             // not weaken an ordinary pin or invent additional body weight.
-            PinPressureBias=Vector3.Dot(Vector3.ClampMagnitude(command.Move,1),(rightPoint-leftPoint).normalized);
+            PinPressureBias=Mathf.Clamp(Vector3.Dot(Vector3.ClampMagnitude(command.Move,1),(rightPoint-leftPoint).normalized)+TopControlHipBias,-1,1);
             ShiftPinPressure(ref leftLoad,ref rightLoad,PinPressureBias);
             // A full body's weight is the shared upper bound. Prefer the raised
             // shoulder, but also load a pair lifted together by the wrist hold.
@@ -184,6 +189,25 @@ public partial class GBWrestler {
             }
         }
         stamina=Mathf.Max(0,stamina-dt*3);Feedback(IsCovering?"Controlling - keep both shoulders on the mat":"Maintain your grip and control",.2f);
+    }
+    void UpdateTopControl(GBWrestler victim,float floor){
+        // Position improves an ordinary hold, rather than becoming a second
+        // pin qualification. A standing side-control keeps its old leverage.
+        // Actual low, supported hips connect body weight through the chest;
+        // hanging far away on a wrist cannot create the same pressure.
+        Vector3 weightPoint=Root.position*.6f+bodies[1].position*.4f;
+        float distance=Vector3.ProjectOnPlane(weightPoint-victim.bodies[1].position,Vector3.up).magnitude;
+        float close=1-Mathf.InverseLerp(.55f,1.2f,distance);
+        float lowHips=1-Mathf.InverseLerp(.70f,1.05f,Root.position.y-floor);
+        for(int part=9;part<=14;part++){
+            var collider=bodies[part].GetComponent<Collider>();if(!collider)continue;
+            Vector3 sole=new Vector3(collider.bounds.center.x,collider.bounds.min.y,collider.bounds.center.z);
+            RaycastHit hit;if(Physics.Raycast(sole+Vector3.up*.04f,Vector3.down,out hit,.10f,1,QueryTriggerInteraction.Ignore)&&hit.normal.y>.75f&&Mathf.Abs(sole.y-hit.point.y)<.06f){TopControlSupported=true;break;}
+        }
+        float far=Mathf.InverseLerp(.90f,1.55f,distance);
+        TopControlLeverage=Mathf.Clamp(1+.18f*close*lowHips*(TopControlSupported?1:0)-.15f*far-(TopControlSupported?0:.10f),.75f,1.18f);
+        Vector3 shoulderAxis=(victim.ShoulderPoint(1,pinFront)-victim.ShoulderPoint(-1,pinFront)).normalized;
+        TopControlHipBias=Mathf.Clamp(Vector3.Dot(weightPoint-victim.bodies[1].position,shoulderAxis)/.40f,-1,1)*.45f*close*lowHips*(TopControlSupported?1:0);
     }
     void BridgeAndRoll(float dt){
         if(!ScrambleReady||!command.Has(GBInput.Brace)||command.Move.sqrMagnitude<.05f||stamina<4||eliminated||(!Down&&!PinControlled&&Vector3.Dot(bodies[1].rotation*Vector3.up,Vector3.up)>.5f))return;

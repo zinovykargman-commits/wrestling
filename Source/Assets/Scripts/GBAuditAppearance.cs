@@ -10,8 +10,14 @@ public partial class GBAudit {
             var visual=wrestler.GetComponentInChildren<GBRealisticWrestler>();
             mapped&=visual&&visual.Skins.Length>=20;
             foreach(var skin in visual.Skins){
-                parts++;vertices+=skin.sharedMesh.vertexCount;mapped&=skin.bones.Length==15&&skin.sharedMesh.bindposes.Length==15;
-                for(int b=0;b<15;b++)mapped&=skin.bones[b]==wrestler.bodies[b].transform;
+                parts++;vertices+=skin.sharedMesh.vertexCount;mapped&=skin.bones.Length==17&&skin.sharedMesh.bindposes.Length==17;
+                for(int b=0;b<15;b++){
+                    if(b==5||b==8){
+                        int hand=b==5?0:1;var proxy=visual.HandContact.ShownHand(hand);
+                        mapped&=skin.bones[b]==proxy&&!proxy.GetComponent<Rigidbody>()&&!proxy.GetComponent<Collider>()&&Vector3.Distance(proxy.position,wrestler.bodies[b].transform.position)<=.0281f&&Quaternion.Angle(proxy.rotation,wrestler.bodies[b].transform.rotation)<.01f;
+                    }else mapped&=skin.bones[b]==wrestler.bodies[b].transform;
+                }
+                for(int b=15;b<17;b++)mapped&=skin.bones[b]&&skin.bones[b].name.Contains("render-only shoulder")&&!skin.bones[b].GetComponent<Rigidbody>()&&!skin.bones[b].GetComponent<Collider>();
                 foreach(var weight in skin.sharedMesh.boneWeights){float sum=weight.weight0+weight.weight1+weight.weight2+weight.weight3;normalized&=Mathf.Abs(sum-1)<.0001f;}
                 if(skin.name.Contains("shoe sole")||skin.name.Contains("fabric lace"))foreach(var weight in skin.sharedMesh.boneWeights){soleVertices++;shoeLocked&=(weight.boneIndex0==11||weight.boneIndex0==14)&&weight.weight0>.9999f;}
                 var baked=new Mesh();skin.BakeMesh(baked);
@@ -20,7 +26,7 @@ public partial class GBAudit {
                 foreach(var mat in skin.sharedMaterials)if(mat.name.Contains("skin"))textured&=mat.mainTexture&&mat.GetTexture("_BumpMap");
             }
         }
-        Check("appearance_real_physical_bones",mapped,"all visual parts read existing15 rigid region transforms; parts="+parts);
+        Check("appearance_real_physical_bones",mapped,"17 skin slots follow15 physical regions,2 shoulder pivots and2 replacement hand render proxies (bounded0.028m, exact physical rotation); parts="+parts);
         Check("appearance_normalized_finite_skin",normalized&&finite,"four normalized influences, current baked finite positions; vertices="+vertices);
         Check("appearance_licensed_skin_texture",textured,"diffuse and anatomical normal textures present on both athletes");
         Check("appearance_no_new_physics",app.Registry.Count==92,"same92 registered bodies and15 per athlete");
@@ -81,6 +87,48 @@ public partial class GBAudit {
         finite=true;
         foreach(var skin in a.GetComponentInChildren<GBRealisticWrestler>().Skins){var baked=new Mesh();skin.BakeMesh(baked);foreach(var v in baked.vertices)finite&=!float.IsNaN(v.x)&&!float.IsInfinity(v.x)&&v.magnitude<6;Destroy(baked);}
         Check("appearance_articulated_mesh_finite",finite,"baked bent-limb surface finite; inspected native articulation screenshot required");
+        // Close matched diagnostics for the user's two deferred arm defects.
+        // These are frozen, joint-connected inspection poses, not a gameplay
+        // animation or evidence that actual movement is already correct.
+        a.ResetTo(new Vector3(-.45f,.2f,0));bperson.ResetTo(new Vector3(.45f,.2f,0));
+        camera.fieldOfView=31;camera.transform.position=new Vector3(0,1.52f,3.1f);camera.transform.LookAt(new Vector3(0,1.48f,0));
+        yield return Wait(.3f);ScreenCapture.CaptureScreenshot(Path.Combine(directory,"arms-neutral-front-close.png"));yield return Wait(.3f);
+        camera.transform.position=new Vector3(0,1.55f,-3.1f);camera.transform.LookAt(new Vector3(0,1.48f,0));
+        yield return Wait(.3f);ScreenCapture.CaptureScreenshot(Path.Combine(directory,"arms-neutral-back-close.png"));yield return Wait(.3f);
+        foreach(var w in app.Wrestlers){
+            w.Root.rotation=Quaternion.Euler(70,0,0);
+            for(int n=1;n<15;n++){
+                Quaternion local=Quaternion.identity;
+                if(n==3||n==6)local=Quaternion.Euler(-150,0,n==3?-8:8);
+                if(n==4||n==7)local=Quaternion.Euler(-65,0,0);
+                var parent=w.bodies[w.parents[n]];var child=w.bodies[n];child.rotation=parent.rotation*local;
+                child.position=parent.position+parent.rotation*w.joints[n].connectedAnchor-child.rotation*w.joints[n].anchor;
+            }
+        }
+        camera.fieldOfView=37;camera.transform.position=new Vector3(0,3.25f,-1.4f);camera.transform.LookAt(new Vector3(0,1.15f,.32f));
+        yield return Wait(.3f);ScreenCapture.CaptureScreenshot(Path.Combine(directory,"arms-overhead-back.png"));yield return Wait(.3f);
+        camera.transform.position=new Vector3(0,2.95f,2.3f);camera.transform.LookAt(new Vector3(0,1.3f,.4f));
+        yield return Wait(.3f);ScreenCapture.CaptureScreenshot(Path.Combine(directory,"arms-overhead-front.png"));yield return Wait(.3f);
+        camera.transform.position=new Vector3(3.1f,1.7f,.6f);camera.transform.LookAt(new Vector3(0,1.15f,.3f));
+        yield return Wait(.3f);ScreenCapture.CaptureScreenshot(Path.Combine(directory,"arms-overhead-side.png"));yield return Wait(.3f);
+        Check("both_overhead_arm_chains_connected",a.JointSeparation()<.001f&&bperson.JointSeparation()<.001f,"both pitched-forward arm poses keep their real joint anchors connected; visual inspection required");
+        a.ResetTo(new Vector3(-.5f,.28f,0));bperson.ResetTo(new Vector3(2.2f,.28f,1.6f));
+        foreach(var w in app.Wrestlers)foreach(var rb in w.bodies){rb.isKinematic=false;rb.interpolation=RigidbodyInterpolation.Interpolate;}
+        app.enabled=true;app.Phase=GBApp.GamePhase.Fighting;app.SetPhaseSeconds(30);
+        app.ScriptedInputs[0]=new GBInput{az=1,hy=1.10f,hz=.75f,flags=GBInput.HandAim};
+        app.ScriptedInputs[1]=new GBInput{az=1};yield return Wait(.9f);
+        Check("live_raised_mouse_reach_connected",a.bodies[5].position.y>a.ArmShoulder(0).y+.10f&&a.bodies[8].position.y>a.ArmShoulder(1).y+.10f&&a.JointSeparation()<.03f&&a.GripCount==0,"actual independent hand motors reach overhead; no prepared pose/grip; L/R hands="+a.bodies[5].position+" / "+a.bodies[8].position+" gap="+a.JointSeparation());
+        app.enabled=false;foreach(var w in app.Wrestlers)foreach(var rb in w.bodies)rb.isKinematic=true;
+        camera.fieldOfView=34;camera.transform.position=new Vector3(-.5f,2.15f,2.6f);camera.transform.LookAt(new Vector3(-.5f,1.8f,.25f));
+        yield return Wait(.3f);ScreenCapture.CaptureScreenshot(Path.Combine(directory,"live-raised-reach-front.png"));yield return Wait(.3f);
+        camera.transform.position=new Vector3(-.5f,2.15f,-2.6f);camera.transform.LookAt(new Vector3(-.5f,1.8f,.25f));
+        yield return Wait(.3f);ScreenCapture.CaptureScreenshot(Path.Combine(directory,"live-raised-reach-back.png"));yield return Wait(.3f);
+        foreach(var w in app.Wrestlers)foreach(var rb in w.bodies)rb.isKinematic=false;app.enabled=true;
+        app.ScriptedInputs[0]=new GBInput{az=1,hy=1.10f,hz=.75f,flags=GBInput.HandAim|GBInput.Sprawl};yield return Wait(.75f);
+        Check("live_sprawl_reach_connected",a.Sprawling&&a.JointSeparation()<.03f&&a.GripCount==0,"actual heldE with independent raisedmouse target; physics-only posture, gap="+a.JointSeparation());
+        app.enabled=false;foreach(var w in app.Wrestlers)foreach(var rb in w.bodies)rb.isKinematic=true;
+        camera.fieldOfView=37;camera.transform.position=a.Root.position+new Vector3(0,2.1f,-1.1f);camera.transform.LookAt(a.bodies[1].position+Vector3.forward*.4f);
+        yield return Wait(.3f);ScreenCapture.CaptureScreenshot(Path.Combine(directory,"live-sprawl-reach-back.png"));yield return Wait(.3f);
         app.enabled=true;
     }
 }

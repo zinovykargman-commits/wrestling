@@ -1,0 +1,91 @@
+{
+    "build": "0.4.9",
+    "engine": "6000.3.7f1",
+    "hardware": "Intel(R) Core(TM) i5-14400F / 16173 MB",
+    "graphics": "NVIDIA GeForce RTX 5060",
+    "startedUtc": "2026-10-13T02:11:52.5761822Z",
+    "duration": 2.557502508163452,
+    "averageFps": 84.24052429199219,
+    "minFps": 43.03277587890625,
+    "bodies": 92,
+    "issues": 0,
+    "screenWidth": 1920,
+    "screenHeight": 1080,
+    "checks": [
+        {
+            "name": "test_inputs_not_serialized",
+            "passed": true,
+            "evidence": "runtime-only input; scene cannot install an empty test array"
+        },
+        {
+            "name": "corner_adds_bounded_physical_leg_pressure",
+            "passed": false,
+            "evidence": "prepared live manual leg contacts: actual extra force=0 N balance loss=0 in one physicaltick; handCount=2 roots=(0.00, 1.24, -0.65)/(0.00, 1.24, 0.30) footbottoms=0.2/0.2/0.2/0.2 anchorGap=2.216681"
+        },
+        {
+            "name": "corner_contact_wrench_has_equal_reaction",
+            "passed": false,
+            "evidence": "actual accumulated net force=(0.00, 0.00, 0.00) and origin torque=(0.00, 0.00, 0.00) across both15-body athletes"
+        },
+        {
+            "name": "corner_one_arm_is_weaker",
+            "passed": false,
+            "evidence": "one/two actual force=0/0 and extra balance loss=0/0"
+        },
+        {
+            "name": "corner_brace_and_sprawl_resist",
+            "passed": false,
+            "evidence": "normal/brace/sprawl actualforce=0/0/0"
+        },
+        {
+            "name": "corner_requires_earned_sideways_motion",
+            "passed": true,
+            "evidence": "stationary side key and non-lateral input supply no finishing pressure"
+        },
+        {
+            "name": "corner_requires_actual_leg_contact",
+            "passed": true,
+            "evidence": "no grip, torso grip and remote stretched leggrip all inactive"
+        },
+        {
+            "name": "corner_requires_mat_support_and_no_ground_flip",
+            "passed": true,
+            "evidence": "airborne attacker/victim, down attacker, boots outside mat or below mat receive no corner leverage"
+        },
+        {
+            "name": "corner_preserves_grip_work_cost_no_brace_bill",
+            "passed": false,
+            "evidence": "actual full production Simulate stamina/s normal/braced=5.998535/5.998535; two grips4+existingpull2, no new cost"
+        },
+        {
+            "name": "corner_leg_is_manually_caught_in_live_play",
+            "passed": true,
+            "evidence": "natural handinput+mouse leg aim acquired=1; no Attach/velocity injection in live scenario;  hand=(-0.05, 1.09, 0.16) reachableGoal=(-0.09, 1.08, 0.22) physicalError=0.077 candidate=left thigh releaseRequired=False clamped=True root=(0.14, 1.09, -0.44) shoulder=(-0.08, 1.59, -0.28)"
+        },
+        {
+            "name": "live_manual_leg_catch_can_turn_corner",
+            "passed": true,
+            "evidence": "actual corner force integral=36.14336 Ns; opponent displacement=0.4355093 m; fixture creates no instant takedown"
+        },
+        {
+            "name": "corner_live_bodies_connected",
+            "passed": true,
+            "evidence": "actual maxliveanchor separation=0.004058789 and registry=92"
+        },
+        {
+            "name": "corner_release_stops_finishing_pressure",
+            "passed": true,
+            "evidence": "release returns normal physical play"
+        },
+        {
+            "name": "corner_no_runtime_issues",
+            "passed": true,
+            "evidence": ""
+        },
+        {
+            "name": "connected_body_joints",
+            "passed": true,
+            "evidence": "missing frames=0 maximum physical anchor separation=0.0050 m"
+        }
+    ]
+}

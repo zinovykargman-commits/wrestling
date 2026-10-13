@@ -15,14 +15,14 @@
       "cutout": false
     },
     {
-      "name": "Black technical sports fabric",
+      "name": "Cobalt fitted wrestling singlet",
       "color": [
-        0.020999999716877937,
         0.02500000037252903,
-        0.028999999165534973,
+        0.25,
+        0.3799999952316284,
         1.0
       ],
-      "roughness": 0.9599999785423279,
+      "roughness": 0.6399999856948853,
       "main": "",
       "normal": "",
       "cutout": false
@@ -93,14 +93,14 @@
       "cutout": false
     },
     {
-      "name": "Cobalt fitted wrestling singlet",
+      "name": "Black technical sports fabric",
       "color": [
+        0.020999999716877937,
         0.02500000037252903,
-        0.25,
-        0.3799999952316284,
+        0.028999999165534973,
         1.0
       ],
-      "roughness": 0.6399999856948853,
+      "roughness": 0.9599999785423279,
       "main": "",
       "normal": "",
       "cutout": false
@@ -127,8 +127,8 @@
         0,
         1
       ],
-      "vertices": 56692,
-      "triangles": 107024
+      "vertices": 64836,
+      "triangles": 108288
     },
     {
       "name": "Cobalt attached fabric lace",
@@ -269,7 +269,7 @@
       "name": "Cobalt left fitted wrestling boot",
       "file": "cobalt-16",
       "materials": [
-        1
+        7
       ],
       "vertices": 2778,
       "triangles": 5556
@@ -278,7 +278,7 @@
       "name": "Cobalt right fitted wrestling boot",
       "file": "cobalt-17",
       "materials": [
-        1
+        7
       ],
       "vertices": 2778,
       "triangles": 5556
@@ -289,8 +289,8 @@
       "materials": [
         2
       ],
-      "vertices": 495,
-      "triangles": 880
+      "vertices": 672,
+      "triangles": 1344
     },
     {
       "name": "Cobalt sewn neckline and hem binding.001",
@@ -298,8 +298,8 @@
       "materials": [
         2
       ],
-      "vertices": 902,
-      "triangles": 1620
+      "vertices": 936,
+      "triangles": 1872
     },
     {
       "name": "Cobalt sewn neckline and hem binding.002",
@@ -307,8 +307,8 @@
       "materials": [
         2
       ],
-      "vertices": 1485,
-      "triangles": 2680
+      "vertices": 1920,
+      "triangles": 3840
     },
     {
       "name": "Cobalt sewn neckline and hem binding.003",
@@ -316,8 +316,8 @@
       "materials": [
         2
       ],
-      "vertices": 495,
-      "triangles": 880
+      "vertices": 672,
+      "triangles": 1344
     },
     {
       "name": "Cobalt sewn neckline and hem binding.004",
@@ -325,21 +325,12 @@
       "materials": [
         2
       ],
-      "vertices": 924,
-      "triangles": 1660
-    },
-    {
-      "name": "Cobalt singlet",
-      "file": "cobalt-23",
-      "materials": [
-        7
-      ],
-      "vertices": 15194,
-      "triangles": 30400
+      "vertices": 936,
+      "triangles": 1872
     },
     {
       "name": "Cobalt underlaid scalp hair",
-      "file": "cobalt-24",
+      "file": "cobalt-23",
       "materials": [
         8
       ],
@@ -347,7 +338,8 @@
       "triangles": 1516
     }
   ],
-  "boneCount": 15,
-  "weights": "Official MakeHuman CC0, aggregated to unchanged physical regions",
+  "boneCount": 17,
+  "physicalBoneCount": 15,
+  "weights": "Official MakeHuman CC0,15 physical regions plus2 render-only shoulder volume pivots",
   "geometryFollowsPhysics": true
 }

@@ -1,0 +1,96 @@
+{
+    "build": "0.4.9",
+    "engine": "6000.3.7f1",
+    "hardware": "Intel(R) Core(TM) i5-14400F / 16173 MB",
+    "graphics": "NVIDIA GeForce RTX 5060",
+    "startedUtc": "2026-10-13T03:29:45.5612178Z",
+    "duration": 6.29306697845459,
+    "averageFps": 86.28192901611328,
+    "minFps": 37.95210266113281,
+    "bodies": 92,
+    "issues": 0,
+    "screenWidth": 1920,
+    "screenHeight": 1080,
+    "checks": [
+        {
+            "name": "test_inputs_not_serialized",
+            "passed": true,
+            "evidence": "runtime-only input; scene cannot install an empty test array"
+        },
+        {
+            "name": "gym_decorations_present",
+            "passed": true,
+            "evidence": "detail objects=377"
+        },
+        {
+            "name": "gym_scenery_has_no_colliders_or_targets",
+            "passed": true,
+            "evidence": "ringside decor cannot obstruct, grip or alter movement"
+        },
+        {
+            "name": "gym_registry_compatible",
+            "passed": true,
+            "evidence": "unchanged registered bodies=92 rope segments=48"
+        },
+        {
+            "name": "gym_rope_skins_follow_physics",
+            "passed": true,
+            "evidence": "12 rounded continuous skins smoothly follow48 original physical segments; original colliders/constraints stay enabled, no new collision bodies"
+        },
+        {
+            "name": "gym_textured_canvas",
+            "passed": true,
+            "evidence": "2k photographed weave, normal and roughness-derived smoothness"
+        },
+        {
+            "name": "gym_roof_and_real_materials",
+            "passed": true,
+            "evidence": "closed ceiling and licensed PBR surface maps"
+        },
+        {
+            "name": "gym_corner_cushions",
+            "passed": true,
+            "evidence": "three rounded cushions per corner=12"
+        },
+        {
+            "name": "gym_benches_banners_equipment",
+            "passed": true,
+            "evidence": "benches=6 banners=2 bags=3 dumbbells=12"
+        },
+        {
+            "name": "gym_station_layout_clear",
+            "passed": true,
+            "evidence": "14 stations; 91 unrelated footprint pairs; minimum clearance=0.7000003m. Seating along entrance wall, strength equipment rear left, dumbbells rear center, bags rear right; original table/platform clear of seating."
+        },
+        {
+            "name": "gym_owned_camera_centered",
+            "passed": true,
+            "evidence": "player=0 viewport=(0.50, 0.50, 7.60)"
+        },
+        {
+            "name": "gym_one_camera",
+            "passed": true,
+            "evidence": "full-screen owned-player view retained"
+        },
+        {
+            "name": "gym_movement_remains_playable",
+            "passed": true,
+            "evidence": "distance=1.659101"
+        },
+        {
+            "name": "gym_performance",
+            "passed": true,
+            "evidence": "native mean FPS=86.28193 minimum=37.9521 GPU=NVIDIA GeForce RTX 5060"
+        },
+        {
+            "name": "gym_runtime_clean",
+            "passed": true,
+            "evidence": ""
+        },
+        {
+            "name": "connected_body_joints",
+            "passed": true,
+            "evidence": "missing frames=0 maximum physical anchor separation=0.0050 m"
+        }
+    ]
+}

@@ -1,0 +1,171 @@
+{
+    "build": "0.4.9",
+    "engine": "6000.3.7f1",
+    "hardware": "Intel(R) Core(TM) i5-14400F / 16173 MB",
+    "graphics": "NVIDIA GeForce RTX 5060",
+    "startedUtc": "2026-10-13T03:30:51.1073683Z",
+    "duration": 3.9700417518615724,
+    "averageFps": 73.99620056152344,
+    "minFps": 7.591705799102783,
+    "bodies": 92,
+    "issues": 0,
+    "screenWidth": 1920,
+    "screenHeight": 1080,
+    "checks": [
+        {
+            "name": "test_inputs_not_serialized",
+            "passed": true,
+            "evidence": "runtime-only input; scene cannot install an empty test array"
+        },
+        {
+            "name": "offender_0_bottom",
+            "passed": true,
+            "evidence": "actual boundary-crossing wrestler; airborne launch allowed"
+        },
+        {
+            "name": "offender_0_connected_pose",
+            "passed": true,
+            "evidence": "gap=2.980232E-08"
+        },
+        {
+            "name": "offender_0_kneeling",
+            "passed": true,
+            "evidence": "hips=(0.00, 0.76, 0.00) hand=(-0.31, 0.30, 0.67) knee=(-0.13, 0.32, -0.04)"
+        },
+        {
+            "name": "offender_0_top_kneels",
+            "passed": true,
+            "evidence": "top hips=(0.00, 0.80, -0.75) actual knees=(-0.13, 0.32, -0.75)/(0.13, 0.32, -0.75) canvas=0.2 hand=(-0.31, 0.91, -0.07)"
+        },
+        {
+            "name": "offender_0_no_body_overlap",
+            "passed": true,
+            "evidence": "max inter-wrestler penetration=0"
+        },
+        {
+            "name": "offender_0_above_canvas",
+            "passed": true,
+            "evidence": "no body collider initially penetrates mat top .2; actual bottom minimum=0.20200 on left hand; top minimum=0.25244"
+        },
+        {
+            "name": "offender_0_scores_unchanged",
+            "passed": true,
+            "evidence": "no score, free grip or free pin on restart"
+        },
+        {
+            "name": "offender_0_1_5_seconds",
+            "passed": true,
+            "evidence": "seconds=1.5 number=3"
+        },
+        {
+            "name": "offender_0_count_2",
+            "passed": true,
+            "evidence": "seconds=0.9168897"
+        },
+        {
+            "name": "offender_0_count_1",
+            "passed": true,
+            "evidence": "seconds=0.4086823"
+        },
+        {
+            "name": "offender_0_input_locked",
+            "passed": true,
+            "evidence": "gameplay inputs cannot move bodies or spend stamina before whistle"
+        },
+        {
+            "name": "offender_0_whistle",
+            "passed": true,
+            "evidence": "countdown ends at1.503185s; exactly one whistle issued even if a later mat sound plays in the same frame"
+        },
+        {
+            "name": "offender_0_stays_low",
+            "passed": true,
+            "evidence": "bottom hips=(0.01, 0.65, 0.05) top hips=(0.01, 0.70, -0.77) gap=0.000542459"
+        },
+        {
+            "name": "offender_1_bottom",
+            "passed": true,
+            "evidence": "actual boundary-crossing wrestler; airborne launch allowed"
+        },
+        {
+            "name": "offender_1_connected_pose",
+            "passed": true,
+            "evidence": "gap=2.980232E-08"
+        },
+        {
+            "name": "offender_1_kneeling",
+            "passed": true,
+            "evidence": "hips=(0.00, 0.76, 0.00) hand=(-0.31, 0.30, 0.67) knee=(-0.13, 0.32, -0.04)"
+        },
+        {
+            "name": "offender_1_top_kneels",
+            "passed": true,
+            "evidence": "top hips=(0.00, 0.80, -0.75) actual knees=(-0.13, 0.32, -0.75)/(0.13, 0.32, -0.75) canvas=0.2 hand=(-0.31, 0.91, -0.07)"
+        },
+        {
+            "name": "offender_1_no_body_overlap",
+            "passed": true,
+            "evidence": "max inter-wrestler penetration=0"
+        },
+        {
+            "name": "offender_1_above_canvas",
+            "passed": true,
+            "evidence": "no body collider initially penetrates mat top .2; actual bottom minimum=0.20200 on left hand; top minimum=0.25244"
+        },
+        {
+            "name": "offender_1_scores_unchanged",
+            "passed": true,
+            "evidence": "no score, free grip or free pin on restart"
+        },
+        {
+            "name": "offender_1_1_5_seconds",
+            "passed": true,
+            "evidence": "seconds=1.5 number=3"
+        },
+        {
+            "name": "offender_1_count_2",
+            "passed": true,
+            "evidence": "seconds=0.9199605"
+        },
+        {
+            "name": "offender_1_count_1",
+            "passed": true,
+            "evidence": "seconds=0.416914"
+        },
+        {
+            "name": "offender_1_input_locked",
+            "passed": true,
+            "evidence": "gameplay inputs cannot move bodies or spend stamina before whistle"
+        },
+        {
+            "name": "offender_1_whistle",
+            "passed": true,
+            "evidence": "countdown ends at1.511081s; exactly one whistle issued even if a later mat sound plays in the same frame"
+        },
+        {
+            "name": "offender_1_stays_low",
+            "passed": true,
+            "evidence": "bottom hips=(0.00, 0.65, 0.05) top hips=(0.00, 0.70, -0.77) gap=0.0003259793"
+        },
+        {
+            "name": "rope_contact_does_not_reset",
+            "passed": true,
+            "evidence": "contact at ropes stays in ring; boundary is outside rope perimeter"
+        },
+        {
+            "name": "ordinary_start_preserved",
+            "passed": true,
+            "evidence": "normal start remains 3 seconds; ring-out alone is 1.5 seconds"
+        },
+        {
+            "name": "restart_no_runtime_issues",
+            "passed": true,
+            "evidence": ""
+        },
+        {
+            "name": "connected_body_joints",
+            "passed": true,
+            "evidence": "missing frames=0 maximum physical anchor separation=0.0050 m"
+        }
+    ]
+}

@@ -1,0 +1,38 @@
+{
+  "version": "0.4.9",
+  "nativeBuild": "f180",
+  "counts": {
+    "appearance": 16,
+    "camera": 17,
+    "corner": 15,
+    "gym": 16,
+    "hand-contact": 11,
+    "input": 42,
+    "locomotion-quality": 20,
+    "momentum": 22,
+    "net": 32,
+    "pin": 71,
+    "pin-rules": 18,
+    "pin-spam": 35,
+    "ringout": 31,
+    "scramble": 13,
+    "stamina": 10,
+    "stance": 32,
+    "top-control": 10,
+    "ui": 2
+  },
+  "nativeChecks": 413,
+  "passedNativeChecks": 412,
+  "allPassed": false,
+  "remainingScenarioFailures": [
+    {
+      "category": "pin",
+      "name": "walking_moves_with_alternating_physical_steps",
+      "passed": false,
+      "evidence": "root travel=4.95 m, left/right raised=False/False, foot height difference=0.024"
+    }
+  ],
+  "issues": 0,
+  "sourceBaselineSha256": "6c5b1e122ed9d09531658b7e8a92e13dcbbf000c4b41fd95f189a4ea9a8ca68a",
+  "visualReview": "work/f180-release-review.json"
+}

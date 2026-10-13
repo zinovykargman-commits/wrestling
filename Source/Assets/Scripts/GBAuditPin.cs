@@ -51,9 +51,11 @@ public static class GBAuditPin {
             check("opponent_brace_does_not_add_cost_"+hands+"_hands_"+(lift?"lift":"hold"),Mathf.Abs(neutral-resisting)<.02f&&Mathf.Abs(resisting-expected)<.03f,"normal="+neutral+" resisting="+resisting+" expected="+expected+" stamina/s; production Simulate and actual manual joints");
         }
         b.stamina=80;float ownBefore=b.stamina;b.Simulate(new GBInput{az=-1,flags=GBInput.Brace});
-        check("brace_spends_only_bracer_stamina",Mathf.Abs((ownBefore-b.stamina)/Time.fixedDeltaTime-7)<.03f,"own brace cost="+(ownBefore-b.stamina)/Time.fixedDeltaTime);
+        check("held_brace_spends_only_defender_stamina",b.HeldByOpponent&&Mathf.Abs((ownBefore-b.stamina)/Time.fixedDeltaTime-7)<.03f,"actually held defender brace cost="+(ownBefore-b.stamina)/Time.fixedDeltaTime);
         a.Release(0);a.Release(1);a.stamina=80;float recovery=a.stamina;a.Simulate(new GBInput{az=1});
         check("released_grips_allow_recovery",a.stamina>recovery&&Mathf.Abs((a.stamina-recovery)/Time.fixedDeltaTime-app.Tuning.staminaRegen)<.03f,"recovery="+(a.stamina-recovery)/Time.fixedDeltaTime+"/s");
+        b.ResetTo(new Vector3(.5f,.28f,0));b.stamina=80;float stanceBefore=b.stamina;b.Simulate(new GBInput{az=-1,flags=GBInput.Brace});
+        check("free_standing_Ctrl_does_not_spend_scramble_stamina",!b.HeldByOpponent&&b.stamina>=stanceBefore,"unheld standing Ctrl stamina="+stanceBefore+" -> "+b.stamina+"; held defensive brace cost tested separately");
         app.enabled=true;app.Paused=false;app.ReturnToMenu();check("stamina_patch_no_runtime_issues",app.Issues.Count==0,string.Join("; ",app.Issues));
     }
     // Prepared native fixtures isolate rules and applied forces. They do not

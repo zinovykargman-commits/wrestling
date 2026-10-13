@@ -1,18 +1,18 @@
-# Hands-on acceptance — 0.4.0
+# GRIP BREAK 0.4.9 hands-on acceptance
 
-1. Open PLAY.cmd and confirm only Pin Wrestling. AI and private host/join use the same rules/version.
-2. Aim high/low/sideways before clicking and while gripping. Check useful hand response, body-region selection, independent clicks/releases and absence of F/Y Throw action.
-3. Work opponent off balance, grip, hold C, cover both chest-down and back-down positions on the mat. Check both shoulder indicators and continuous count, 2.5-second count, interruptions by shoulder/grip/C; valid pins at ropes still count; complete three pins/rematch.
-4. Defend with Ctrl + WASD bridge/roll. Compare fresh/exhausted stamina and loose one-hand vs two-hand control. Both players should have meaningful chances.
-5. Run Q shots and manually grip afterward; rotate/release for momentum. Check connected bodies/nonadjacent arm contact during sustained play.
-6. Physical keyboard/controller buttons, rebind/save/reset, disconnect/rumble, F1/Escape/focus and F11. Scripted polling is not a hardware-event check.
-7. Separate PCs/networks: copied host invite to Join, ready/start, aiming/grips/pins/escapes by both, reset/disconnect/helper cleanup. Same-PC public routing does not establish every network.
-8. Older installation: CHECK FOR UPDATE → UPDATE & RESTART; confirm saved prefs/Source/version/logs. Isolated installer/restart evidence differs from this full button-driven upgrade.
-9. Full matches/all AI difficulties/long two-player sessions: assess aiming, pin setup/escape, stamina balance, camera comfort and enjoyment.
+These checks need a person, real hardware or separate computers; native automated fixtures do not certify them.
 
-10. Check visible alternating steps, forefoot roll, knee bends and recovery from E sprawl while moving in each direction. Stamina begins at155.25 and Ctrl scramble effort uses1.43 times its original cost; other action costs remain unchanged.
-
-Current pin rule: the grounded wrestler may be chest-down or back-down, with both actual shoulders on the mat and a live nearby controlling grip while C is held. The attacker does not need to place their chest over the rival. Multiplayer omits the mat motivational slogan and bottom coaching prompt.
-
-Tackle and X shove are removed from keyboard/controller bindings, control legends, AI decisions and physics. Retired network bits are rejected. Windows players should use0.4.8 (protocol12). Mac remains paused at0.4.5; current cross-platform internet play has not been retested.
-Jump requires 8 stamina (climb 16) and is unavailable while under pin control. C requires a physically low, lying opponent before pin control; low balance or a Down timer while upright is insufficient. Ctrl + movement still bridges/rolls.
+1. Open PLAY.cmd on Windows or the extracted GRIP BREAK.app on Mac. Confirm AI/private online use only Pin Wrestling, one camera follows your own athlete, and there is no split screen. Test F11, F1 and Escape/focus recovery.
+2. Stand freely and hold/release Ctrl: hips lower, both knees bend, boots stay supported and head stays up. Check free standing stance does not drain stamina. Have a rival hold you and compare paid standing defense with grounded bridge/roll; rapid Ctrl tapping must not endlessly avoid pins or regenerate stamina.
+3. Aim high/low/sideways before clicks and while holding. Check each manual hand and real selected body region. Inspect shown fingers during close grip contact; the visual fit should be small, wrist continuous and release/reset immediate, with no new grip or physical jump.
+4. Use Q stationary and after forward movement: slightly lower entry, head/chest up, lead knee/foot then trailing drive, normal recovery and no automatic grip. Move sideways in normal stance; compare useful alternating supported steps with sprawl recovery.
+5. Hold a grounded rival's leg and move sideways around them. Compare one versus two grips and bracing resistance. Turning the corner must require movement and position; it cannot automatically award a pin or finish.
+6. Grip a grounded chest-down and back-down rival, hold C and work top position. Both shoulder indicators must remain grounded for 2.5 earned seconds. Test real bridge/roll escape, lost grip/C/control and shoulder contact, including pins against ropes. Finish three pins and rematch.
+7. Test stamina 155.25, grip/lift drain, actual ground scramble, exhausted jump guards and recovery after resting. Bracing should cost the defender rather than add drain to the attacker.
+8. Inspect anatomy/singlet front/back/both sides, overhead reach, crouch and sprawl, held contact and dynamic collision. Note remaining extreme underarm trim folds and small neckline wisps; check shoes/wrists stay connected and joints do not bend through invalid ranges.
+9. Check High/Balanced/Performance in Options, preference persistence and native GPU speed on both platforms. Confirm physics, grips and network timing do not change when visual quality changes. Mac defaults Balanced; hosted virtual GPUs do not represent physical Mac performance.
+10. Physical keyboard/mouse and Windows controllers: rebind/save/reset, controller disconnect/fallback/rumble, utility keys and focus. Scripted polling differs from actual hardware events. Mac keyboard/mouse is the supported control path.
+11. Independent computers/networks with matching 0.4.9: Windows host copies invite; friend pastes/joins from Windows or Mac, ready/start. Both players aim/grip/escape/pin; confirm restart, disconnect, expired invite and host helper cleanup. Same-PC/native fixtures cannot prove every network/service route.
+12. Go over ropes voluntarily and after being thrown: exited wrestler starts bottom on hands/knees, top kneels behind, scores preserved, rapid 1.5-second 3/2/1 then whistle. No early input/grip during the restart.
+13. Older Windows installation: CHECK FOR UPDATE → UPDATE & RESTART, then confirm new version, saved preferences/editable Source, rollback backup and restart logs. Mac update button opens the correct download; replace the app manually. Public hash evidence differs from a real old-install button-driven upgrade.
+14. Play full matches against all AI difficulties and longer friend sessions. Assess hand aiming, pin setup/escape, grip stability, stamina balance, camera comfort and enjoyment; report device-specific issues.

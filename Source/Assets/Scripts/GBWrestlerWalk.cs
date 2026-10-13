@@ -3,12 +3,13 @@ using UnityEngine;
 public partial class GBWrestler {
     public string WalkPhaseEvidence {get;private set;}
     public bool WalkPhaseDiagnostics;
+    public bool StandingStance {get;private set;}
     bool walkPlannerActive,walkStartedStep;
     readonly Vector3[] walkFootGoals=new Vector3[2];
     public float LargestFootPlacement {get;private set;}
     public int LeftFootPlacements {get;private set;}
     public int RightFootPlacements {get;private set;}
-    void ResetWalkMetrics(){LargestFootPlacement=0;LeftFootPlacements=RightFootPlacements=0;WalkPhaseEvidence="reset";walkPlannerActive=walkStartedStep=false;}
+    void ResetWalkMetrics(){StandingStance=false;LargestFootPlacement=0;LeftFootPlacements=RightFootPlacements=0;WalkPhaseEvidence="reset";walkPlannerActive=walkStartedStep=false;}
     void RecordFootPlacement(int foot,float length){LargestFootPlacement=Mathf.Max(LargestFootPlacement,length);if(foot==0)LeftFootPlacements++;else RightFootPlacements++;}
 
     void RecordWalkStep(int foot,Vector3 goal,float progress,bool lowStance){
@@ -19,6 +20,23 @@ public partial class GBWrestler {
         // Follow the real foot planner's raised step, rather than a free-running
         // sine wave. Only motor targets change; grounded feet keep their forces.
         LegFootPoses(95);
+    }
+
+    void StandingStancePoses(){
+        // The same supported foot targets fold the knees in their anatomical
+        // plane. A moderate hip drop leaves the head up and chest over the base.
+        // All changes are bounded joint/foot motors, never transform animation.
+        LegFootPoses(110);
+        poses[1]=facingRotation*Quaternion.Euler(30,0,0);
+        poses[2]=facingRotation; // 30 degrees neck extension, existing limit40.
+        // A free hand rests ahead of the chest. Mouse aiming and actual
+        // manual grips keep their own physical hand targets in UpdateHand.
+        if(!command.HasHandAim)for(int h=0;h<2;h++){
+            if(hands[h].joint)continue;int upper=h==0?3:6;
+            poses[upper]=facingRotation*Quaternion.Euler(-25,0,h==0?-5:5);
+            poses[upper+1]=facingRotation*Quaternion.Euler(-65,0,0);
+            poses[upper+2]=poses[upper+1];
+        }
     }
 
     Quaternion WalkingBootRotation(int foot){
@@ -40,6 +58,14 @@ public partial class GBWrestler {
             int thigh=foot==0?9:12,shin=thigh+1,boot=thigh+2;
             Vector3 hip=Root.position+Root.rotation*joints[thigh].connectedAnchor;
             Quaternion bootRotation=Shooting?ShotBootRotation(foot):WalkingBootRotation(foot);
+            if(StandingStance){
+                // Solve for the requested lower hip height, not the current
+                // upright hips. Otherwise straight knee targets resist the very
+                // lowering that must happen before the IK can bend the knees.
+                // This changes only a physical motor target; no body is moved.
+                float mat=walkFootGoals[foot].y-BootSupportHeight(bootRotation);
+                hip.y=mat+.80f+(Root.rotation*joints[thigh].connectedAnchor).y;
+            }
             Vector3 ankle=walkFootGoals[foot]+bootRotation*joints[boot].anchor;
             Vector3 local=Quaternion.Inverse(facingRotation)*(ankle-hip);
             float drop=Mathf.Max(Shooting?.05f:.25f,-local.y);
@@ -61,7 +87,7 @@ public partial class GBWrestler {
 
     float ShotProgress {get{return Mathf.Clamp01((Time.time-shotStarted)/.78f);}}
     float ShotDrivePhase {get{return 1-.45f*Mathf.SmoothStep(0,1,(ShotProgress-.5f)/.3f);}}
-    float ShotStanceHeight {get{return Mathf.Lerp(.68f,.56f,Mathf.SmoothStep(0,1,(ShotProgress-.17f)/.28f))+Mathf.SmoothStep(0,1,(ShotProgress-.55f)/.45f)*.40f;}}
+    float ShotStanceHeight {get{return Mathf.Lerp(.62f,.50f,Mathf.SmoothStep(0,1,(ShotProgress-.17f)/.28f))+Mathf.SmoothStep(0,1,(ShotProgress-.55f)/.45f)*.46f;}}
     float ShotFootOffset(int foot){
         float kneeDown=Mathf.SmoothStep(0,1,(ShotProgress-.2f)/.28f),follow=Mathf.SmoothStep(0,1,(ShotProgress-.35f)/.4f),rise=Mathf.SmoothStep(0,1,(ShotProgress-.8f)/.2f);
         // Lead foot enters first, then the knee passes over its toe as the hips

@@ -1,0 +1,44 @@
+{
+  "nativeBuild": "f180",
+  "approved": true,
+  "sourceBaselineSha256": "6c5b1e122ed9d09531658b7e8a92e13dcbbf000c4b41fd95f189a4ea9a8ca68a",
+  "reviewedCaptures": [
+    "work/checks/f180-appearance/arms-neutral-front-close.png",
+    "work/checks/f180-appearance/appearance-back.png",
+    "work/checks/f180-appearance/arms-overhead-back.png",
+    "work/checks/f180-appearance/arms-overhead-side.png",
+    "work/checks/f180-hand-contact/held-body-contact-front.png",
+    "work/checks/f180-stance/stance-held-side.png",
+    "work/checks/f180-stance/lower-shot-side-04.png",
+    "work/checks/f180-corner/corner-live-motion-08.png",
+    "work/checks/f180-ui/menu.png"
+  ],
+  "nativeChecks": 413,
+  "passedChecks": 412,
+  "visualReview": "Root inspected actual final native front/back, overhead side/back, live hand contact, standing stance, shot, corner movement and menu. Independent arm review accepted focused elbow/shoulder improvements; hand review accepted slight fitting.",
+  "requirements": {
+    "arm-neutral": "focused kink improved; approved proportions preserved",
+    "arm-overhead": "rounded connected shoulder volume retained; shared fabric has no original skin cut-through",
+    "stance": "32 checks; supported knees/head-up/free standing Ctrl; paid held/ground defense preserved",
+    "shot": "slightly lower target; existing manual grip and momentum/cost behavior retained",
+    "corner": "15 checks; real manual leg hold and supported lateral motion; no automatic takedown",
+    "top-control": "10 checks; close low hips and steering pressure, bounded paired forces and escape",
+    "hand-contact": "11 checks; real held contact, at most0.028m visual fit; no physical force or rotation change",
+    "menu": "native enclosed gym menu inspected; render presets preserve physics",
+    "network": "32 host/client checks, no renderer exceptions;92 bodies/protocol12",
+    "delivery": "publication/Desktop/public updater pending separate verification",
+    "cleanup": "audited obsolete cache/capture cleanup pending after delivery"
+  },
+  "remainingLimitations": [
+    "small neckline trim wisps and extreme-pose folds",
+    "palms not perfectly flush in every contact",
+    "legacy walking-height assertion remains failed; dedicated20-check locomotion passes",
+    "separate-machine internet and physical Mac performance unverified"
+  ],
+  "historicalFailuresPreserved": [
+    "f175/f176 prepared fixtures and hand eligibility",
+    "f178 client renderer exception fixed in final build",
+    "f179 0.3mm stance threshold miss; final audit uses5mm contact tolerance without changing gameplay"
+  ],
+  "masterSha256": "79cba5496156807cd68c0b4f370ef6b01c172885b4cb90c997dfa3576d7855bb"
+}

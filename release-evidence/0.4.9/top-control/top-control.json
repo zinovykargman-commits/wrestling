@@ -1,0 +1,66 @@
+{
+    "build": "0.4.9",
+    "engine": "6000.3.7f1",
+    "hardware": "Intel(R) Core(TM) i5-14400F / 16173 MB",
+    "graphics": "NVIDIA GeForce RTX 5060",
+    "startedUtc": "2026-10-13T03:29:08.7442286Z",
+    "duration": 0.325730562210083,
+    "averageFps": 0.0,
+    "minFps": 1000.0,
+    "bodies": 92,
+    "issues": 0,
+    "screenWidth": 1920,
+    "screenHeight": 1080,
+    "checks": [
+        {
+            "name": "test_inputs_not_serialized",
+            "passed": true,
+            "evidence": "runtime-only input; scene cannot install an empty test array"
+        },
+        {
+            "name": "supported_hips_improve_real_top_pressure",
+            "passed": true,
+            "evidence": "same victim/grips: supported low leverage/load=1.18/82.6 poor raised position=0.9/63; eligibility remains viable"
+        },
+        {
+            "name": "real_hip_position_changes_shoulder_pressure",
+            "passed": true,
+            "evidence": "no move command; left/right actual hip bias=-0.16875/0.16875"
+        },
+        {
+            "name": "movement_still_steers_existing_weight",
+            "passed": true,
+            "evidence": "supported neutral leverage=1.18 movement bias=1/-1; baseline preload retained"
+        },
+        {
+            "name": "top_load_remains_bounded_equal_reaction",
+            "passed": true,
+            "evidence": "shoulder cap=649.9137 total chest pressure=959.8723 force+reaction=0; old650+310N budgets"
+        },
+        {
+            "name": "one_arm_top_control_stays_weaker",
+            "passed": true,
+            "evidence": "same supported hip position one/two actual load=74.34/82.6"
+        },
+        {
+            "name": "funded_bridge_can_overcome_top_weight",
+            "passed": true,
+            "evidence": "actual paid bridge upward=2004.445 resisted cover downward=49.55786 load=24.7789 energy=155.25 -> 155.1725; live shoulder escape separately tested by pin suite"
+        },
+        {
+            "name": "release_ends_top_pressure_immediately",
+            "passed": true,
+            "evidence": "releaseC actual incremental load=0 force=(0.00, 0.00, 0.00)"
+        },
+        {
+            "name": "top_control_runtime_clean",
+            "passed": true,
+            "evidence": ""
+        },
+        {
+            "name": "connected_body_joints",
+            "passed": true,
+            "evidence": "missing frames=0 maximum physical anchor separation=0.0050 m"
+        }
+    ]
+}

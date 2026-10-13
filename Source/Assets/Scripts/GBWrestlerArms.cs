@@ -150,7 +150,13 @@ public partial class GBWrestler {
         // Independent shortest-arc fits could twist the elbow through the arm.
         Vector3 hinge=Vector3.Cross(lowerDirection,upperDirection).normalized;
         if(hinge.sqrMagnitude<.01f)hinge=side;
-        poses[upper]=Quaternion.LookRotation(Vector3.Cross(hinge,-upperDirection).normalized,-upperDirection);
+        if(Vector3.Dot(hinge,side)<0)hinge=-hinge;
+        // The humerus is slightly angled in its real connected rest chain.
+        // Align that anchor axis, rather than treating it as a vertical shaft.
+        // Both arm frames keep the same anatomical bend-plane orientation.
+        Vector3 restUpper=(joints[fore].connectedAnchor-joints[upper].anchor).normalized;
+        Quaternion upperRest=Quaternion.LookRotation(Vector3.forward,-restUpper);
+        poses[upper]=Quaternion.LookRotation(Vector3.Cross(hinge,-upperDirection).normalized,-upperDirection)*Quaternion.Inverse(upperRest);
         poses[fore]=poses[index]=Quaternion.LookRotation(Vector3.Cross(hinge,-lowerDirection).normalized,-lowerDirection);
         Vector3 palmForward=Vector3.ProjectOnPlane(facing,lowerDirection);
         if(palmForward.sqrMagnitude>.001f){

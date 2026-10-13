@@ -1,0 +1,116 @@
+{
+    "build": "0.4.9",
+    "engine": "6000.3.7f1",
+    "hardware": "Intel(R) Core(TM) i5-14400F / 16173 MB",
+    "graphics": "NVIDIA GeForce RTX 5060",
+    "startedUtc": "2026-10-13T03:29:29.4942672Z",
+    "duration": 12.196024894714356,
+    "averageFps": 46.98362350463867,
+    "minFps": 8.43661880493164,
+    "bodies": 92,
+    "issues": 0,
+    "screenWidth": 1920,
+    "screenHeight": 1080,
+    "checks": [
+        {
+            "name": "test_inputs_not_serialized",
+            "passed": true,
+            "evidence": "runtime-only input; scene cannot install an empty test array"
+        },
+        {
+            "name": "deliberate_slow_stride",
+            "passed": true,
+            "evidence": "largest placement=0.631 m, L/R=5/4, travel=2.57"
+        },
+        {
+            "name": "useful_normal_stride",
+            "passed": true,
+            "evidence": "largest placement=1.308 m, alternating L/R=3/2, travel=3.21"
+        },
+        {
+            "name": "physical_boot_clearance",
+            "passed": true,
+            "evidence": "maximum real boot height difference=0.046 m"
+        },
+        {
+            "name": "coordinated_physical_knees",
+            "passed": true,
+            "evidence": "maximum actual knee flexion=87.2 degrees"
+        },
+        {
+            "name": "walking_keeps_balance",
+            "passed": true,
+            "evidence": "minimum chest upright dot=0.991, down=False"
+        },
+        {
+            "name": "walking_keeps_mat_support",
+            "passed": true,
+            "evidence": "maximum gap under nearest real supporting foot=0.007 m, no paid jump in walking fixture"
+        },
+        {
+            "name": "walking_stamina_cost_unchanged",
+            "passed": true,
+            "evidence": "non-sprinting stamina=155.25 -> 155.25, maximum155.25, scramble1.43 unchanged"
+        },
+        {
+            "name": "side_left_physical_steps",
+            "passed": true,
+            "evidence": "actual lateral travel=2.430 m; alternating L/R=3/2"
+        },
+        {
+            "name": "side_left_keeps_mat_support",
+            "passed": true,
+            "evidence": "nearest real supporting boot maximum gap=0.002 m; no jump"
+        },
+        {
+            "name": "side_right_physical_steps",
+            "passed": true,
+            "evidence": "actual lateral travel=2.717 m; alternating L/R=2/3"
+        },
+        {
+            "name": "side_right_keeps_mat_support",
+            "passed": true,
+            "evidence": "nearest real supporting boot maximum gap=0.002 m; no jump"
+        },
+        {
+            "name": "shot_cost_unchanged",
+            "passed": true,
+            "evidence": "one Q costs12, observed=12.000"
+        },
+        {
+            "name": "physical_shot_level_change_and_lead_leg",
+            "passed": true,
+            "evidence": "real hip lowering=0.404 m, left/right knee difference=50.8 degrees, knee flexion=89.8"
+        },
+        {
+            "name": "shot_head_up_lead_knee_near_mat",
+            "passed": true,
+            "evidence": "minimum actual head upright=0.946, lead knee above mat=0.191 m"
+        },
+        {
+            "name": "shot_trail_foot_steps_up",
+            "passed": true,
+            "evidence": "early/late actual trailing boot relative to hips=-0.469/-0.326 m"
+        },
+        {
+            "name": "shot_grabs_stay_manual",
+            "passed": true,
+            "evidence": "shot never attached a hand or auto grabbed"
+        },
+        {
+            "name": "shot_returns_to_ready_stance",
+            "passed": true,
+            "evidence": "shooting=False, down=False, chest upright=1.000"
+        },
+        {
+            "name": "locomotion_connected_finite",
+            "passed": true,
+            "evidence": "maximum anchor separation=0.00500 m, finite=True, unchanged registry=92"
+        },
+        {
+            "name": "connected_body_joints",
+            "passed": true,
+            "evidence": "missing frames=0 maximum physical anchor separation=0.0050 m"
+        }
+    ]
+}

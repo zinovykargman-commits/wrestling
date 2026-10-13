@@ -1,0 +1,96 @@
+{
+    "build": "0.4.9",
+    "engine": "6000.3.7f1",
+    "hardware": "Intel(R) Core(TM) i5-14400F / 16173 MB",
+    "graphics": "NVIDIA GeForce RTX 5060",
+    "startedUtc": "2026-10-13T03:28:32.4738583Z",
+    "duration": 13.736303329467774,
+    "averageFps": 47.765621185302737,
+    "minFps": 17.21395492553711,
+    "bodies": 92,
+    "issues": 0,
+    "screenWidth": 1920,
+    "screenHeight": 1080,
+    "checks": [
+        {
+            "name": "test_inputs_not_serialized",
+            "passed": true,
+            "evidence": "runtime-only input; scene cannot install an empty test array"
+        },
+        {
+            "name": "appearance_real_physical_bones",
+            "passed": true,
+            "evidence": "17 skin slots follow15 physical regions,2 shoulder pivots and2 replacement hand render proxies (bounded0.028m, exact physical rotation); parts=48"
+        },
+        {
+            "name": "appearance_normalized_finite_skin",
+            "passed": true,
+            "evidence": "four normalized influences, current baked finite positions; vertices=162634"
+        },
+        {
+            "name": "appearance_licensed_skin_texture",
+            "passed": true,
+            "evidence": "diffuse and anatomical normal textures present on both athletes"
+        },
+        {
+            "name": "appearance_no_new_physics",
+            "passed": true,
+            "evidence": "same92 registered bodies and15 per athlete"
+        },
+        {
+            "name": "both_athletes_limb_and_torso_self_contact",
+            "passed": true,
+            "evidence": "both athletes enabled limb/body pairs=182; only28 connected overlapping joint pairs excluded"
+        },
+        {
+            "name": "shoe_soles_laces_locked_to_physical_feet",
+            "passed": true,
+            "evidence": "foot-only rigid attachment vertices=3932; flexible ankle collars follow calf/foot skin"
+        },
+        {
+            "name": "ankles_have_anatomical_bend_and_twist_stops",
+            "passed": true,
+            "evidence": "four ankles: physical25-degree dorsiflexion/55-degree plantarflexion,20-degree side/twist stops; dynamic render/contact checks required"
+        },
+        {
+            "name": "appearance_straight_ready_leg_axes",
+            "passed": true,
+            "evidence": "live ready-state thigh/shin lateral center differences=0.000/0.000 m; render inspection still required"
+        },
+        {
+            "name": "upright_both_shoe_soles_align_with_mat",
+            "passed": true,
+            "evidence": "front/back straight-pose maximum actual sole-bottom offset=0.0002 m"
+        },
+        {
+            "name": "appearance_articulated_anchors_connected",
+            "passed": true,
+            "evidence": "frozen bent arms/knees real joint anchors gap=0.00000"
+        },
+        {
+            "name": "appearance_articulated_mesh_finite",
+            "passed": true,
+            "evidence": "baked bent-limb surface finite; inspected native articulation screenshot required"
+        },
+        {
+            "name": "both_overhead_arm_chains_connected",
+            "passed": true,
+            "evidence": "both pitched-forward arm poses keep their real joint anchors connected; visual inspection required"
+        },
+        {
+            "name": "live_raised_mouse_reach_connected",
+            "passed": true,
+            "evidence": "actual independent hand motors reach overhead; no prepared pose/grip; L/R hands=(-0.63, 2.17, 0.55) / (-0.37, 2.17, 0.55) gap=2.40274E-07"
+        },
+        {
+            "name": "live_sprawl_reach_connected",
+            "passed": true,
+            "evidence": "actual heldE with independent raisedmouse target; physics-only posture, gap=0.000756052"
+        },
+        {
+            "name": "connected_body_joints",
+            "passed": true,
+            "evidence": "missing frames=0 maximum physical anchor separation=0.0050 m"
+        }
+    ]
+}

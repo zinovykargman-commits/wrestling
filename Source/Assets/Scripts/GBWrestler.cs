@@ -120,13 +120,13 @@ public partial class GBWrestler:MonoBehaviour {
     public void ResetTo(Vector3 at) {
         restartPoseUntil=0;
         Release(0);Release(1);for(int n=0;n<15;n++){bodies[n].position=at+initial[n];bodies[n].rotation=Quaternion.identity;bodies[n].linearVelocity=Vector3.zero;bodies[n].angularVelocity=Vector3.zero;}
-        stamina=MaxStamina;balance=100;downUntil=recoveryUntil=pressureUntil=climbUntil=liftCharge=stumbleUntil=EscapeUntil=jumpAt=strikeAt=jumpRequestUntil=carriedRecoveryUntil=0;carriedFlight=false;lastFootSupport=-10;lastImpact=-1;eliminated=false;oldFlags=0;facing=Vector3.forward;facingRotation=Quaternion.identity;command=default;pinProgress=0;lastRoot=at+initial[0];feetInitialized=false;nextStep=0;stepBegin[0]=stepBegin[1]=-10;ResetWalkMetrics();foreach(var hand in hands){hand.releaseRequired=false;hand.candidate=null;}CombatReset();PinReset();SprawlReset();
+        stamina=MaxStamina;balance=100;downUntil=recoveryUntil=pressureUntil=climbUntil=liftCharge=stumbleUntil=EscapeUntil=jumpAt=strikeAt=jumpRequestUntil=carriedRecoveryUntil=0;carriedFlight=false;lastFootSupport=-10;lastImpact=-1;eliminated=false;oldFlags=0;facing=Vector3.forward;facingRotation=Quaternion.identity;command=default;pinProgress=0;lastRoot=at+initial[0];feetInitialized=false;nextStep=0;stepBegin[0]=stepBegin[1]=-10;ResetWalkMetrics();foreach(var hand in hands){hand.releaseRequired=false;hand.candidate=null;}CombatReset();CornerReset();PinReset();SprawlReset();
     }
     public void Simulate(GBInput input) {
         if(eliminated)return;command=input.Sanitize();
         bool scrambleRequested=command.Has(GBInput.Brace)&&(HeldByOpponent||Down||PhysicallyDownForPin||PinControlled);
         GateScrambleInput(scrambleRequested);UpdateScrambleRecovery(scrambleRequested);
-        if(!ScrambleReady){command.flags&=~GBInput.Brace;if(scrambleRequested)Feedback(Time.time<scrambleUntil||stamina<4?"Scramble exhausted - release Ctrl":"Scramble cooldown - stop tapping Ctrl",.2f);}
+        if(scrambleRequested&&!ScrambleReady){command.flags&=~GBInput.Brace;if(scrambleRequested)Feedback(Time.time<scrambleUntil||stamina<4?"Scramble exhausted - release Ctrl":"Scramble cooldown - stop tapping Ctrl",.2f);}
         SprawlRefresh();AdvanceShotEntry();var tuning=GBApp.I.Tuning;float dt=Time.fixedDeltaTime;
         grounded=Physics.Raycast(bodies[11].position+Vector3.up*.12f,Vector3.down,.37f,1,QueryTriggerInteraction.Ignore)||Physics.Raycast(bodies[14].position+Vector3.up*.12f,Vector3.down,.37f,1,QueryTriggerInteraction.Ignore);
         if(grounded)lastFootSupport=Time.time;
@@ -140,11 +140,12 @@ public partial class GBWrestler:MonoBehaviour {
         hanging=false;for(int h=0;h<2;h++)if(hands[h].joint&&hands[h].target&&!hands[h].target.wrestler&&hands[h].target.GetComponent<Collider>().bounds.max.y>Root.position.y+.6f&&bodies[h==0?5:8].position.y>Root.position.y+.2f)hanging=true;
         int edges=command.flags&~oldFlags;oldFlags=command.flags;
         facing=Vector3.Slerp(facing,Shooting?ShotDirection:command.Aim,Mathf.Clamp01(dt*12));facingRotation=Quaternion.LookRotation(facing,Vector3.up);
-        bool brace=command.Has(GBInput.Brace)&&!Down&&stamina>1;bool pinning=command.Has(GBInput.Pin)&&GBApp.I.CurrentMode==1;
+        bool brace=command.Has(GBInput.Brace)&&!Down&&(!scrambleRequested||stamina>1);
+        bool paidBrace=brace&&scrambleRequested;bool pinning=command.Has(GBInput.Pin)&&GBApp.I.CurrentMode==1;
         bool groundEscape=ScrambleReady&&command.Has(GBInput.Brace)&&command.Move.sqrMagnitude>.05f&&(Down||PinControlled);
-        bool effort=command.Has(GBInput.Lift)&&GripCount>0||command.Has(GBInput.Sprint)&&command.Move.magnitude>.1f||GripCount>0||brace||groundEscape||Sprawling;
+        bool effort=command.Has(GBInput.Lift)&&GripCount>0||command.Has(GBInput.Sprint)&&command.Move.magnitude>.1f||GripCount>0||paidBrace||groundEscape||Sprawling;
         bool scrambling=groundEscape||(HeldByOpponent&&command.Has(GBInput.Brace)&&command.Move.sqrMagnitude>.08f&&stamina>8);
-        float cost=GripCount*2.0f+(command.Has(GBInput.Lift)&&GripCount>0?tuning.liftCost:0)+(command.Has(GBInput.Sprint)&&command.Move.magnitude>.1f?12:0)+(brace?7*(scrambling?ScrambleStaminaMultiplier:1):0)+(Sprawling?10:0);
+        float cost=GripCount*2.0f+(command.Has(GBInput.Lift)&&GripCount>0?tuning.liftCost:0)+(command.Has(GBInput.Sprint)&&command.Move.magnitude>.1f?12:0)+(paidBrace?7*(scrambling?ScrambleStaminaMultiplier:1):0)+(Sprawling?10:0);
         // Opponent resistance changes physical leverage, not our stamina bill.
         stamina=Mathf.Clamp(stamina+(effort?-cost:EscapeRecoveryBlocked?0:tuning.staminaRegen)*dt,0,MaxStamina);
         if(stamina<=.1f){Release(0);Release(1);}
@@ -160,7 +161,7 @@ public partial class GBWrestler:MonoBehaviour {
         bool nearFloor=Physics.Raycast(Root.position+Vector3.up*.1f,Vector3.down,1.5f,1,QueryTriggerInteraction.Ignore);
         bool pressured=Time.time<pressureUntil;
         bool canStand=!Down&&!pressured&&!PinControlled&&!carriedFlight&&Time.time>=carriedRecoveryUntil&&(grounded||nearFloor)&&(!JumpFlightWindow||grounded)&&!hanging&&Time.time>jumpAt-.2f;
-        bool lowAim=false;
+        bool lowAim=false;StandingStance=false;
         if(canStand) {
             Vector3 locomotion=ShotDriving?ShotDirection:command.Move;
             float desired=ShotDriving?ShotDriveSpeed*ShotDrivePhase:command.Has(GBInput.Sprint)&&stamina>10?tuning.sprintSpeed:tuning.walkSpeed;
@@ -176,10 +177,11 @@ public partial class GBWrestler:MonoBehaviour {
             if(Physics.Raycast(Root.position+Vector3.up*.2f,Vector3.down,out ground,1.9f,1,QueryTriggerInteraction.Ignore))floor=ground.point.y;
             // Use the cursor's world height: as the hips lower, a fixed leg
             // target must not alternate between crouching and standing.
-            lowAim=command.HasHandAim&&!Shooting&&!pinning&&!sprawling&&Root.position.y+command.HandOffset.y<floor+.90f;
+            lowAim=command.HasHandAim&&!brace&&!Shooting&&!pinning&&!sprawling&&Root.position.y+command.HandOffset.y<floor+.90f;
             float lateralMove=Mathf.Abs(Vector3.Dot(command.Move,facingRotation*Vector3.right));
             bool lateralWalk=lateralMove>Mathf.Abs(Vector3.Dot(command.Move,facing))*1.15f;
-            float stanceHeight=sprawling?.48f:brace||lowAim?.60f:Shooting?ShotStanceHeight:pinning?.60f:command.Has(GBInput.Pin)?.9f:command.Move.sqrMagnitude>.01f?(lateralWalk?.84f:.88f):1.04f;
+            StandingStance=brace&&!Shooting&&!pinning&&!lowAim&&!sprawling&&!PhysicallyDownForPin;
+            float stanceHeight=sprawling?.48f:Shooting?ShotStanceHeight:StandingStance?.80f:brace||lowAim?.60f:pinning?.60f:command.Has(GBInput.Pin)?.9f:command.Move.sqrMagnitude>.01f?(lateralWalk?.84f:.88f):1.04f;
             float lift=(floor+stanceHeight-Root.position.y)*2800-Root.linearVelocity.y*330+(sprawling?0:totalMass*9.81f);
             Root.AddForce(Vector3.up*Mathf.Clamp(lift,pinning?-1000:-220,1950),ForceMode.Force);
             Quaternion desiredRotation=facingRotation;
@@ -190,7 +192,8 @@ public partial class GBWrestler:MonoBehaviour {
         bool walkingPose=canStand&&command.Move.sqrMagnitude>.01f&&!brace&&!Shooting&&!pinning&&!lowAim&&!sprawling;
         if(walkingPose)WalkPoses();
         if(Shooting)ShotPoses();
-        if(brace||lowAim){
+        if(StandingStance)StandingStancePoses();
+        else if((brace||lowAim)&&!Shooting){
             // Match the lowered pelvis to a real folded leg chain. The head
             // follows the chest instead of fighting to remain upright, with
             // 30 degrees of neck extension inside the existing 40-degree limit.
@@ -203,6 +206,7 @@ public partial class GBWrestler:MonoBehaviour {
         if(canStand&&!sprawling){ApplyTorque(bodies[1],poses[1],340,50,500);ApplyTorque(bodies[2],poses[2],85,18,125);}
         for(int h=0;h<2;h++)UpdateHand(h,command.Has(h==0?GBInput.Left:GBInput.Right));
         CombatTick(dt);
+        CornerTick(dt);
         SprawlTick();
         PinTick(dt);
         ApplyBottomRestartPose();
@@ -214,7 +218,7 @@ public partial class GBWrestler:MonoBehaviour {
             // The real grip supports the cover. Stiff mouse IK joint motors
             // must let elbows fold instead of propping the torso above contact.
             float armPower=coverArm?.075f:lifting&&n>=3&&n<=8?2.5f:1;var d=joints[n].slerpDrive;d.maximumForce=(n==1?260:n>=9?161:97.75f)*muscle*armPower;d.positionSpring=(n==1?2100:n>=9?1207.5f:805)*muscle*armPower;d.positionDamper=(n==1?130:n>=9?74.75f:55.2f)*(coverArm?armPower:1);
-            if((Shooting||walkingPose)&&n>=9){
+            if((Shooting||walkingPose||StandingStance)&&n>=9){
                 // The shared relative drives opposed the fast asymmetric entry.
                 // Track the real planned world pose with a bounded physical
                 // actuator, returning its full reaction to the supporting hips.
@@ -306,10 +310,11 @@ public partial class GBWrestler:MonoBehaviour {
             float raised=progress<1?Mathf.Sin(arcProgress*Mathf.PI)*clearance:0;
             Vector3 goal=progress<1?Vector3.Lerp(stepStarts[h],stepGoals[h],Mathf.SmoothStep(0,1,progress)):plantedFeet[h];goal.y=floor+.085f+raised;
             if(Shooting){goal=home;goal.y=floor+ShotBootHeight(h);}
-            Quaternion bootPose=Shooting?ShotBootRotation(h):walking?WalkingBootRotation(h):facingRotation;
-            if(walking)goal.y=floor+BootSupportHeight(bootPose)+raised;
+            bool supportedPose=walking||StandingStance;
+            Quaternion bootPose=Shooting?ShotBootRotation(h):supportedPose?WalkingBootRotation(h):facingRotation;
+            if(supportedPose)goal.y=floor+BootSupportHeight(bootPose)+raised;
             RaycastHit support;if(!Physics.Raycast(goal+Vector3.up*.25f,Vector3.down,out support,.75f,1,QueryTriggerInteraction.Ignore)){RecordWalkStep(h,foot.position,1,lowStance);continue;}
-            goal.y=support.point.y+(Shooting?ShotBootHeight(h) :(walking?BootSupportHeight(bootPose):.085f)+raised);
+            goal.y=support.point.y+(Shooting?ShotBootHeight(h) :(supportedPose?BootSupportHeight(bootPose):.085f)+raised);
             RecordWalkStep(h,goal,progress,lowStance);
             // Shot targets travel with the real hips. Damping against world
             // velocity held both boots behind, even when their targets advanced.

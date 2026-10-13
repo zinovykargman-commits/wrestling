@@ -1,0 +1,176 @@
+{
+    "build": "0.4.9",
+    "engine": "6000.3.7f1",
+    "hardware": "Intel(R) Core(TM) i5-14400F / 16173 MB",
+    "graphics": "NVIDIA GeForce RTX 5060",
+    "startedUtc": "2026-10-13T03:28:50.1848969Z",
+    "duration": 8.09469985961914,
+    "averageFps": 99.07012939453125,
+    "minFps": 13.345308303833008,
+    "bodies": 92,
+    "issues": 0,
+    "screenWidth": 1920,
+    "screenHeight": 1080,
+    "checks": [
+        {
+            "name": "test_inputs_not_serialized",
+            "passed": true,
+            "evidence": "runtime-only input; scene cannot install an empty test array"
+        },
+        {
+            "name": "standing_ctrl_lowers_physical_hips",
+            "passed": true,
+            "evidence": "hips=1.241786 -> 1.110854 mat=0.2; minimum0.125m (0.13m target with5mm solver tolerance)"
+        },
+        {
+            "name": "standing_ctrl_bends_both_anatomical_knees",
+            "passed": true,
+            "evidence": "actual knee flexion L/R=57.84399/56.12844"
+        },
+        {
+            "name": "standing_ctrl_head_up_chest_forward",
+            "passed": true,
+            "evidence": "chest/head upright dots=0.8555845/0.9998927"
+        },
+        {
+            "name": "standing_ctrl_both_boots_supported",
+            "passed": true,
+            "evidence": "actual boot clearance L/R=-8.626282E-05/-9.49204E-06"
+        },
+        {
+            "name": "standing_ctrl_is_free_and_not_ground_escape",
+            "passed": true,
+            "evidence": "energy min=155.25 start=155.25 accepted=288/288 cooldown=0"
+        },
+        {
+            "name": "stance_free_hands_guard_forward",
+            "passed": true,
+            "evidence": "actual hand forward offset L/R=0.5468666/0.5476335; no mouse target or automatic grip"
+        },
+        {
+            "name": "ctrl_forward_stance_moves_supported",
+            "passed": true,
+            "evidence": "actual travel=0.6513091 nearest boot maximumgap=0.0001168549 stable stance=True stamina=155.25"
+        },
+        {
+            "name": "ctrl_lateral_stance_moves_supported",
+            "passed": true,
+            "evidence": "actual travel=0.6539123 nearest boot maximumgap=0.001713023 stable stance=True stamina=155.25"
+        },
+        {
+            "name": "stance_release_restores_standing",
+            "passed": true,
+            "evidence": "released hips=1.248549 cooldown=0"
+        },
+        {
+            "name": "standing_stance_available_when_exhausted",
+            "passed": true,
+            "evidence": "physical stance at starting stamina2 without a ground exhaustion timer"
+        },
+        {
+            "name": "lower_shot_cost_unchanged",
+            "passed": true,
+            "evidence": "same production Shot action cost12; no extra impulse"
+        },
+        {
+            "name": "shot_has_actual_lower_level_change",
+            "passed": true,
+            "evidence": "physical lowering exceeds f167 dedicated native drop.361m by1cm; standing/min hips=1.241844/0.8423443 minimum head above mat=1.30209 entry target reduced6cm with same final recovery"
+        },
+        {
+            "name": "stance_shot_stay_connected_no_auto_grab",
+            "passed": true,
+            "evidence": "max stance/shot joint gap=0.004999996 grips=0 registry=92"
+        },
+        {
+            "name": "sustained_scramble_never_script_releases_hold",
+            "passed": true,
+            "evidence": "1.2s of production input steps; real grip retained without displacement/overload"
+        },
+        {
+            "name": "scramble_has_no_timed_escape_immunity",
+            "passed": true,
+            "evidence": "no automatic release, immunity or charged velocity kick"
+        },
+        {
+            "name": "jitter_clicks_cannot_repeat_scramble",
+            "passed": true,
+            "evidence": "accepted=1/10 rapid presses; release recovery=0.3747826"
+        },
+        {
+            "name": "jitter_clicks_do_not_break_grip",
+            "passed": true,
+            "evidence": "prepared real grip survives repeated input edges"
+        },
+        {
+            "name": "holding_early_press_waits_for_recovery",
+            "passed": true,
+            "evidence": "early press is gated"
+        },
+        {
+            "name": "held_scramble_resumes_after_recovery",
+            "passed": true,
+            "evidence": "held key resumes after0.4s; no extra burst"
+        },
+        {
+            "name": "exhaustion_still_requires_1_2_seconds",
+            "passed": true,
+            "evidence": "remaining=1.2"
+        },
+        {
+            "name": "reset_clears_both_scramble_timers",
+            "passed": true,
+            "evidence": "new round restores control"
+        },
+        {
+            "name": "unstrained_physical_hold_still_survives",
+            "passed": true,
+            "evidence": "production grip spring/strain evaluated with coincident contact endpoints"
+        },
+        {
+            "name": "real_physical_overload_can_still_break_hold",
+            "passed": true,
+            "evidence": "real0.8m anchor separation breaks through strain, not a scramble key event"
+        },
+        {
+            "name": "scramble_patch_no_runtime_issues",
+            "passed": true,
+            "evidence": ""
+        },
+        {
+            "name": "menu_camera_inside_gym_ring_visible",
+            "passed": true,
+            "evidence": "camera=(7.50, 4.70, -8.70) ring viewport=(0.58, 0.45, 12.03) roof retained; screenshot requires visual review"
+        },
+        {
+            "name": "balanced_changes_render_settings",
+            "passed": true,
+            "evidence": "AA2 /18m shadows /lower light maps"
+        },
+        {
+            "name": "performance_changes_render_settings",
+            "passed": true,
+            "evidence": "AA/shadows/HDR off"
+        },
+        {
+            "name": "high_restores_authored_rendering",
+            "passed": true,
+            "evidence": "AA4 /28m authoredgym shadows /HDR"
+        },
+        {
+            "name": "graphics_preserves_assets_and_physics",
+            "passed": true,
+            "evidence": "registry=92 renderers=1276 physics step=0.004166667"
+        },
+        {
+            "name": "stance_menu_no_runtime_issues",
+            "passed": true,
+            "evidence": ""
+        },
+        {
+            "name": "connected_body_joints",
+            "passed": true,
+            "evidence": "missing frames=0 maximum physical anchor separation=0.0050 m"
+        }
+    ]
+}
