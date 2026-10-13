@@ -22,7 +22,7 @@ public static class GBAuditMomentum {
     }
     class ShotSample {public float approach,peakSpeed,displacement,balanceLoss,contactApproach,impactPressure,physicalImpulse;public int hands,impacts;public bool shooting;public string feedback;}
     class JumpSample {public float approach,peakSpeed,displacement,balanceLoss,physicalImpulse,impactApproach;public int impacts,hands;public bool airborne,funded;public string before="",after="";}
-    class SpinSample {public float angularSpeed,gripGain,gripDelay,spinAtGrip,transferImpulse;public int hands;}
+    class SpinSample {public float angularSpeed,gripGain,energyGain,gripDelay,spinAtGrip,transferImpulse,targetMass;public int hands;}
     static Vector3 Velocity(GBWrestler w){Vector3 momentum=Vector3.zero;float mass=0;foreach(var b in w.bodies){momentum+=b.linearVelocity*b.mass;mass+=b.mass;}return momentum/Mathf.Max(1,mass);}
     static float HorizontalSpeed(GBWrestler w){return Vector3.ProjectOnPlane(Velocity(w),Vector3.up).magnitude;}
     static float KineticEnergy(GBWrestler w){float energy=0;foreach(var body in w.bodies){Vector3 omega=Quaternion.Inverse(body.rotation*body.inertiaTensorRotation)*body.angularVelocity;energy+=.5f*(body.mass*body.linearVelocity.sqrMagnitude+Vector3.Dot(omega,Vector3.Scale(body.inertiaTensor,omega)));}return energy;}
@@ -57,7 +57,9 @@ public static class GBAuditMomentum {
         var spin=new SpinSample();yield return SpinGrab(app,integrity,directory,true,spin);
         check("hard_spin_is_physical_rotation",spin.angularSpeed>2f&&spin.angularSpeed>still.angularSpeed+1f,"standing/spinning root yaw peak="+still.angularSpeed.ToString("0.00")+"/"+spin.angularSpeed.ToString("0.00")+" rad/s from Rigidbody.angularVelocity");
         check("spin_manual_grips_naturally_acquired",still.hands>0&&spin.hands>0,"standing/spinning natural hands="+still.hands+"/"+spin.hands+" reach delay="+still.gripDelay.ToString("0.00")+"/"+spin.gripDelay.ToString("0.00")+" seconds; no Attach calls");
-        check("recent_spin_carries_grabbed_opponent",spin.gripGain>still.gripGain+.15f,"standing/spinning target horizontal speed gain during matched one-hand grip="+still.gripGain.ToString("0.00")+"/"+spin.gripGain.ToString("0.00")+" m/s; recent physical spin="+spin.spinAtGrip.ToString("0.00")+" Nms transfer="+spin.transferImpulse.ToString("0.00")+" Ns");
+        float freeResponse=spin.transferImpulse/Mathf.Max(1,spin.targetMass);
+        float freeEnergy=spin.transferImpulse*spin.transferImpulse/(2*Mathf.Max(1,spin.targetMass));
+        check("recent_spin_carries_grabbed_opponent",spin.transferImpulse>still.transferImpulse+5&&spin.gripGain>freeResponse*.5f&&spin.energyGain>freeEnergy*.5f,"standing/spin velocity change="+still.gripGain.ToString("0.000")+"/"+spin.gripGain.ToString("0.000")+" m/s; whole-body translational/rotational energy gain="+still.energyGain.ToString("0.00")+"/"+spin.energyGain.ToString("0.00")+" J; actual impulse="+still.transferImpulse.ToString("0.00")+"/"+spin.transferImpulse.ToString("0.00")+" Ns. Requires >5Ns additional earned transfer and measured motion/energy above half the free-impulse response. The constraint spring and mat friction also contribute: a catch need not have greater net speed than a differently loaded stationary catch.");
         Start(app);var a=app.Wrestlers[0];var b=app.Wrestlers[1];a.ResetTo(new Vector3(-.5f,.25f,-2));b.ResetTo(new Vector3(.5f,.25f,-2));yield return Observe(app,integrity,.8f);
         int repeatedAcquisitions=0,previousHands=0;float repeatEnd=Time.realtimeSinceStartup+18,start=Time.realtimeSinceStartup,repeatEnergy=0,repeatSpeed=0,peakAt=0,maxCom=0,maxHorizontalCom=0,comPeakAt=0,energyPeakAt=0,firstIntegral=0,lastIntegral=0,firstDuration=0,lastDuration=0,firstPeak=0,lastPeak=0,lastFrame=start;string peakPart="",comPeakWrestler="",energyPeakPositions="";Vector3 comPeakPosition=Vector3.zero,comPeakVelocity=Vector3.zero;bool withinRing=true;
         while(Time.realtimeSinceStartup<repeatEnd){
@@ -130,16 +132,17 @@ public static class GBAuditMomentum {
     }
 
     static IEnumerator SpinGrab(GBApp app,Integrity integrity,string directory,bool spinning,SpinSample sample){
-        Start(app);var a=app.Wrestlers[0];var b=app.Wrestlers[1];a.ResetTo(new Vector3(-.5f,.25f,-1));b.ResetTo(new Vector3(.5f,.25f,-1));yield return Observe(app,integrity,.8f);
+        Start(app);var a=app.Wrestlers[0];var b=app.Wrestlers[1];a.ResetTo(new Vector3(-.5f,.25f,-1));b.ResetTo(new Vector3(.5f,.25f,-1));yield return Observe(app,integrity,2);
+        foreach(var body in b.bodies)sample.targetMass+=body.mass;
         float spinStart=Time.realtimeSinceStartup,spinEnd=spinStart+.7f;
         while(Time.realtimeSinceStartup<spinEnd){
             float angle=spinning?(Time.realtimeSinceStartup-spinStart)/.7f*Mathf.PI*2:0;app.ScriptedInputs[0]=new GBInput{ax=Mathf.Cos(angle),az=Mathf.Sin(angle)};
             sample.angularSpeed=Mathf.Max(sample.angularSpeed,Mathf.Abs(a.Root.angularVelocity.y));integrity.Measure(app);yield return null;
         }
-        float beforeGripSpeed=HorizontalSpeed(b),reachStart=Time.realtimeSinceStartup,reachEnd=reachStart+2.6f;sample.spinAtGrip=a.RecentSpinMomentum;Aim(app,GBInput.Left);
-        while(Time.realtimeSinceStartup<reachEnd&&VictimGrips(a,b)==0){integrity.Measure(app);yield return null;}
+        Vector3 beforeGripVelocity=Velocity(b);float beforeEnergy=KineticEnergy(b),reachStart=Time.realtimeSinceStartup,reachEnd=reachStart+2.6f;sample.spinAtGrip=a.RecentSpinMomentum;Aim(app,GBInput.Left);
+        while(Time.realtimeSinceStartup<reachEnd&&VictimGrips(a,b)==0){beforeGripVelocity=Velocity(b);beforeEnergy=KineticEnergy(b);integrity.Measure(app);yield return null;}
         sample.hands=VictimGrips(a,b);sample.gripDelay=Time.realtimeSinceStartup-reachStart;sample.transferImpulse=a.LastGrabMomentumImpulse;float holdEnd=Time.realtimeSinceStartup+.2f;
-        while(Time.realtimeSinceStartup<holdEnd){sample.gripGain=Mathf.Max(sample.gripGain,HorizontalSpeed(b)-beforeGripSpeed);integrity.Measure(app);yield return null;}
+        while(Time.realtimeSinceStartup<holdEnd){sample.gripGain=Mathf.Max(sample.gripGain,Vector3.ProjectOnPlane(Velocity(b)-beforeGripVelocity,Vector3.up).magnitude);sample.energyGain=Mathf.Max(sample.energyGain,KineticEnergy(b)-beforeEnergy);integrity.Measure(app);yield return null;}
         app.Capture(Path.Combine(directory,"momentum-"+(spinning?"spin":"stationary")+"-grab-carry.png"));
     }
 }

@@ -24,7 +24,7 @@ public partial class GBWrestler {
     }
     public Vector3 ArmAimGoal(int h){
         Vector3 shoulder=ArmShoulder(h),delta=HandCenterGoal(h)-shoulder;
-        return shoulder+(delta.sqrMagnitude>.001f?delta.normalized:facing)*Mathf.Clamp(delta.magnitude,.20f,.837f);
+        return shoulder+(delta.sqrMagnitude>.001f?delta.normalized:facing)*Mathf.Clamp(delta.magnitude,.20f,.718f);
     }
     public bool ArmAimClamped(int h){return Vector3.Distance(ArmAimGoal(h),HandCenterGoal(h))>.035f;}
     public Vector3 ArmTarget(int h){
@@ -95,7 +95,7 @@ public partial class GBWrestler {
         int upper=h==0?3:6,fore=h==0?4:7,index=h==0?5:8;
         Vector3 shoulder=ArmShoulder(h),desired=reach??ArmTarget(h),delta=desired-shoulder;
         Vector3 direction=delta.sqrMagnitude>.001f?delta.normalized:facing;
-        const float upperLength=.427f,lowerLength=.42f;
+        const float upperLength=.323f,lowerLength=.41f;
         float distance=Mathf.Clamp(delta.magnitude,.20f,upperLength+lowerLength-.01f);
         Vector3 end=shoulder+direction*distance;
         bool covering=command.Has(GBInput.Pin)&&PinTarget;
@@ -146,8 +146,12 @@ public partial class GBWrestler {
             armBendPole[h]=(elbow-circle).normalized;
         }
         Vector3 upperDirection=(elbow-shoulder).normalized,lowerDirection=(end-elbow).normalized;
-        poses[upper]=facingRotation*Quaternion.FromToRotation(Vector3.down,Quaternion.Inverse(facingRotation)*upperDirection);
-        poses[fore]=poses[index]=facingRotation*Quaternion.FromToRotation(Vector3.down,Quaternion.Inverse(facingRotation)*lowerDirection);
+        // One shared elbow hinge plane keeps humerus/forearm rotation coherent.
+        // Independent shortest-arc fits could twist the elbow through the arm.
+        Vector3 hinge=Vector3.Cross(lowerDirection,upperDirection).normalized;
+        if(hinge.sqrMagnitude<.01f)hinge=side;
+        poses[upper]=Quaternion.LookRotation(Vector3.Cross(hinge,-upperDirection).normalized,-upperDirection);
+        poses[fore]=poses[index]=Quaternion.LookRotation(Vector3.Cross(hinge,-lowerDirection).normalized,-lowerDirection);
         Vector3 palmForward=Vector3.ProjectOnPlane(facing,lowerDirection);
         if(palmForward.sqrMagnitude>.001f){
             Quaternion relaxed=Quaternion.LookRotation(palmForward.normalized,-lowerDirection);

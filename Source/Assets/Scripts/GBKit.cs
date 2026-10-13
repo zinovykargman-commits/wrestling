@@ -13,10 +13,10 @@ using System.Runtime.InteropServices;
     public float x,z,ax,az,hx,hy,hz;
     public int flags,sequence;
     public double stamp;
-    // Bit 256 (retired tackle) is rejected along with Throw.
+    // Retired tackle (256), shove (1024), and Throw are rejected.
     // Throw is reserved solely so historical audits compile; no live input may
     // activate it. Throws now follow the player's actual arm/body movement.
-    public const int Left=1,Right=2,Sprint=4,Jump=8,Lift=16,Throw=32,Strike=64,Brace=128,Pin=512,Shove=1024,HandAim=2048,Sprawl=4096;
+    public const int Left=1,Right=2,Sprint=4,Jump=8,Lift=16,Throw=32,Strike=64,Brace=128,Pin=512,HandAim=2048,Sprawl=4096;
     public bool Has(int bit) { return (flags & bit)!=0; }
     public bool HasHandAim {get{return Has(HandAim);}}
     public Vector3 HandOffset {get{return Vector3.ClampMagnitude(new Vector3(hx,Mathf.Clamp(hy,-1.10f,1.25f),hz),1.35f);}}
@@ -24,7 +24,7 @@ using System.Runtime.InteropServices;
     public Vector3 Aim { get { var v=new Vector3(ax,0,az); return v.sqrMagnitude>.05f ? v.normalized:Vector3.forward; } }
     public GBInput Sanitize() {
         if(!Finite(x)||!Finite(z)||!Finite(ax)||!Finite(az)||!Finite(hx)||!Finite(hy)||!Finite(hz)||double.IsNaN(stamp)||double.IsInfinity(stamp))return default;
-        x=Mathf.Clamp(x,-1,1);z=Mathf.Clamp(z,-1,1);ax=Mathf.Clamp(ax,-1,1);az=Mathf.Clamp(az,-1,1);flags&=7903;
+        x=Mathf.Clamp(x,-1,1);z=Mathf.Clamp(z,-1,1);ax=Mathf.Clamp(ax,-1,1);az=Mathf.Clamp(az,-1,1);flags&=Left|Right|Sprint|Jump|Lift|Strike|Brace|Pin|HandAim|Sprawl;
         Vector3 hand=HasHandAim?HandOffset:Vector3.zero;hx=hand.x;hy=hand.y;hz=hand.z;
         return this;
     }
@@ -56,7 +56,6 @@ public static class GBPad {
         if((p.buttons&0x4000)!=0)i.flags|=GBInput.Strike;
         if(p.leftTrigger>90)i.flags|=GBInput.Brace;
         if((p.buttons&0x2)!=0)i.flags|=GBInput.Pin;
-        if((p.buttons&0x1)!=0)i.flags|=GBInput.Shove;
         return i;
     }
 }
@@ -104,6 +103,7 @@ public class GBSound:MonoBehaviour {
     public AudioSource source,ambience;
     public AudioClip wood,metal,cloth,hit,grip,win,wind,beat,cheer,whistle;
     public string LastPlayed {get;private set;}
+    public int WhistleCount {get;private set;}
     void Awake() {
         whistle=Whistle();
         source=gameObject.AddComponent<AudioSource>();source.spatialBlend=0; source.priority=64;
@@ -116,7 +116,7 @@ public class GBSound:MonoBehaviour {
         var c=AudioClip.Create(name,n,1,rate,false);c.SetData(v,0);return c;
     }
     AudioClip Whistle(){int rate=22050;float[] samples=new float[(int)(rate*.32f)];for(int n=0;n<samples.Length;n++){float t=(float)n/rate;float envelope=Mathf.Min(1,t/.015f)*Mathf.Clamp01((.32f-t)/.06f);samples[n]=envelope*(Mathf.Sin(2*Mathf.PI*2350*t+1.8f*Mathf.Sin(2*Mathf.PI*36*t))*.35f+Mathf.Sin(2*Mathf.PI*3100*t)*.12f);}var clip=AudioClip.Create("Referee whistle",samples.Length,1,rate,false);clip.SetData(samples,0);return clip;}
-    public void Play(string type,float strength=1) {LastPlayed=type;if(volume<=0)return;source.pitch=type=="whistle"?1:UnityEngine.Random.Range(.88f,1.1f);source.PlayOneShot(type=="whistle"?whistle:type=="wood"?wood:type=="metal"?metal:type=="cloth"?cloth:type=="grip"?grip:type=="win"?win:type=="crowd"?cheer:hit,Mathf.Clamp(strength,.12f,1)*volume);}
+    public void Play(string type,float strength=1) {LastPlayed=type;if(type=="whistle")WhistleCount++;if(volume<=0)return;source.pitch=type=="whistle"?1:UnityEngine.Random.Range(.88f,1.1f);source.PlayOneShot(type=="whistle"?whistle:type=="wood"?wood:type=="metal"?metal:type=="cloth"?cloth:type=="grip"?grip:type=="win"?win:type=="crowd"?cheer:hit,Mathf.Clamp(strength,.12f,1)*volume);}
     public void SetArena(int arena) {ambience.clip=arena==0?wind:beat;ambience.volume=volume*.16f;ambience.Play();}
     void Update(){ambience.volume=volume*.16f;}
 }

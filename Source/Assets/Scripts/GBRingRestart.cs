@@ -35,13 +35,23 @@ public partial class GBApp {
 
 public partial class GBWrestler {
     Quaternion[] restartPose;float restartPoseUntil,restartHipHeight;
+    static float RestartMatHeight(){
+        // Decorative primitive colliders can survive until deferred Destroy
+        // completes during ResetRound. Only the authored canvas defines height.
+        if(GBApp.I&&GBApp.I.Arena)foreach(var c in GBApp.I.Arena.GetComponentsInChildren<Collider>())
+            if(c.enabled&&c.gameObject.activeInHierarchy&&c.name=="ring mat")return c.bounds.max.y;
+        throw new System.InvalidOperationException("Ring restart requires the authored enabled ring mat collider.");
+    }
     public void PrepareBottomRestart(){
-        PrepareRestartPose(new Vector3(0,.72f,0),new float[]{90,65,35,-20,-65,0,-20,-65,0,0,90,0,0,90,0});
+        // The shortened arm chain reaches the mat with the upper arms down
+        // and a modest elbow bend. Shins and toes share an anatomical ankle
+        // angle, rather than starting inside the mat or beyond its joint stop.
+        PrepareRestartPose(new Vector3(0,RestartMatHeight()+.56f,0),new float[]{90,65,35,0,-35,0,0,-35,0,0,115,95,0,115,95});
     }
     public void PrepareTopRestart(){
         // Kneeling referee position: chest above and behind the hips, hands
         // poised outside the waist. The player must still earn manual grips.
-        PrepareRestartPose(new Vector3(0,.86f,-.70f),new float[]{0,30,0,-30,-50,0,-30,-50,0,0,90,0,0,90,0});
+        PrepareRestartPose(new Vector3(0,RestartMatHeight()+.60f,-.75f),new float[]{0,20,0,-50,-70,0,-50,-70,0,0,115,95,0,115,95});
     }
     void PrepareRestartPose(Vector3 at,float[] pitch){
         ResetTo(Vector3.zero);restartPose=new Quaternion[15];restartHipHeight=at.y;
@@ -55,6 +65,12 @@ public partial class GBWrestler {
         }
         foreach(var rb in bodies)rb.transform.SetPositionAndRotation(rb.position,rb.rotation);
         facing=Vector3.forward;restartPoseUntil=0;Physics.SyncTransforms();
+        // Initial placement is a connected reset pose. Translate the complete
+        // chain together only if its real colliders need canvas clearance.
+        float mat=RestartMatHeight(),lowest=float.PositiveInfinity;
+        foreach(var rb in bodies)foreach(var c in rb.GetComponents<Collider>())lowest=Mathf.Min(lowest,c.bounds.min.y);
+        float raise=Mathf.Max(0,mat+.002f-lowest);
+        if(raise>0){foreach(var rb in bodies){rb.position+=Vector3.up*raise;rb.transform.SetPositionAndRotation(rb.position,rb.rotation);}restartHipHeight+=raise;Physics.SyncTransforms();}
     }
     public void ReleaseRingRestart(){pressureUntil=Time.time+.75f;restartPoseUntil=Time.time+.75f;feetInitialized=false;}
     void ApplyBottomRestartPose(){

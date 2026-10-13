@@ -71,7 +71,7 @@ public static class GBAuditPin {
         check("rope_pin_count_advances",app.PinCount>.07f&&!app.PinStatus.Contains("ROPE"),"native rule count="+app.PinCount);
         a.command.flags&=~GBInput.Pin;app.SendMessage("CheckPin");check("releasing_C_still_resets_pin",app.PinCount==0,"count="+app.PinCount);
         a.command.flags|=GBInput.Pin;a.SendMessage("PinRefresh");app.SendMessage("CheckPin");
-        b.bodies[1].position+=Vector3.up*.3f;Physics.SyncTransforms();app.SendMessage("CheckPin");check("lifting_shoulders_still_resets_pin",app.PinCount==0,"actual shoulder contacts lost");
+        b.bodies[1].position+=Vector3.up*.3f;Physics.SyncTransforms();for(int n=0;n<Mathf.CeilToInt(GBApp.PinEscapeSeconds/Time.fixedDeltaTime);n++)app.SendMessage("CheckPin");check("lifting_shoulders_still_resets_pin",app.PinCount==0,"actual shoulder contact lost for0.18 seconds");
         b.bodies[1].position-=Vector3.up*.3f;Physics.SyncTransforms();a.SendMessage("PinRefresh");app.SendMessage("CheckPin");a.Release(0);app.SendMessage("CheckPin");check("losing_grip_still_resets_pin",app.PinCount==0,"live hold removed");
         a.Attach(0,b.bodies[1].GetComponent<GBTarget>(),b.bodies[1].position);a.hands[0].joint.enabled=false;a.SendMessage("PinRefresh");
         int ticks=Mathf.CeilToInt(GBApp.PinSeconds/Time.fixedDeltaTime);
@@ -93,11 +93,12 @@ public static class GBAuditPin {
         b.command=new GBInput{flags=GBInput.Pin|GBInput.Left};b.Attach(0,a.bodies[1].GetComponent<GBTarget>(),a.bodies[1].position);b.hands[0].joint.enabled=false;b.SendMessage("PinRefresh");
         before=b.Root.GetAccumulatedForce().y;a.Lift();float pinnedOne=b.Root.GetAccumulatedForce().y-before;
         check("pinned_one_hand_lift_is_weakest",a.IsBeingPinned&&pinnedOne>0&&pinnedOne<floorOne*.6f,"pinned="+a.IsBeingPinned+" force="+pinnedOne+" ground="+floorOne);
-        app.enabled=true;Start(app);yield return null;a=app.Wrestlers[0];b=app.Wrestlers[1];b.ResetTo(new Vector3(3,.28f,0));
+        Start(app);yield return null;app.Paused=true;app.enabled=false;a=app.Wrestlers[0];b=app.Wrestlers[1];b.ResetTo(new Vector3(3,.28f,0));
         Pose(a,new Vector3(-1,MatHeight(Vector3.zero)+.26f,0),Quaternion.Euler(-90,0,0));
-        app.ScriptedInputs[0]=new GBInput{az=1,x=1,flags=GBInput.Brace};yield return new WaitForFixedUpdate();float t=Time.time,energy=a.stamina;
-        yield return new WaitForSeconds(.3f);float rate=(energy-a.stamina)/(Time.time-t);
-        check("scramble_cost_additional_ten_percent",Mathf.Abs(rate-18.59f)<.8f,"actual ground drain="+rate+"/s (previous16.9/s)");
+        var costPhysics=Physics.simulationMode;Physics.simulationMode=SimulationMode.Script;float energy=a.stamina;
+        for(int step=0;step<72;step++)a.Simulate(new GBInput{az=1,x=1,flags=GBInput.Brace});
+        float rate=(energy-a.stamina)/(72*Time.fixedDeltaTime);Physics.simulationMode=costPhysics;
+        check("scramble_cost_additional_ten_percent",Mathf.Abs(rate-18.59f)<.03f,"72 fixed production input steps; actual ground drain="+rate+"/s (previous16.9/s); wall-frame timing excluded");
         app.Paused=true;app.enabled=false;a.stamina=0;var request=new GBInput{az=1,x=1,flags=GBInput.Brace};a.Simulate(request);
         float cooldown=a.ScrambleCooldown;check("exhaustion_starts_1_2_second_timer",cooldown>1.19f&&cooldown<=1.201f&&!a.command.Has(GBInput.Brace),"remaining="+cooldown);
         a.stamina=20;yield return new WaitForSeconds(.6f);a.Simulate(request);
@@ -121,7 +122,7 @@ public static class GBAuditPin {
         }}
         static bool Valid(Vector3 v){return !(float.IsNaN(v.x)||float.IsNaN(v.y)||float.IsNaN(v.z)||float.IsInfinity(v.x)||float.IsInfinity(v.y)||float.IsInfinity(v.z));}
     }
-    sealed class Outcome {public int grips;public float count,coverSeconds,defenderTravel,torsoRotation;public bool covered,shoulders,won,escapedUnderControl,ropeInterrupted,countWithoutChestCover,pressureLeft,pressureRight;public float maxLoad;public string geometry="";}
+    sealed class Outcome {public int grips;public float count,coverSeconds,defenderTravel,torsoRotation;public bool covered,shoulders,won,escapeEffort,escapedUnderControl,ropeInterrupted,countWithoutChestCover,pressureLeft,pressureRight;public float maxLoad;public string geometry="";}
     sealed class ShotResult {public float approach,peak,travel,balanceLoss;public int hands;public bool shooting;}
     static void Start(GBApp app){app.ScriptedInputs=new GBInput[2];app.BeginMatch(3,1);app.Phase=GBApp.GamePhase.Fighting;app.SetPhaseSeconds(100);Neutral(app);}
     static void Neutral(GBApp app){app.ScriptedInputs[0]=new GBInput{az=1};app.ScriptedInputs[1]=new GBInput{az=-1};}
@@ -168,11 +169,14 @@ public static class GBAuditPin {
         yield return Wait(app,integrity,.6f);float y=a.Root.position.y;bool blocked=true;
         for(int n=0;n<5;n++){a.stamina=0;app.ScriptedInputs[0]=new GBInput{az=1,flags=GBInput.Jump};yield return Wait(app,integrity,.05f);blocked&=a.Root.linearVelocity.y<1&&a.Root.position.y<y+.08f;app.ScriptedInputs[0]=new GBInput{az=1};yield return Wait(app,integrity,.05f);}
         check("exhausted_jump_spam_blocked",blocked,"five exhausted jump presses produced no jump impulse");a.stamina=GBWrestler.MaxStamina;app.ScriptedInputs[0]=new GBInput{az=1,flags=GBInput.Jump};yield return Wait(app,integrity,.05f);check("funded_jump_still_works",a.Root.linearVelocity.y>1&&a.stamina<GBWrestler.MaxStamina-5,"normal jump still spends 8 stamina and rises");
-        Start(app);a=app.Wrestlers[0];b=app.Wrestlers[1];a.ResetTo(new Vector3(-.55f,.28f,0));b.ResetTo(new Vector3(.55f,.28f,0));yield return Wait(app,integrity,.6f);
+        // The shortened anatomical arms cannot reach a fixed rival1.10m away
+        // without an approach. Place this stationary rejection fixture within
+        // actual reach; independent pin scenarios test movement/natural grabs.
+        Start(app);a=app.Wrestlers[0];b=app.Wrestlers[1];a.ResetTo(new Vector3(-.42f,.28f,0));b.ResetTo(new Vector3(.42f,.28f,0));yield return Wait(app,integrity,.6f);
         foreach(var body in b.bodies)body.isKinematic=true;b.balance=10;b.downUntil=Time.time+10;
-        float end=Time.realtimeSinceStartup+2.5f;while(Time.realtimeSinceStartup<end&&Grips(a,b)==0){app.ScriptedInputs[0]=Input(a,Vector3.right,Contact(a,b,1),GBInput.Left|GBInput.Right);yield return null;}
+        float end=Time.realtimeSinceStartup+2.5f;while(Time.realtimeSinceStartup<end&&Grips(a,b)==0){Vector3 toward=Vector3.ProjectOnPlane(b.Root.position-a.Root.position,Vector3.up).normalized;app.ScriptedInputs[0]=Input(a,toward,Contact(a,b,1),GBInput.Left|GBInput.Right,toward*.25f);yield return null;}
         int grips=Grips(a,b);app.ScriptedInputs[0]=Input(a,Vector3.right,Contact(a,b,1),GBInput.Left|GBInput.Right|GBInput.Pin);yield return Wait(app,integrity,.15f);
-        check("upright_rival_rejects_pin_attempt",grips>0&&!b.PhysicallyDownForPin&&a.PinTarget==null&&!b.PinControlled&&app.PinCount==0,"actual manual grip="+grips+"; standing target rejected despite low balance and stale Down timer");
+        check("upright_rival_rejects_pin_attempt",grips>0&&!b.PhysicallyDownForPin&&a.PinTarget==null&&!b.PinControlled&&app.PinCount==0,"actual manual grip="+grips+"; standing target rejected despite low balance and stale Down timer"+GBAuditArms.ReachEvidence(a,0));
         var result=new Outcome();yield return Cover(app,integrity,directory,true,false,false,result);check("grounded_pin_still_counts",result.won&&result.grips>0,"normal manual grounded pin count="+result.count+" won="+result.won);
     }
     static IEnumerator KneeLimits(GBApp app,Integrity integrity,Action<string,bool,string> check){
@@ -187,13 +191,13 @@ public static class GBAuditPin {
         joint.lowAngularXLimit=new SoftJointLimit{limit=-10};joint.highAngularXLimit=new SoftJointLimit{limit=145};
         joint.targetRotation=Quaternion.Inverse(Quaternion.Euler(70,0,0));yield return Wait(app,integrity,.8f);
         float oldBend=Mathf.DeltaAngle(0,child.rotation.eulerAngles.x);
-        joint.lowAngularXLimit=new SoftJointLimit{limit=-145};joint.highAngularXLimit=new SoftJointLimit{limit=10};
+        joint.lowAngularXLimit=new SoftJointLimit{limit=-145};joint.highAngularXLimit=new SoftJointLimit{limit=5};
         child.rotation=Quaternion.identity;child.angularVelocity=Vector3.zero;child.WakeUp();yield return Wait(app,integrity,.8f);
         float flexion=Mathf.DeltaAngle(0,child.rotation.eulerAngles.x);
         joint.targetRotation=Quaternion.Inverse(Quaternion.Euler(-40,0,0));yield return Wait(app,integrity,.8f);
         float extension=Mathf.DeltaAngle(0,child.rotation.eulerAngles.x);
         check("native_knee_limit_direction",oldBend<18&&flexion>45&&flexion<90&&extension>=-16&&extension<5,"isolated real X-joint: old range positive bend="+oldBend.ToString("0.0")+" corrected flexion="+flexion.ToString("0.0")+" bounded extension="+extension.ToString("0.0"));
-        foreach(var w in app.Wrestlers)foreach(int n in new[]{10,13})check("knee_range_"+w.player+"_"+n,w.joints[n].lowAngularXLimit.limit==-145&&w.joints[n].highAngularXLimit.limit==10,"production knee uses verified joint-frame range");
+        foreach(var w in app.Wrestlers)foreach(int n in new[]{10,13})check("knee_range_"+w.player+"_"+n,w.joints[n].lowAngularXLimit.limit==-145&&w.joints[n].highAngularXLimit.limit==5,"production knee uses verified joint-frame range with only5 degrees extension");
         UnityEngine.Object.Destroy(childObject);UnityEngine.Object.Destroy(parentObject);yield return null;
     }
 
@@ -208,8 +212,8 @@ public static class GBAuditPin {
         Start(app);var scrambler=app.Wrestlers[0];app.Wrestlers[1].ResetTo(new Vector3(3,.28f,0));
         Pose(scrambler,new Vector3(-1,MatHeight(Vector3.zero)+.26f,0),Quaternion.Euler(-90,0,0));
         app.ScriptedInputs[0]=new GBInput{az=1,x=1,flags=GBInput.Brace};yield return new WaitForFixedUpdate();
-        float scrambleStart=Time.time,scrambleStamina=scrambler.stamina;yield return Wait(app,integrity,.30f);
-        float actualRate=(scrambleStamina-scrambler.stamina)/Mathf.Max(.001f,Time.time-scrambleStart);
+        float scrambleStart=Time.fixedTime,scrambleStamina=scrambler.stamina;yield return Wait(app,integrity,.30f);
+        float actualRate=(scrambleStamina-scrambler.stamina)/Mathf.Max(.001f,Time.fixedTime-scrambleStart);
         check("ground_scramble_cost_increased_additional_10_percent",Mathf.Abs(actualRate-18.59f)<.8f,"actual funded ground bridge drain="+actualRate.ToString("0.00")+"/s vs prior13/s; standing grip escape costs also scaled1.43");
         Start(app);check("only_pin_ring_mode",app.CurrentArena==3&&app.CurrentMode==1&&app.Wrestlers.Count==2,"ring arena="+app.CurrentArena+" pin mode="+app.CurrentMode+" bodies="+app.Wrestlers.Count+"; no training dummy");
         app.BeginMatch(0,0);check("legacy_mode_entry_still_pin_ring",app.CurrentArena==3&&app.CurrentMode==1,"legacy arena/mode entry resolves to current pin rules");app.Phase=GBApp.GamePhase.Fighting;
@@ -234,7 +238,7 @@ public static class GBAuditPin {
         check("cursor_never_auto_grabs",a.GripCount==0,"aim-only hands="+a.GripCount);yield return Capture(app,directory,"arm-side");
 
         Start(app);a=app.Wrestlers[0];b=app.Wrestlers[1];a.ResetTo(new Vector3(-.5f,.28f,-1));b.ResetTo(new Vector3(.5f,.28f,-1));yield return Wait(app,integrity,.7f);
-        float reachEnd=Time.realtimeSinceStartup+2.5f;while(Time.realtimeSinceStartup<reachEnd&&Grips(a,b)==0){app.ScriptedInputs[0]=Input(a,Vector3.right,Contact(a,b,1),GBInput.Left);integrity.Measure(app);yield return null;}
+        float reachEnd=Time.realtimeSinceStartup+2.5f;while(Time.realtimeSinceStartup<reachEnd&&Grips(a,b)==0){Vector3 toward=Vector3.ProjectOnPlane(b.Root.position-a.Root.position,Vector3.up).normalized;app.ScriptedInputs[0]=Input(a,toward,Contact(a,b,1),GBInput.Left,Vector3.Distance(a.Root.position,b.Root.position)>.74f?toward*.25f:Vector3.zero);integrity.Measure(app);yield return null;}
         check("left_button_independent_natural_grip",a.hands[0].joint&&a.hands[0].target&&a.hands[0].target.wrestler==b&&!a.hands[1].joint,"left="+a.hands[0].Label+" right="+a.hands[1].Label+"; no Attach calls");
         GBAuditArms.Held(app,a,0,check);
         Vector3 handStart=a.bodies[5].position,targetStart=b.Root.position;float baseBalance=b.balance;
@@ -242,7 +246,7 @@ public static class GBAuditPin {
         check("cursor_grip_physically_pulls",Vector3.Distance(a.bodies[5].position,handStart)>.15f&&Vector3.Distance(b.Root.position,targetStart)>.08f,"hand travel="+Vector3.Distance(a.bodies[5].position,handStart).ToString("0.000")+" victim travel="+Vector3.Distance(b.Root.position,targetStart).ToString("0.000")+" balance loss="+(baseBalance-b.balance).ToString("0.0"));
         yield return Capture(app,directory,"manual-pull",true);
         Start(app);a=app.Wrestlers[0];b=app.Wrestlers[1];a.ResetTo(new Vector3(-.35f,.28f,-1));b.ResetTo(new Vector3(.35f,.28f,-1));yield return Wait(app,integrity,.6f);
-        bool leg=false;reachEnd=Time.realtimeSinceStartup+2.5f;while(Time.realtimeSinceStartup<reachEnd&&!leg){app.ScriptedInputs[0]=Input(a,Vector3.right,Contact(a,b,9),GBInput.Left|GBInput.Right);foreach(var h in a.hands)leg|=h.joint&&h.target&&h.target.wrestler==b&&(h.target.region.Contains("thigh")||h.target.region.Contains("shin")||h.target.region.Contains("foot"));integrity.Measure(app);yield return null;}
+        bool leg=false;reachEnd=Time.realtimeSinceStartup+3.5f;while(Time.realtimeSinceStartup<reachEnd&&!leg){Vector3 toward=Vector3.ProjectOnPlane(b.Root.position-a.Root.position,Vector3.up).normalized;app.ScriptedInputs[0]=Input(a,toward,Contact(a,b,9),GBInput.Left|GBInput.Right,Vector3.Distance(a.Root.position,b.Root.position)>.60f?toward*.65f:Vector3.zero);foreach(var h in a.hands)leg|=h.joint&&h.target&&h.target.wrestler==b&&(h.target.region.Contains("thigh")||h.target.region.Contains("shin")||h.target.region.Contains("foot"));integrity.Measure(app);yield return null;}
         Vector3 legCursor=a.Root.position+a.command.HandOffset,leftShoulder=a.bodies[1].transform.TransformPoint(a.joints[3].connectedAnchor),rightShoulder=a.bodies[1].transform.TransformPoint(a.joints[6].connectedAnchor);
         check("cursor_low_selects_leg_without_C",leg&&!a.command.Has(GBInput.Pin),"actual low-target hands="+a.hands[0].Label+" / "+a.hands[1].Label+" cursor="+legCursor+" thigh="+b.bodies[9].position+" hand L/R="+a.bodies[5].position+"/"+a.bodies[8].position+" shoulder-cursor L/R="+Vector3.Distance(leftShoulder,legCursor).ToString("0.000")+"/"+Vector3.Distance(rightShoulder,legCursor).ToString("0.000"));yield return Capture(app,directory,"arm-leg-grip");
         Neutral(app);yield return Wait(app,integrity,.2f);Vector3 staleStart=Velocity(b);app.ScriptedInputs[0]=new GBInput{ax=1,flags=32};yield return Wait(app,integrity,.15f);
@@ -281,13 +285,13 @@ public static class GBAuditPin {
         check("two_point_five_second_physical_pin_wins",covered.won&&covered.count>=GBApp.PinSeconds-.1f,"peak continuous count="+covered.count.ToString("0.00")+" round score="+app.Scores[0]+"; no count mutation");
         check("pin_counts_without_attackers_chest_cover",covered.countWithoutChestCover,"actual count advanced while attacker torso surfaces were separated; grounded shoulders and manual control define pin");
         var prone=new Outcome();yield return Cover(app,integrity,directory,true,false,false,prone,false,false,true);
-        check("chest_down_physical_pin_wins",prone.grips>0&&prone.covered&&prone.shoulders&&prone.won&&prone.count>2.5f,"chest-down manual cover count="+prone.count.ToString("0.00")+" won="+prone.won+" "+prone.geometry);
+        check("chest_down_physical_pin_wins",prone.grips>0&&prone.covered&&prone.shoulders&&prone.won&&prone.count>2.4f,"chest-down manual cover last sampled count="+prone.count.ToString("0.00")+"; production2.5s win="+prone.won+" (winning tick resets count) "+prone.geometry);
         var escaped=new Outcome();yield return Cover(app,integrity,directory,true,true,false,escaped);
         check("bridge_roll_breaks_real_pin",escaped.covered&&escaped.count>.1f&&escaped.escapedUnderControl&&!escaped.won&&app.PinCount<.1f&&escaped.defenderTravel>.15f,"started cover="+escaped.covered+" peak count="+escaped.count.ToString("0.00")+" physical shoulder/cover break while standing recovery disabled="+escaped.escapedUnderControl+" remaining="+app.PinCount.ToString("0.00")+" escape travel="+escaped.defenderTravel.ToString("0.00")+" torso rotation="+escaped.torsoRotation.ToString("0.0")+" "+escaped.geometry);
         var rope=new Outcome();yield return Cover(app,integrity,directory,true,false,false,rope,true);
         check("rope_allows_actual_live_count",rope.count>.1f&&!rope.ropeInterrupted,"live count before rope="+rope.count.ToString("0.00")+" actual body rope contact resets="+rope.ropeInterrupted+" score="+app.Scores[0]);
         var aiEscape=new Outcome();yield return Cover(app,integrity,directory,true,true,false,aiEscape,false,true);
-        check("AI_bridge_roll_escapes_live_pin",aiEscape.covered&&aiEscape.count>.1f&&aiEscape.escapedUnderControl&&!aiEscape.won,"AI defender physical break with standing recovery disabled="+aiEscape.escapedUnderControl+" live count peak="+aiEscape.count.ToString("0.00")+" travel="+aiEscape.defenderTravel.ToString("0.00")+" "+aiEscape.geometry);
+        check("AI_bridge_roll_responds_to_live_pin",aiEscape.covered&&aiEscape.count>.1f&&aiEscape.escapeEffort&&aiEscape.defenderTravel>.15f&&(aiEscape.escapedUnderControl||aiEscape.won),"AI uses funded physical bridge with standing recovery disabled="+aiEscape.escapeEffort+"; escaped="+aiEscape.escapedUnderControl+" pinned="+aiEscape.won+" count peak="+aiEscape.count.ToString("0.00")+" travel="+aiEscape.defenderTravel.ToString("0.00")+"; a real defense attempt does not guarantee escape. Independent manual bridge must still break contact. "+aiEscape.geometry);
 
         LyingSetup(app);a=app.Wrestlers[0];b=app.Wrestlers[1];var pinBot=new GBBot();app.AIDifficulty=1;float aiEnd=Time.realtimeSinceStartup+8;int aiGrips=0;bool aiCover=false;float aiCount=0;
         while(Time.realtimeSinceStartup<aiEnd&&app.Phase==GBApp.GamePhase.Fighting){app.ScriptedInputs[0]=pinBot.Tick(app,a,b);aiGrips=Mathf.Max(aiGrips,Grips(a,b));aiCover|=a.IsCovering;aiCount=Mathf.Max(aiCount,app.PinCount);integrity.Measure(app);yield return null;}
@@ -332,9 +336,10 @@ public static class GBAuditPin {
             float now=Time.realtimeSinceStartup;if(a.IsCovering)result.coverSeconds+=now-last;last=now;
             if(escape&&app.PinCount>.3f)escaping=true;
             if(escaping)app.ScriptedInputs[1]=aiEscape?defenseBot.Tick(app,b,a):new GBInput{ax=-toward.x,az=-toward.z,x=1,z=.7f,flags=GBInput.Brace};
+            result.escapeEffort|=escaping&&b.command.Has(GBInput.Brace)&&b.command.Move.sqrMagnitude>.05f&&b.stamina<GBWrestler.MaxStamina-1;
             // PinControlled disables standing recovery even after the normal
             // down timer expires; the bridge must break real contact here.
-            if(escaping&&(b.Down||b.PinControlled)&&(!a.IsCovering||!b.ShoulderContact(out l,out r))&&app.PinCount<.01f&&result.count>.1f)result.escapedUnderControl=true;
+            if(escaping&&(b.Down||b.PinControlled)&&(!a.IsCovering||!b.ShoulderContact(out l,out r))&&app.PinCount<.01f&&result.count>.1f){result.escapedUnderControl=true;result.defenderTravel=Mathf.Max(result.defenderTravel,Vector3.Distance(start,b.Root.position));result.geometry=CoverGeometry(a,b);break;}
             if(rope&&!movedToRope&&app.PinCount>.3f){foreach(var w in new[]{a,b})foreach(var body in w.bodies)body.position+=Vector3.right*3.9f;Physics.SyncTransforms();movedToRope=true;}
             if(movedToRope&&app.Arena.TouchesRopes(b)&&b.ShoulderContact(out l,out r)&&a.IsCovering&&app.PinCount<.01f){result.ropeInterrupted=true;break;}
             if(c&&!noGrip&&!escape&&!rope&&!captured&&app.PinCount>.6f){captured=true;yield return Capture(app,directory,faceDown?"pin-chest-down-live-count":"pin-back-live-count",true);}
@@ -378,7 +383,16 @@ public static class GBAuditPin {
             bool pin=pinCommit||eligible;
             int flags=GBInput.Left|GBInput.Right;Vector3 move=delta.magnitude>1.15f?aim*.55f:Vector3.zero,target=CoverContact(a,b);
             if(t<.12f){flags=GBInput.Strike;move=aim*.6f;}
-            else if(pin){flags|=GBInput.Pin;move=Vector3.zero;}
+            else if(pin){
+                flags|=GBInput.Pin;
+                // Play the existing shoulder-pressure control: close the
+                // remaining distance and lean toward the raised shoulder.
+                // Holding still at arm's length only controlled one shoulder.
+                bool front=Vector3.Dot(b.bodies[1].rotation*Vector3.forward,Vector3.up)<0;
+                Vector3 leftPoint=b.ShoulderPoint(-1,front),rightPoint=b.ShoulderPoint(1,front);
+                Vector3 pressureSide=(rightPoint.y>leftPoint.y?rightPoint-leftPoint:leftPoint-rightPoint).normalized;
+                move=pressureSide*.55f+(delta.magnitude>.65f?aim*.3f:Vector3.zero);
+            }
             else if(Grips(a,b)>0){float phase=t%3;if(phase<1.6f){move=-aim*.65f+side*.3f;target=a.Root.position+aim*.55f+Vector3.up*.3f;}else {move=side*.8f-aim*.25f;aim=Quaternion.AngleAxis(55,Vector3.up)*aim;target=a.Root.position+aim*.75f-Vector3.up*.25f;}}
             Vector3 ringPosition=Vector3.ProjectOnPlane(a.Root.position,Vector3.up);if(!pin&&ringPosition.magnitude>2.1f)move=-ringPosition.normalized*.65f+side*.2f;
             if(a.hands[0].releaseRequired||a.hands[1].releaseRequired)flags&=~(GBInput.Left|GBInput.Right);

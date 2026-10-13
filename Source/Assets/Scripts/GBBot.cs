@@ -127,7 +127,6 @@ public class GBBot {
                     }
                 }
                 else{
-                    bool rivalBracing=rival.command.Has(GBInput.Brace)&&rival.stamina>16;
                     // Pull, physically rotate, then drive the held limbs down.
                     // No canned throw command or direct physics shortcut.
                     float windup=difficulty==0?.85f:difficulty==1?.5f:.35f;
@@ -135,12 +134,6 @@ public class GBBot {
                     if(gripAge<windup){move=-aim*.45f;target=me.Root.position+aim*.5f+Vector3.up*.35f;Intent="PULLING OFF BALANCE";}
                     else if(phase<1.25f){move=side*.65f-aim*.25f;aim=Quaternion.AngleAxis((me.player==0?1:-1)*(difficulty==0?25:60),Vector3.up)*aim;target=me.Root.position+aim*.7f+Vector3.up*(legAttack?.2f:.7f);if(me.stamina>35)bits|=GBInput.Lift;Intent="PIVOTING / LIFTING";}
                     else {move=aim*.55f+side*.25f;target=me.Root.position+aim*.9f-Vector3.up*.35f;Intent="TURNING / DRIVING DOWN";}
-                    // Shove is X while gripping. Keep a full decision with X released
-                    // between attempts so the input edge can fire again.
-                    if(rivalBracing&&gripAge>windup&&Time.time>=strikeAt&&difficulty>0){
-                        bits|=GBInput.Shove;strikeAt=Time.time+(difficulty==2?.95f:1.35f);
-                        Attacks++;Intent="SHOVING";
-                    }
                 }
             }else{
                 gripSince=-1;

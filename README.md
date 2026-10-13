@@ -20,7 +20,6 @@ Extract GRIP_BREAK-Windows.zip and open **PLAY.cmd**. Only **Pin Wrestling** in 
 | Forward wrestling shot | Q, then manually grab | X |
 | Sprawl | Hold E; release to recover | R3 |
 | Lift | Hold R | RT |
-| Shove | X | D-pad up |
 | Sprint | Shift | L3 |
 | Jump | Space | A |
 | Controls / pause / fullscreen | F1 / Escape / F11 | Keyboard utility keys |
@@ -59,7 +58,7 @@ Walking uses alternating physical foot targets and coordinated thigh/knee motors
 
 Current pin rule: the grounded wrestler may be chest-down or back-down, with both actual shoulders on the mat and a live nearby controlling grip while C is held. The attacker does not need to place their chest over the rival. Multiplayer omits the mat motivational slogan and bottom coaching prompt.
 
-Tackle has been removed from keyboard/controller bindings, control legends, AI decisions and physics. The retired network input bit is rejected. Windows 0.4.7 retains protocol12. Mac updates are paused at0.4.5; its older countdown display/audio remain unchanged.
+Tackle has been removed from keyboard/controller bindings, control legends, AI decisions and physics. The retired network input bit is rejected. Windows0.4.8 retains protocol12. Mac updates are paused at0.4.5; its older countdown display/audio remain unchanged.
 Jump requires 8 stamina (climb 16) and is unavailable while under pin control. C requires a physically low, lying opponent before pin control; low balance or a Down timer while upright is insufficient. Ctrl + movement still bridges/rolls.
 
 
@@ -77,3 +76,13 @@ Single-grip pin control is stronger in 0.4.0 so a live one-hand hold can settle 
 0.4.6: offender-bottom ring-out restarts, 1.5-second 3/2/1 and referee whistle. Ordinary match starts remain three seconds. Mac source/builds are unchanged.
 
 0.4.7: woven printed canvas, soft neutral lighting, padded corners and cylindrical rope covers, stitched apron, windows, benches, club banners, lockers, dumbbells and training bags. Decorations are visual-only; physical ropes and collision geometry are preserved. Top starts kneeling in the referee position, rather than standing behind bottom. Both remain low briefly after the whistle, with normal manual grips and physical control. Mac updates remain paused.
+
+0.4.8: rebuilt gym surfaces, ceiling, daylight and detailed equipment. Short shoulder twitches pause earned pin progress for up to0.18s; sustained physical escapes reset it. No pin progress during missing contact. Ctrl taps postpone free stamina recovery0.8s; active live pin control blocks regeneration. Rested19/s returns after control ends. Capacity, lifting/gripping and scramble costs unchanged. The realistic models were subsequently approved for live installation. Mac updates stay paused at0.4.5.
+
+The owner subsequently approved the realistic wrestlers for this update. Continuous anatomy/fitted clothes now follow the unchanged15 physical regions with licensed skin/eye/short-hair assets, separated brows, straighter legs, matte boots and attached laces. Chest/biceps are slightly fuller. The gym stations have clear space around the rack/table and benches. Walking takes useful alternating physical strides; Q changes level, enters with a lead knee/foot, brings the trailing foot up and recovers upward. Grips remain manual. Mac stays paused at0.4.5.
+
+Final0.4.8 appearance revision: slimmer thighs and smooth calf contours, closer straight hip/knee/ankle stance, deeper chest, proper elbow hinge routing, newly fitted singlets with curved arm openings/high backs, shoe soles/laces locked to feet and flexible ankle collars. Normal movement uses a supported athletic stance; upright soles align with the mat. X shove is removed entirely from keyboard/controller/AI/physics and rejected in network input.
+
+Final refinement: full upper/lower pectoral geometry, slightly shorter torso and narrower clavicles, straighter tank straps, improved sideways shuffle, approximately15% firmer limb motors and anatomical one-way elbow/knee extension limits. All nonadjacent limb/torso/opposite-limb collisions remain enabled; only overlapping adjacent joint pairs are excluded.
+
+Ankles use25-degree dorsiflexion/55-degree plantarflexion stops and20-degree side/twist limits. Walking and shots roll onto the forefoot with its actual toe supported. Continuous rounded rope skins smooth drawing only; all48 physical rope segments and their contacts/grips remain. A real spin catch briefly yields an unbraced rival's footing for0.16s without adding a second impulse or free knockdown. Bracing/sprawling retains support. Overhead shoulder skin deformation is deferred to the next update as requested; see KNOWN_ISSUES.md.

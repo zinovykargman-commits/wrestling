@@ -30,9 +30,6 @@ public partial class GBAudit {
         Check("leg_selection_natural",leg,"C modifies selection: "+a.hands[0].Label+" / "+a.hands[1].Label);
         app.Capture(Path.Combine(directory,"leg-grab.png"));
         Neutral();CloseSetup();yield return Wait(.8f);app.ScriptedInputs[0]=new GBInput{ax=1,flags=3};yield return Wait(1.5f);
-        Vector3 shoveBefore=b.Root.position;app.ScriptedInputs[0]=new GBInput{ax=1,flags=3|GBInput.Shove};yield return Wait(.4f);
-        Check("shove_creates_space",a.GripCount==0&&b.Root.position.x>shoveBefore.x+.12f,"release="+a.GripCount+" displacement="+(b.Root.position.x-shoveBefore.x));
-        Neutral();CloseSetup();yield return Wait(.8f);app.ScriptedInputs[0]=new GBInput{ax=1,flags=3};yield return Wait(1.5f);
         Check("escape_fixture_acquired",a.GripCount>0,"natural grab before struggle");
         app.ScriptedInputs[1]=new GBInput{x=1,ax=-1,flags=GBInput.Brace};yield return Wait(.85f);
         Check("escape_releases_and_protects",a.GripCount==0&&b.EscapeUntil>Time.time,"attacker hands="+a.GripCount+" escape remaining="+(b.EscapeUntil-Time.time));

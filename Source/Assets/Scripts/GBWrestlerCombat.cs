@@ -3,9 +3,19 @@ using System.Collections.Generic;
 
 public partial class GBWrestler {
     string actionFeedback="",remoteFeedback="";float feedbackUntil,remoteStrain,feedbackPriorityUntil;bool remoteLegs;
-    float shoveUntil,shotUntil,shotAt,lastLiftCharge,lastLiftAt=-10;int combatFlags;bool shotImpactDone;Vector3 shotDirection=Vector3.forward;
+    float shotUntil,shotAt,shotStarted,lastLiftCharge,lastLiftAt=-10;int shotLeadFoot;bool shotImpactDone,shotLaunchPending;Vector3 shotDirection=Vector3.forward;
     public bool Shooting {get{return Time.time<shotUntil&&!Down;}}
     public Vector3 ShotDirection {get{return shotDirection;}}
+    bool ShotDriving {get{return Shooting&&Time.time-shotStarted>=.10f;}}
+    void AdvanceShotEntry(){
+        if(!shotLaunchPending)return;
+        if(!Shooting){shotLaunchPending=false;return;}
+        if(!ShotDriving)return;
+        shotLaunchPending=false;
+        // Change level before penetration. Deliver the existing paid drive
+        // exactly once after the hips start lowering, never add another boost.
+        foreach(var part in bodies)part.AddForce(shotDirection*2.8f+Vector3.down*.15f,ForceMode.VelocityChange);
+    }
     readonly LineRenderer[] targetRings=new LineRenderer[2];
     bool LegTargeting {get{return GBApp.I.CurrentMode!=1&&command.Has(GBInput.Pin);}}
     public string TargetMode {get{return GBApp.I.CurrentMode==1?"Cursor / body":(GBApp.I.Authority?LegTargeting:remoteLegs)?"Legs":"Upper body";}}
@@ -14,16 +24,21 @@ public partial class GBWrestler {
     public bool HeldByOpponent {get{foreach(var wrestler in GBApp.I.Wrestlers)if(wrestler!=this)foreach(var hand in wrestler.hands)if(hand!=null&&hand.joint&&hand.target&&hand.target.wrestler==this)return true;return false;}}
     public void ApplyCombatSnapshot(string feedback,float strain,bool legs){remoteFeedback=feedback??"";remoteStrain=Mathf.Clamp01(strain);remoteLegs=legs;feedbackUntil=Time.time+.5f;}
     void Feedback(string text,float duration=.8f){if(duration<=.4f&&Time.time<feedbackPriorityUntil)return;actionFeedback=text;feedbackUntil=Time.time+duration;if(duration>=.5f)feedbackPriorityUntil=Time.time+duration;}
-    float scrambleUntil,scrambleRepressAt;bool scrambleExhausted,scrambleInputHeld,scrambleUsed;
+    float scrambleUntil,scrambleRepressAt,scrambleRegenAt;bool scrambleExhausted,scrambleInputHeld,scrambleUsed;
     public const float ScrambleRepressSeconds=.4f;
+    public const float ScrambleRegenDelay=.8f;
     void GateScrambleInput(bool requested){
         bool held=command.Has(GBInput.Brace);
+        // Read raw defensive input before cooldown masking. A blocked press
+        // is still an escape attempt, never a free regeneration interval.
+        if(requested)scrambleRegenAt=Time.time+ScrambleRegenDelay;
         if(!held&&scrambleInputHeld&&scrambleUsed)scrambleRepressAt=Mathf.Max(scrambleRepressAt,Time.time+ScrambleRepressSeconds);
         scrambleInputHeld=held;
         if(!held)scrambleUsed=false;else scrambleUsed|=requested;
     }
     public float ScrambleCooldown {get{return Mathf.Max(0,Mathf.Max(scrambleUntil,scrambleRepressAt)-Time.time);}}
     public bool ScrambleReady {get{return Time.time>=scrambleUntil&&Time.time>=scrambleRepressAt&&stamina>=4;}}
+    public bool EscapeRecoveryBlocked {get{return Time.time<scrambleRegenAt||PinControlled||IsBeingPinned;}}
     void UpdateScrambleRecovery(bool requested){
         if(Time.time>=scrambleUntil&&stamina>=4)scrambleExhausted=false;
         if(requested&&stamina<4&&!scrambleExhausted){scrambleUntil=Time.time+1.2f;scrambleExhausted=true;}
@@ -35,7 +50,7 @@ public partial class GBWrestler {
         if(PhysicallyDownForPin||Down)power*=.55f;
         return power;
     }
-    void CombatReset(){scrambleUntil=scrambleRepressAt=0;scrambleExhausted=scrambleInputHeld=scrambleUsed=false;shoveUntil=shotUntil=shotAt=lastLiftCharge=0;lastLiftAt=-10;combatFlags=0;shotImpactDone=false;shotDirection=Vector3.forward;actionFeedback=remoteFeedback="";feedbackUntil=remoteStrain=feedbackPriorityUntil=0;remoteLegs=false;MomentumReset();for(int h=0;h<2;h++)if(targetRings[h])targetRings[h].enabled=false;}
+    void CombatReset(){scrambleUntil=scrambleRepressAt=scrambleRegenAt=0;scrambleExhausted=scrambleInputHeld=scrambleUsed=false;shotUntil=shotAt=lastLiftCharge=0;lastLiftAt=-10;shotImpactDone=shotLaunchPending=false;shotDirection=Vector3.forward;actionFeedback=remoteFeedback="";feedbackUntil=remoteStrain=feedbackPriorityUntil=0;remoteLegs=false;MomentumReset();for(int h=0;h<2;h++)if(targetRings[h])targetRings[h].enabled=false;}
 
     void ReachLedge(int h,Vector3 point){
         int upper=h==0?3:6,fore=h==0?4:7,index=h==0?5:8;
@@ -113,13 +128,11 @@ public partial class GBWrestler {
 
     void CombatTick(float dt) {
         MomentumTick(dt);
-        int edges=command.flags&~combatFlags;combatFlags=command.flags;
-        if((edges&GBInput.Shove)!=0&&!Down&&Time.time>=shoveUntil)Shove();
         bool escaping=ScrambleReady&&HeldByOpponent&&command.Has(GBInput.Brace)&&command.Move.sqrMagnitude>.08f&&stamina>8&&!Down;
         // Scrambling works against the real hold. It never releases the
         // opponent's hands or awards a timed escape/velocity impulse.
         if(escaping){stamina=Mathf.Max(0,stamina-dt*5*ScrambleStaminaMultiplier);Feedback("Work out of the hold - brace and move",.2f);}
-        if(Down||GripCount==0||command.Has(GBInput.Lift)||Time.time<shoveUntil||stamina<6)return;
+        if(Down||GripCount==0||command.Has(GBInput.Lift)||stamina<6)return;
         float backward=Mathf.Max(0,-Vector3.Dot(command.Move,facing));Vector3 side=Vector3.Cross(Vector3.up,facing);float lateral=Vector3.Dot(command.Move,side);
         if(backward<.15f&&Mathf.Abs(lateral)<.2f)return;var affected=new HashSet<GBWrestler>();
         foreach(var hand in hands){
@@ -167,19 +180,14 @@ public partial class GBWrestler {
         if(Time.time<shotAt){Feedback("Shot recovering - reposition",.3f);return;}
         if(stamina<12){Feedback("Exhausted - shot needs stamina");return;}
         if(Down||hanging||Sprawling||Time.time<pressureUntil||!Physics.Raycast(Root.position+Vector3.up*.1f,Vector3.down,1.8f,1,QueryTriggerInteraction.Ignore)){Feedback(Sprawling?"Release sprawl before shooting":"Plant your feet before shooting",.5f);return;}
-        shotDirection=facing.normalized;shotUntil=Time.time+.58f;shotAt=Time.time+.9f;shotImpactDone=false;LastShotApproachSpeed=0;stamina=Mathf.Max(0,stamina-12);
+        shotDirection=facing.normalized;shotStarted=Time.time;shotUntil=Time.time+.78f;shotAt=Time.time+.9f;shotImpactDone=false;LastShotApproachSpeed=0;stamina=Mathf.Max(0,stamina-12);
+        // Enter on the foot that is already ahead. The rear leg follows with
+        // real joint motors; the shot never swaps or teleports the limbs.
+        shotLeadFoot=Vector3.Dot(bodies[11].position-bodies[14].position,shotDirection)>=0?0:1;
+        nextStep=shotLeadFoot;
         BeginShotMomentum();
-        foreach(var part in bodies)part.AddForce(shotDirection*2.8f+Vector3.down*.15f,ForceMode.VelocityChange);
+        shotLaunchPending=true;
         Feedback("Forward shot - grab manually to follow through",.7f);
-    }
-    public void Shove(){
-        if(GripCount==0){Feedback("Shove needs a manual grip - grab first");return;}
-        if(stamina<10){Feedback("Exhausted - cannot shove");return;}var affected=new HashSet<GBWrestler>();
-        for(int h=0;h<2;h++){var target=hands[h].target;if(target&&target.wrestler&&affected.Add(target.wrestler)){
-            var victim=target.wrestler;bool braced=victim.command.Has(GBInput.Brace)&&victim.grounded&&victim.stamina>8;
-            float leverage=AttackLeverage(victim);foreach(var part in victim.bodies)part.AddForce((facing*(braced?.65f:1.9f)+Vector3.up*.18f)*leverage,ForceMode.VelocityChange);victim.Knock((braced?8:22)*leverage,.32f);victim.EscapeUntil=Mathf.Max(victim.EscapeUntil,Time.time+.32f);
-        }else if(target&&!target.wrestler&&!target.Body.isKinematic)target.Body.AddForce(facing*1.9f,ForceMode.VelocityChange);Release(h);hands[h].releaseRequired=true;}
-        stamina=Mathf.Max(0,stamina-10);shoveUntil=Time.time+.4f;Feedback("Shoved - space to reposition",.8f);GBApp.I.Sfx.Play("hit",.5f);
     }
     public void Contact(float speed,float impulse) {if(Time.time-lastImpact<.3f||speed<GBApp.I.Tuning.impactThreshold)return;lastImpact=Time.time;Knock(Mathf.Clamp((speed-GBApp.I.Tuning.impactThreshold)*6+impulse*.01f,5,58),speed>8?.7f:.35f);}
     public void Knock(float damage,float duration) {

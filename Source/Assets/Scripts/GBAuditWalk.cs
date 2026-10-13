@@ -10,7 +10,7 @@ public static class GBAuditWalk {
         a.ResetTo(new Vector3(-1.6f,.28f,-1.6f));b.ResetTo(new Vector3(1.6f,.28f,0));
         app.ScriptedInputs[0]=new GBInput{az=1};app.ScriptedInputs[1]=new GBInput{az=-1};yield return new WaitForSeconds(1);
         Vector3 start=a.Root.position;float gap=0,knee=0,lift=0;bool left=false,right=false,upright=true;int frames=0;
-        float end=Time.time+3;app.ScriptedInputs[0]=new GBInput{az=1,z=.30f};
+        float end=Time.time+3;app.ScriptedInputs[0]=new GBInput{az=1,z=.55f};
         while(Time.time<end){
             float difference=a.bodies[11].position.y-a.bodies[14].position.y;
             lift=Mathf.Max(lift,Mathf.Abs(difference));left|=difference>.045f;right|=difference<-.045f;

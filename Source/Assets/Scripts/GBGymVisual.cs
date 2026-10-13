@@ -2,8 +2,8 @@ using UnityEngine;
 using System.Collections.Generic;
 
 // Scenery and skins only: the existing registered physical world is unchanged.
-public static class GBGymVisual {
-    static Material canvas,rubber,cloth,leather,ropeWhite,ropeOrange,paint,oak,metal,light;
+public static partial class GBGymVisual {
+    static Material canvas,rubber,cloth,leather,ropeWhite,ropeOrange,paint,oak,metal,light,concrete;
     static readonly Dictionary<string,Mesh> rounded=new Dictionary<string,Mesh>();
     public static void Apply(GBArena arena){
         Materials();var root=new GameObject("Gym visual details");root.transform.SetParent(arena.transform,false);var p=root.transform;
@@ -17,20 +17,21 @@ public static class GBGymVisual {
             }
         }
         foreach(var rope in arena.ropes){
-            rope.GetComponent<Renderer>().enabled=false;bool x=rope.GetComponent<BoxCollider>().size.x>1;Vector3 axis=x?Vector3.right:Vector3.forward;
-            GBArt.Cylinder(rope,"Braided rope cover",-axis*1.11f,axis*1.11f,.035f,rope.position.y>.8f&&rope.position.y<1.1f?ropeOrange:ropeWhite);
+            rope.GetComponent<Renderer>().enabled=false;
         }
+        root.AddComponent<GBRopeVisual>().Initialize(arena,ropeWhite,ropeOrange);
         foreach(var renderer in arena.GetComponentsInChildren<Renderer>()){
             if(renderer.name=="Corner pad"||renderer.name=="Wall acoustic panel"||renderer.name=="LEDGE DRILL"||renderer.name=="THE GYM")renderer.enabled=false;
             if(renderer.name=="Gym floor") {renderer.sharedMaterial=rubber;}
             if(renderer.name=="Ring base")renderer.sharedMaterial=leather;
             if(renderer.name=="Gym wall")renderer.sharedMaterial=paint;
-            if(renderer.name=="practice ledge")renderer.sharedMaterial=cloth;
+            if(renderer.name=="practice ledge")renderer.enabled=false;
             if(renderer.name=="table top")renderer.sharedMaterial=oak;
             if(renderer.name=="table leg")renderer.sharedMaterial=metal;
         }
         GBArt.Shape(p,"Printed woven canvas",PrimitiveType.Plane,new Vector3(0,.203f,0),new Vector3(.88f,1,.88f),canvas);
-        Round(p,"Training platform cushion",new Vector3(7.1f,1.36f,0),new Vector3(3.45f,.065f,3.45f),.025f,leather);
+        Round(p,"Training platform upholstery",new Vector3(7.1f,.65f,0),new Vector3(3.5f,1.4f,3.5f),.12f,leather);
+        for(int panel=0;panel<4;panel++)Round(p,"Training platform cushion",new Vector3(7.1f,1.365f,(panel-1.5f)*.86f),new Vector3(3.45f,.065f,.85f),.025f,cloth);
         // Every detail is non-solid, with no GBTarget and no network registry entry.
         for(int x=-1;x<=1;x+=2)for(int z=-1;z<=1;z+=2){
             for(int h=0;h<3;h++){
@@ -46,21 +47,27 @@ public static class GBGymVisual {
             GBArt.Box(apron.transform,"Apron piping",new Vector3(0,.32f,-.015f),new Vector3(8.55f,.028f,.018f),ropeOrange,false);
         }
         GBArt.Text(p,"GRIP BREAK",new Vector3(0,-.39f,-4.585f),.28f,new Color(.88f,.88f,.81f),Quaternion.identity);
-        Room(p);
+        Room(p);FinishRoom(p);FinishProps(arena);OrganizeStations(p);
         Lighting(arena,p);
     }
     static void Materials(){
         if(canvas)return;
-        canvas=GBArt.Mat("Gym printed woven canvas",Color.white,0,.10f);canvas.mainTexture=Canvas();
-        cloth=GBArt.Mat("Gym canvas sides",new Color(.27f,.35f,.42f),0,.12f);cloth.mainTexture=Grain("Canvas weave",256,0);cloth.mainTextureScale=new Vector2(5,5);
-        rubber=GBArt.Mat("Gym speckled rubber tiles",new Color(.28f,.31f,.34f),0,.14f);rubber.mainTexture=Grain("Rubber tile grain",256,1);rubber.mainTextureScale=new Vector2(12,9);
-        leather=GBArt.Mat("Gym charcoal upholstery",new Color(.085f,.105f,.13f),0,.27f);leather.mainTexture=Grain("Leather grain",256,2);
+        canvas=PBR("Gym printed woven canvas","canvas",Color.white,Vector2.one,.18f);
+        cloth=PBR("Gym canvas sides","fabric_pattern_07",new Color(.43f,.49f,.52f),new Vector2(18,18),.20f);
+        rubber=PBR("Gym speckled rubber tiles","rubber_tiles",Color.white,new Vector2(7,5),.7f);
+        leather=PBR("Gym charcoal upholstery","leather_red_02",new Color(.19f,.20f,.21f),new Vector2(2,2),.65f);
         ropeWhite=GBArt.Mat("Gym ivory rope braid",new Color(.83f,.82f,.73f),0,.23f);ropeWhite.mainTexture=Grain("Rope weave",128,0);ropeWhite.mainTextureScale=new Vector2(4,12);
         ropeOrange=GBArt.Mat("Gym burnt orange rope braid",new Color(.8f,.25f,.08f),0,.24f);ropeOrange.mainTexture=ropeWhite.mainTexture;ropeOrange.mainTextureScale=ropeWhite.mainTextureScale;
-        paint=GBArt.Mat("Gym slate painted wall",new Color(.20f,.25f,.30f),0,.14f);
-        oak=GBArt.Mat("Gym warm bench timber",new Color(.60f,.38f,.20f),0,.28f);oak.mainTexture=Grain("Timber grain",256,3);oak.mainTextureScale=new Vector2(3,1);
-        metal=GBArt.Mat("Gym brushed steel fittings",new Color(.35f,.40f,.44f),.7f,.48f);
+        paint=PBR("Gym warm plaster wall","painted_plaster_wall",new Color(.92f,.91f,.86f),new Vector2(6,2),.4f);
+        oak=PBR("Gym warm bench timber","wood_floor_worn",new Color(.90f,.78f,.62f),new Vector2(2,1),.5f);
+        concrete=PBR("Gym concrete roof","concrete_floor_02",new Color(.7f,.72f,.73f),new Vector2(5,4),.35f);
+        metal=GBArt.Mat("Gym brushed steel fittings",new Color(.22f,.25f,.27f),.55f,.46f);
         light=GBArt.Mat("Gym soft diffuser",new Color(.81f,.84f,.79f),0,.3f,true);
+    }
+    static Material PBR(string name,string asset,Color tint,Vector2 scale,float bump){
+        var material=GBArt.Mat(name,tint,0,.3f);material.mainTexture=Resources.Load<Texture2D>("Gym/"+asset+"_color");material.mainTextureScale=scale;
+        material.SetTexture("_BumpMap",Resources.Load<Texture2D>("Gym/"+asset+"_normal"));material.SetFloat("_BumpScale",bump);material.EnableKeyword("_NORMALMAP");
+        material.SetTexture("_MetallicGlossMap",Resources.Load<Texture2D>("Gym/"+asset+"_smooth"));material.SetFloat("_GlossMapScale",.45f);material.EnableKeyword("_METALLICGLOSSMAP");return material;
     }
     static Texture2D Grain(string name,int size,int kind){
         var texture=new Texture2D(size,size,TextureFormat.RGB24,true);texture.name=name;texture.wrapMode=TextureWrapMode.Repeat;texture.anisoLevel=4;
@@ -97,7 +104,7 @@ public static class GBGymVisual {
     static GameObject Round(Transform p,string name,Vector3 at,Vector3 size,float radius,Material mat){
         string key=size.ToString("F4")+radius.ToString("F4");Mesh mesh;
         if(!rounded.TryGetValue(key,out mesh)){
-            const int steps=5;var vertices=new List<Vector3>();var normals=new List<Vector3>();var uv=new List<Vector2>();var triangles=new List<int>();Vector3 half=size*.5f,inner=half-Vector3.one*radius;
+            const int steps=12;var vertices=new List<Vector3>();var normals=new List<Vector3>();var uv=new List<Vector2>();var triangles=new List<int>();Vector3 half=size*.5f,inner=half-Vector3.one*radius;
             foreach(Vector3 n in new[]{Vector3.right,Vector3.left,Vector3.up,Vector3.down,Vector3.forward,Vector3.back}){
                 Vector3 u=Mathf.Abs(n.y)>.5f?Vector3.right:Vector3.Cross(n,Vector3.up);Vector3 v=Vector3.Cross(n,u);int start=vertices.Count;
                 for(int row=0;row<=steps;row++)for(int col=0;col<=steps;col++){
@@ -113,10 +120,12 @@ public static class GBGymVisual {
     }
     static void Room(Transform p){
         GBArt.Shape(p,"Extended gym floor",PrimitiveType.Plane,new Vector3(0,-1.049f,0),new Vector3(2.7f,1,2.6f),rubber);
-        var window=GBArt.Mat("Gym frosted window glass",new Color(.25f,.36f,.43f),.12f,.55f);
+        var window=GBArt.Mat("Gym daylight window glass",new Color(.70f,.78f,.83f),.05f,.82f,true);
         GBArt.Box(p,"Upper back wall",new Vector3(0,5.9f,10.01f),new Vector3(27,1.8f,.18f),paint,false);
         for(int side=-1;side<=1;side+=2){
-            GBArt.Box(p,"Gym side wall",new Vector3(side*13.45f,2.85f,0),new Vector3(.18f,7.8f,20),paint,false);
+            GBArt.Box(p,"Gym window sill wall",new Vector3(side*13.45f,.71f,0),new Vector3(.18f,3.52f,20),paint,false);
+            GBArt.Box(p,"Gym upper window wall",new Vector3(side*13.45f,5.77f,0),new Vector3(.18f,2.52f,20),paint,false);
+            foreach(float pier in new[]{-9.2f,-2.5f,2.5f,9.2f})GBArt.Box(p,"Window wall pier",new Vector3(side*13.45f,3.45f,pier),new Vector3(.18f,2.0f,2.8f),paint,false);
             for(int bay=-1;bay<=1;bay++){
                 float z=bay*5;
                 GBArt.Box(p,"Gym window pane",new Vector3(side*13.35f,3.4f,z),new Vector3(.035f,1.8f,3.2f),window,false);
@@ -128,12 +137,10 @@ public static class GBGymVisual {
             GBArt.Box(p,"Roof crossbeam",new Vector3(0,6.65f,z),new Vector3(27,.18f,.16f),metal,false);
             for(int side=-1;side<=1;side+=2)GBArt.Box(p,"Side wall column",new Vector3(side*13.25f,2.8f,z),new Vector3(.16f,7.65f,.18f),metal,false);
         }
-        for(int side=-1;side<=1;side+=2){
-            for(int bay=0;bay<3;bay++){
-                float x=side*8.5f,z=-4+bay*4;
+        for(int seat=0;seat<6;seat++){
+                float x=-10+seat*4,z=-8.6f;
                 Round(p,"Timber ringside bench",new Vector3(x,-.43f,z),new Vector3(2.8f,.14f,.65f),.04f,oak);
                 for(int leg=-1;leg<=1;leg+=2)GBArt.Box(p,"Bench steel legs",new Vector3(x+leg*1.12f,-.73f,z),new Vector3(.09f,.55f,.5f),metal,false);
-            }
         }
         for(int x=-12;x<=12;x+=4){
             GBArt.Box(p,"Wall pilaster",new Vector3(x,1.9f,9.82f),new Vector3(.12f,5.5f,.18f),metal,false);
@@ -155,7 +162,7 @@ public static class GBGymVisual {
         }
         for(int bag=0;bag<3;bag++){
             float x=7.8f+bag*1.8f;
-            GBArt.Cylinder(p,"Hanging heavy bag",new Vector3(x,-.22f,7.1f),new Vector3(x,1.44f,7.1f),.30f,leather);
+            Lathe(p,"Hanging heavy bag",new Vector3(x,-.22f,7.1f),new[]{new Vector2(0,0),new Vector2(.26f,.025f),new Vector2(.30f,.09f),new Vector2(.305f,.4f),new Vector2(.30f,1.45f),new Vector2(.27f,1.62f),new Vector2(.12f,1.66f),new Vector2(0,1.67f)},leather);
             GBArt.Cylinder(p,"Heavy bag trim",new Vector3(x,.92f,7.1f),new Vector3(x,1.08f,7.1f),.304f,ropeOrange);
             for(int s=-1;s<=1;s+=2)GBArt.Cylinder(p,"Bag suspension",new Vector3(x+s*.21f,1.44f,7.1f),new Vector3(x,3.3f,7.1f),.014f,metal);
         }
@@ -178,12 +185,17 @@ public static class GBGymVisual {
     }
     static void Lighting(GBArena arena,Transform p){
         foreach(var l in arena.GetComponentsInChildren<Light>())l.intensity*=.3f;
-        GBArt.Light(p,new Vector3(-2,5,0),new Color(1,.95f,.85f),1.0f,12);
-        GBArt.Light(p,new Vector3(3,4,3),new Color(.77f,.85f,.91f),.8f,12);
-        RenderSettings.ambientSkyColor=new Color(.43f,.48f,.54f);RenderSettings.ambientEquatorColor=new Color(.28f,.31f,.36f);RenderSettings.ambientGroundColor=new Color(.15f,.17f,.20f);
+        GBArt.Light(p,new Vector3(-2,5,0),new Color(1,.95f,.85f),1.6f,15);
+        GBArt.Light(p,new Vector3(3,4,3),new Color(.86f,.92f,1),1.0f,15);
+        RenderSettings.ambientSkyColor=new Color(.47f,.49f,.52f);RenderSettings.ambientEquatorColor=new Color(.30f,.31f,.32f);RenderSettings.ambientGroundColor=new Color(.18f,.17f,.16f);RenderSettings.fogDensity=.0015f;
         foreach(var l in Object.FindObjectsByType<Light>(FindObjectsSortMode.None))if(l.type==LightType.Directional){
-            if(l.name=="Evening sun"){l.color=new Color(1,.94f,.84f);l.intensity=1.05f;l.transform.rotation=Quaternion.Euler(58,-32,0);l.shadowStrength=.72f;l.shadowBias=.035f;l.shadowNormalBias=.25f;l.shadowResolution=UnityEngine.Rendering.LightShadowResolution.High;}
-            else {l.color=new Color(.71f,.81f,.93f);l.intensity=.35f;}
+            if(l.name=="Evening sun"){l.color=new Color(1,.95f,.87f);l.intensity=.65f;l.transform.rotation=Quaternion.Euler(38,-68,0);l.shadowStrength=.78f;l.shadowBias=.018f;l.shadowNormalBias=.15f;l.shadowResolution=UnityEngine.Rendering.LightShadowResolution.VeryHigh;}
+            else {l.color=new Color(.81f,.87f,.93f);l.intensity=.28f;}
+        }
+        var reflection=Resources.Load<Cubemap>("Gym/gym_01");if(reflection){RenderSettings.defaultReflectionMode=UnityEngine.Rendering.DefaultReflectionMode.Custom;RenderSettings.customReflectionTexture=reflection;RenderSettings.reflectionIntensity=.45f;}
+        for(int side=-1;side<=1;side+=2)for(int bay=-1;bay<=1;bay++){
+            var go=new GameObject("Daylight through window");go.transform.SetParent(p,false);go.transform.localPosition=new Vector3(side*12.9f,4.0f,bay*5);
+            go.transform.LookAt(new Vector3(side*5,0,bay*4));var l=go.AddComponent<Light>();l.type=LightType.Spot;l.spotAngle=100;l.range=20;l.intensity=2.4f;l.color=new Color(.86f,.91f,1);l.shadows=LightShadows.Soft;l.shadowResolution=UnityEngine.Rendering.LightShadowResolution.Medium;l.shadowBias=.025f;l.shadowNormalBias=.1f;
         }
         QualitySettings.shadowDistance=28;
     }

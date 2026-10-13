@@ -121,6 +121,11 @@ public partial class GBWrestler {
         float safe=MomentumImpulseLimit(this,-impulse,point);if(target.wrestler)safe=Mathf.Min(safe,MomentumImpulseLimit(target.wrestler,impulse,point));
         impulse*=safe;impulseMagnitude*=safe;if(impulseMagnitude<.5f)return false;
         TargetMomentumImpulse(target,impulse,point);BodyMomentumImpulse(this,-impulse,point);
+        // Give a real unbraced catch a brief footing response, as with a real
+        // shot contact. Neutral standing motors otherwise erased the earned
+        // impulse before it could carry the opponent. No extra impulse, Down
+        // state or grip is awarded; planted brace/sprawl retains its support.
+        if(target.wrestler&&!braced&&!target.wrestler.Sprawling)target.wrestler.pressureUntil=Mathf.Max(target.wrestler.pressureUntil,Time.time+.16f);
         spinBudget=Mathf.Sign(spinBudget)*Mathf.Max(0,Mathf.Abs(spinBudget)-impulseMagnitude*Mathf.Abs(sourceLever));
         grabMomentumAt=Time.time+.9f;LastGrabMomentumImpulse=impulseMagnitude;
         Feedback(braced?"Spin caught - opponent braced the momentum":"Spin carried into the grip",.8f);return true;

@@ -1,0 +1,353 @@
+{
+  "name": "Cobalt",
+  "materials": [
+    {
+      "name": "Cobalt natural skin",
+      "color": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "roughness": 0.49000000953674316,
+      "main": "tex-5130c59aa53f",
+      "normal": "tex-5b7e90353022",
+      "cutout": false
+    },
+    {
+      "name": "Black technical sports fabric",
+      "color": [
+        0.020999999716877937,
+        0.02500000037252903,
+        0.028999999165534973,
+        1.0
+      ],
+      "roughness": 0.9599999785423279,
+      "main": "",
+      "normal": "",
+      "cutout": false
+    },
+    {
+      "name": "Warm white seam binding",
+      "color": [
+        0.7300000190734863,
+        0.7200000286102295,
+        0.6800000071525574,
+        1.0
+      ],
+      "roughness": 0.6399999856948853,
+      "main": "",
+      "normal": "",
+      "cutout": false
+    },
+    {
+      "name": "Cobalt eyebrow005 eyebrows natural material",
+      "color": [
+        0.30000001192092896,
+        0.25,
+        0.2199999988079071,
+        1.0
+      ],
+      "roughness": 0.9599999785423279,
+      "main": "tex-7258dd3cf124",
+      "normal": "",
+      "cutout": true
+    },
+    {
+      "name": "Cobalt high-poly eyes natural material",
+      "color": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "roughness": 0.2199999988079071,
+      "main": "tex-4659691c7295",
+      "normal": "",
+      "cutout": true
+    },
+    {
+      "name": "Cobalt short01 hair natural material",
+      "color": [
+        0.30000001192092896,
+        0.25,
+        0.2199999988079071,
+        1.0
+      ],
+      "roughness": 0.9599999785423279,
+      "main": "tex-f34a0957184e",
+      "normal": "",
+      "cutout": true
+    },
+    {
+      "name": "Wrestling shoe rubber",
+      "color": [
+        0.02500000037252903,
+        0.02800000086426735,
+        0.03099999949336052,
+        1.0
+      ],
+      "roughness": 0.8199999928474426,
+      "main": "",
+      "normal": "",
+      "cutout": false
+    },
+    {
+      "name": "Cobalt fitted wrestling singlet",
+      "color": [
+        0.02500000037252903,
+        0.25,
+        0.3799999952316284,
+        1.0
+      ],
+      "roughness": 0.6399999856948853,
+      "main": "",
+      "normal": "",
+      "cutout": false
+    },
+    {
+      "name": "Cobalt close cropped hair",
+      "color": [
+        0.017000000923871994,
+        0.010999999940395355,
+        0.007000000216066837,
+        1.0
+      ],
+      "roughness": 0.9599999785423279,
+      "main": "",
+      "normal": "",
+      "cutout": false
+    }
+  ],
+  "parts": [
+    {
+      "name": "Cobalt athlete",
+      "file": "cobalt-0",
+      "materials": [
+        0,
+        1
+      ],
+      "vertices": 56692,
+      "triangles": 107024
+    },
+    {
+      "name": "Cobalt attached fabric lace",
+      "file": "cobalt-1",
+      "materials": [
+        2
+      ],
+      "vertices": 99,
+      "triangles": 160
+    },
+    {
+      "name": "Cobalt attached fabric lace.001",
+      "file": "cobalt-2",
+      "materials": [
+        2
+      ],
+      "vertices": 99,
+      "triangles": 160
+    },
+    {
+      "name": "Cobalt attached fabric lace.002",
+      "file": "cobalt-3",
+      "materials": [
+        2
+      ],
+      "vertices": 99,
+      "triangles": 160
+    },
+    {
+      "name": "Cobalt attached fabric lace.003",
+      "file": "cobalt-4",
+      "materials": [
+        2
+      ],
+      "vertices": 99,
+      "triangles": 160
+    },
+    {
+      "name": "Cobalt attached fabric lace.004",
+      "file": "cobalt-5",
+      "materials": [
+        2
+      ],
+      "vertices": 99,
+      "triangles": 160
+    },
+    {
+      "name": "Cobalt attached fabric lace.005",
+      "file": "cobalt-6",
+      "materials": [
+        2
+      ],
+      "vertices": 99,
+      "triangles": 160
+    },
+    {
+      "name": "Cobalt attached fabric lace.006",
+      "file": "cobalt-7",
+      "materials": [
+        2
+      ],
+      "vertices": 99,
+      "triangles": 160
+    },
+    {
+      "name": "Cobalt attached fabric lace.007",
+      "file": "cobalt-8",
+      "materials": [
+        2
+      ],
+      "vertices": 99,
+      "triangles": 160
+    },
+    {
+      "name": "Cobalt attached fabric lace.008",
+      "file": "cobalt-9",
+      "materials": [
+        2
+      ],
+      "vertices": 99,
+      "triangles": 160
+    },
+    {
+      "name": "Cobalt attached fabric lace.009",
+      "file": "cobalt-10",
+      "materials": [
+        2
+      ],
+      "vertices": 99,
+      "triangles": 160
+    },
+    {
+      "name": "Cobalt fitted eyebrow005",
+      "file": "cobalt-11",
+      "materials": [
+        3
+      ],
+      "vertices": 124,
+      "triangles": 192
+    },
+    {
+      "name": "Cobalt fitted high-poly",
+      "file": "cobalt-12",
+      "materials": [
+        4
+      ],
+      "vertices": 1076,
+      "triangles": 2040
+    },
+    {
+      "name": "Cobalt fitted short01",
+      "file": "cobalt-13",
+      "materials": [
+        5
+      ],
+      "vertices": 3050,
+      "triangles": 3678
+    },
+    {
+      "name": "Cobalt flexible shoe sole",
+      "file": "cobalt-14",
+      "materials": [
+        6
+      ],
+      "vertices": 496,
+      "triangles": 988
+    },
+    {
+      "name": "Cobalt flexible shoe sole.001",
+      "file": "cobalt-15",
+      "materials": [
+        6
+      ],
+      "vertices": 496,
+      "triangles": 988
+    },
+    {
+      "name": "Cobalt left fitted wrestling boot",
+      "file": "cobalt-16",
+      "materials": [
+        1
+      ],
+      "vertices": 2778,
+      "triangles": 5556
+    },
+    {
+      "name": "Cobalt right fitted wrestling boot",
+      "file": "cobalt-17",
+      "materials": [
+        1
+      ],
+      "vertices": 2778,
+      "triangles": 5556
+    },
+    {
+      "name": "Cobalt sewn neckline and hem binding",
+      "file": "cobalt-18",
+      "materials": [
+        2
+      ],
+      "vertices": 495,
+      "triangles": 880
+    },
+    {
+      "name": "Cobalt sewn neckline and hem binding.001",
+      "file": "cobalt-19",
+      "materials": [
+        2
+      ],
+      "vertices": 902,
+      "triangles": 1620
+    },
+    {
+      "name": "Cobalt sewn neckline and hem binding.002",
+      "file": "cobalt-20",
+      "materials": [
+        2
+      ],
+      "vertices": 1485,
+      "triangles": 2680
+    },
+    {
+      "name": "Cobalt sewn neckline and hem binding.003",
+      "file": "cobalt-21",
+      "materials": [
+        2
+      ],
+      "vertices": 495,
+      "triangles": 880
+    },
+    {
+      "name": "Cobalt sewn neckline and hem binding.004",
+      "file": "cobalt-22",
+      "materials": [
+        2
+      ],
+      "vertices": 924,
+      "triangles": 1660
+    },
+    {
+      "name": "Cobalt singlet",
+      "file": "cobalt-23",
+      "materials": [
+        7
+      ],
+      "vertices": 15194,
+      "triangles": 30400
+    },
+    {
+      "name": "Cobalt underlaid scalp hair",
+      "file": "cobalt-24",
+      "materials": [
+        8
+      ],
+      "vertices": 819,
+      "triangles": 1516
+    }
+  ],
+  "boneCount": 15,
+  "weights": "Official MakeHuman CC0, aggregated to unchanged physical regions",
+  "geometryFollowsPhysics": true
+}
