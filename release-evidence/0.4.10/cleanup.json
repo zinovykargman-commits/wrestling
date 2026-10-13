@@ -1,9 +1,26 @@
 {
   "completed": true,
-  "removedTargets": 980,
-  "macCacheDeferred": true,
-  "bytesFreed": 2550106200.0,
+  "bytesFreed": 3893075955.0,
+  "passes": [
+    {
+      "completed": true,
+      "removedTargets": 980,
+      "macCacheDeferred": true,
+      "bytesFreed": 2550106200.0,
+      "rawReportsPreserved": true,
+      "cloudPlaceholdersRetained": 35,
+      "protectedFilesRehashed": 1695
+    },
+    {
+      "rawReportsPreserved": true,
+      "completed": true,
+      "macCacheDeferred": false,
+      "removedTargets": 9,
+      "protectedFilesRehashed": 1509,
+      "bytesFreed": 1342969755.0,
+      "cloudPlaceholdersRetained": 35
+    }
+  ],
   "rawReportsPreserved": true,
-  "cloudPlaceholdersRetained": 35,
-  "protectedFilesRehashed": 1695
+  "currentSourceBuildsModelsRehashed": true
 }
