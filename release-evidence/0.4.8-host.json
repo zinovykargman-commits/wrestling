@@ -1,0 +1,106 @@
+{
+    "build": "0.4.8",
+    "engine": "6000.3.7f1",
+    "hardware": "Intel(R) Core(TM) i5-14400F / 16173 MB",
+    "graphics": "Null Device",
+    "startedUtc": "2026-10-13T00:08:00.4051853Z",
+    "duration": 20.417964935302736,
+    "averageFps": 118.89552307128906,
+    "minFps": 14.11809253692627,
+    "bodies": 92,
+    "issues": 0,
+    "screenWidth": 1424,
+    "screenHeight": 714,
+    "checks": [
+        {
+            "name": "test_inputs_not_serialized",
+            "passed": true,
+            "evidence": "runtime-only input; scene cannot install an empty test array"
+        },
+        {
+            "name": "network_handshake",
+            "passed": true,
+            "evidence": "Friend connected"
+        },
+        {
+            "name": "both_ready",
+            "passed": true,
+            "evidence": "private ready-state synchronization"
+        },
+        {
+            "name": "connected_camera_owner",
+            "passed": true,
+            "evidence": "connected peer owns its wrestler camera"
+        },
+        {
+            "name": "connected_wrestler_centered",
+            "passed": true,
+            "evidence": "player=0 viewport=(0.50, 0.50, 7.60)"
+        },
+        {
+            "name": "ringout_countdown_stream",
+            "passed": true,
+            "evidence": "observed 3/2/1 mask=14"
+        },
+        {
+            "name": "ringout_bottom_pose_stream",
+            "passed": true,
+            "evidence": "client wrestler low, host wrestler behind; same protocol12 snapshot"
+        },
+        {
+            "name": "pin_only_network_world",
+            "passed": true,
+            "evidence": "both peers run ring pins"
+        },
+        {
+            "name": "remote_3d_arm_targets",
+            "passed": true,
+            "evidence": "protocol9 passes bounded arm/sprawl input; no retired Throw bit"
+        },
+        {
+            "name": "remote_sprawl_input",
+            "passed": true,
+            "evidence": "protocol9 preserves dedicated sprawl through authenticated peer input"
+        },
+        {
+            "name": "physical_grip_state_stream",
+            "passed": true,
+            "evidence": "maximum simultaneous hand targets=4"
+        },
+        {
+            "name": "prop_break_stream",
+            "passed": true,
+            "evidence": "observed broken prop state"
+        },
+        {
+            "name": "round_reset_stream",
+            "passed": true,
+            "evidence": "epoch=1 â†’ 3"
+        },
+        {
+            "name": "network_survival",
+            "passed": true,
+            "evidence": "Friend connected"
+        },
+        {
+            "name": "state_stream",
+            "passed": true,
+            "evidence": "sent=522 received=0"
+        },
+        {
+            "name": "remote_input",
+            "passed": true,
+            "evidence": "received=2405"
+        },
+        {
+            "name": "network_finite",
+            "passed": true,
+            "evidence": "registry=92"
+        },
+        {
+            "name": "connected_body_joints",
+            "passed": true,
+            "evidence": "missing frames=0 maximum physical anchor separation=0.0050 m"
+        }
+    ]
+}

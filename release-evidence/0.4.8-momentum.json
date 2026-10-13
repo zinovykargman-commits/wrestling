@@ -1,0 +1,126 @@
+{
+    "build": "0.4.8",
+    "engine": "6000.3.7f1",
+    "hardware": "Intel(R) Core(TM) i5-14400F / 16173 MB",
+    "graphics": "NVIDIA GeForce RTX 5060",
+    "startedUtc": "2026-10-13T00:05:20.1149637Z",
+    "duration": 47.874114990234378,
+    "averageFps": 68.8216552734375,
+    "minFps": 5.860778331756592,
+    "bodies": 92,
+    "issues": 0,
+    "screenWidth": 1920,
+    "screenHeight": 1080,
+    "checks": [
+        {
+            "name": "test_inputs_not_serialized",
+            "passed": true,
+            "evidence": "runtime-only input; scene cannot install an empty test array"
+        },
+        {
+            "name": "momentum_shot_actual_runup",
+            "passed": true,
+            "evidence": "standing approach=-0.05 running=4.51 m/s from physical massweighted velocities"
+        },
+        {
+            "name": "momentum_shots_contact",
+            "passed": true,
+            "evidence": "standing/running balance loss=39.2/53.8 physical collision impulse=12.1/15.9 Ns; target peak m/s=2.48/4.42"
+        },
+        {
+            "name": "fast_shot_has_stronger_physical_result",
+            "passed": true,
+            "evidence": "standing/running target peak=2.48/4.42 m/s; forward travel=1.01/2.51 m; contact approach=2.54/5.36 m/s impact pressure=0.299/0.449 s; impact should carry into readable movement before recovery"
+        },
+        {
+            "name": "momentum_q_never_auto_grabs",
+            "passed": true,
+            "evidence": "maximum hands standing/running/braced=0/0/0; Q supplied without either hand button"
+        },
+        {
+            "name": "brace_reduces_running_shot",
+            "passed": true,
+            "evidence": "unbraced/braced target peak=4.42/2.49 forward=2.51/1.26 feedback=Shot resisted - change angle"
+        },
+        {
+            "name": "sprawl_reduces_running_shot",
+            "passed": true,
+            "evidence": "unbraced/sprawled balance loss=53.8/0.0 pressure=0.45/0.00 s; target peak=4.42/0.80"
+        },
+        {
+            "name": "shot_contact_budget_is_one",
+            "passed": true,
+            "evidence": "paid Q impact counts standing/running/braced/sprawled=1/1/1/0; no duplicate per collider or stay callback"
+        },
+        {
+            "name": "forward_jump_has_earned_collision",
+            "passed": true,
+            "evidence": "paid normal jump airborne=True actual core collision count=1 impulse=19.5 Ns; approach=2.80 m/s; launch diagnostics before Space stamina=147.95 grounded=True Down=False pinControlled=False jumpWindow=False gap=1.37 approach=4.58 feet=0.39/0.37 ; first processed Space stamina=140.04 grounded=True Down=False window=True velocity=(4.56, 3.71, 0.01) inputflags=8"
+        },
+        {
+            "name": "jump_momentum_beats_stationary_touch",
+            "passed": true,
+            "evidence": "stationary/jump opponent peak=0.03/1.60 m/s travel=0.03/0.71 m balance loss=0.0/12.1"
+        },
+        {
+            "name": "brace_mitigates_jump_body_impact",
+            "passed": true,
+            "evidence": "neutral/braced loss=12.1/0.0 travel=0.71/0.11"
+        },
+        {
+            "name": "jump_one_contact_budget_no_auto_grab",
+            "passed": true,
+            "evidence": "normal Jump held after initial edge: impacts=0/1/0 hands=0/0/0; no attack injection or impulse injection"
+        },
+        {
+            "name": "hard_spin_is_physical_rotation",
+            "passed": true,
+            "evidence": "standing/spinning root yaw peak=0.02/8.56 rad/s from Rigidbody.angularVelocity"
+        },
+        {
+            "name": "spin_manual_grips_naturally_acquired",
+            "passed": true,
+            "evidence": "standing/spinning natural hands=1/1 reach delay=0.16/0.09 seconds; no Attach calls"
+        },
+        {
+            "name": "recent_spin_carries_grabbed_opponent",
+            "passed": true,
+            "evidence": "standing/spin velocity change=0.378/0.266 m/s; whole-body translational/rotational energy gain=5.62/4.90 J; actual impulse=1.94/12.33 Ns. Requires >5Ns additional earned transfer and measured motion/energy above half the free-impulse response. The constraint spring and mat friction also contribute: a catch need not have greater net speed than a differently loaded stationary catch."
+        },
+        {
+            "name": "repeated_grip_fixture_reacquires",
+            "passed": true,
+            "evidence": "natural spin/release/regrab transitions=12 across twelve cycles / 18 seconds"
+        },
+        {
+            "name": "repeated_grip_fixture_stays_on_mat",
+            "passed": true,
+            "evidence": "root positions remained within±3.8m and above0.1m; ordinary approach only while separation>1.2m; final attacker=(0.51, 1.26, -2.08) defender=(-0.03, 1.25, -1.47)"
+        },
+        {
+            "name": "repeated_grips_keep_energy_bounded",
+            "passed": true,
+            "evidence": "max massweighted COM=0.39 horizontal=0.39 m/s; peak COM wrestler=zinovy root=(-0.52, 1.26, -2.00) velocity=(0.38, 0.08, 0.03) time=0.809 s; total kinetic energy peak=195.5 J time=2.178 s attacker=(-0.46, 1.26, -1.95) defender=(0.52, 1.25, -1.94); first/last 3s average=59.6/57.1 peak=195.5/188.9 J; limb peak diagnostic=6.92 m/s part=zinovy right hand time=1.090 s"
+        },
+        {
+            "name": "repeated_grip_momentum_settles_when_released",
+            "passed": true,
+            "evidence": "after three seconds with all actions released: max COM=0.00 m/s energy=0.0 J vs active late-window average=57.1 J"
+        },
+        {
+            "name": "momentum_bodies_connected_finite",
+            "passed": true,
+            "evidence": "all shots, forward jumps, spins and grips; max joint gap=0.0050 m missing=0 maximum body speed=11.53"
+        },
+        {
+            "name": "momentum_no_runtime_issues",
+            "passed": true,
+            "evidence": ""
+        },
+        {
+            "name": "connected_body_joints",
+            "passed": true,
+            "evidence": "missing frames=0 maximum physical anchor separation=0.0050 m"
+        }
+    ]
+}

@@ -1,0 +1,81 @@
+{
+    "build": "0.4.8",
+    "engine": "6000.3.7f1",
+    "hardware": "Intel(R) Core(TM) i5-14400F / 16173 MB",
+    "graphics": "NVIDIA GeForce RTX 5060",
+    "startedUtc": "2026-10-13T00:03:39.2046050Z",
+    "duration": 7.080646514892578,
+    "averageFps": 78.38138580322266,
+    "minFps": 23.34746551513672,
+    "bodies": 92,
+    "issues": 0,
+    "screenWidth": 1920,
+    "screenHeight": 1080,
+    "checks": [
+        {
+            "name": "test_inputs_not_serialized",
+            "passed": true,
+            "evidence": "runtime-only input; scene cannot install an empty test array"
+        },
+        {
+            "name": "appearance_real_physical_bones",
+            "passed": true,
+            "evidence": "all visual parts read existing15 rigid region transforms; parts=50"
+        },
+        {
+            "name": "appearance_normalized_finite_skin",
+            "passed": true,
+            "evidence": "four normalized influences, current baked finite positions; vertices=175055"
+        },
+        {
+            "name": "appearance_licensed_skin_texture",
+            "passed": true,
+            "evidence": "diffuse and anatomical normal textures present on both athletes"
+        },
+        {
+            "name": "appearance_no_new_physics",
+            "passed": true,
+            "evidence": "same92 registered bodies and15 per athlete"
+        },
+        {
+            "name": "both_athletes_limb_and_torso_self_contact",
+            "passed": true,
+            "evidence": "both athletes enabled limb/body pairs=182; only28 connected overlapping joint pairs excluded"
+        },
+        {
+            "name": "shoe_soles_laces_locked_to_physical_feet",
+            "passed": true,
+            "evidence": "foot-only rigid attachment vertices=3932; flexible ankle collars follow calf/foot skin"
+        },
+        {
+            "name": "ankles_have_anatomical_bend_and_twist_stops",
+            "passed": true,
+            "evidence": "four ankles: physical25-degree dorsiflexion/55-degree plantarflexion,20-degree side/twist stops; dynamic render/contact checks required"
+        },
+        {
+            "name": "appearance_straight_ready_leg_axes",
+            "passed": true,
+            "evidence": "live ready-state thigh/shin lateral center differences=0.000/0.000 m; render inspection still required"
+        },
+        {
+            "name": "upright_both_shoe_soles_align_with_mat",
+            "passed": true,
+            "evidence": "front/back straight-pose maximum actual sole-bottom offset=0.0002 m"
+        },
+        {
+            "name": "appearance_articulated_anchors_connected",
+            "passed": true,
+            "evidence": "frozen bent arms/knees real joint anchors gap=0.00000"
+        },
+        {
+            "name": "appearance_articulated_mesh_finite",
+            "passed": true,
+            "evidence": "baked bent-limb surface finite; inspected native articulation screenshot required"
+        },
+        {
+            "name": "connected_body_joints",
+            "passed": true,
+            "evidence": "missing frames=0 maximum physical anchor separation=0.0050 m"
+        }
+    ]
+}
