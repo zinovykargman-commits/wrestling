@@ -1,0 +1,39 @@
+{
+  "version": "0.4.9",
+  "nativeBuild": "f180",
+  "passed": true,
+  "release": "https://github.com/zinovykargman-commits/wrestling/releases/tag/v0.4.9",
+  "releaseId": 411242899,
+  "manifestMatches": true,
+  "checksumsMatch": true,
+  "assets": [
+    {
+      "name": "GRIP_BREAK-Windows.zip",
+      "sha256": "b717612e8788213a422e150af3dd99a09646399c6673c993f00ecf0dc79a7d64",
+      "size": 156280181,
+      "url": "https://github.com/zinovykargman-commits/wrestling/releases/download/v0.4.9/GRIP_BREAK-Windows.zip",
+      "passed": true
+    },
+    {
+      "name": "GRIP_BREAK-Source.zip",
+      "sha256": "59c7080f147f597bf281c7f78a6d4b1137a7e5b703650935c43ada6369917451",
+      "size": 127629684,
+      "url": "https://github.com/zinovykargman-commits/wrestling/releases/download/v0.4.9/GRIP_BREAK-Source.zip",
+      "passed": true
+    },
+    {
+      "name": "GRIP_BREAK-Update.json",
+      "sha256": "1e9f5fc1acc5a451e4eda580cb57e5b6a476e48baa2cbb0a0110200d21ae3d8d",
+      "size": 243,
+      "url": "https://github.com/zinovykargman-commits/wrestling/releases/download/v0.4.9/GRIP_BREAK-Update.json",
+      "passed": true
+    },
+    {
+      "name": "GRIP_BREAK-Archives-SHA256.txt",
+      "sha256": "e34d6f4b4d3d9775a8730e7fad59d92879fdbd2d2fb6bc8fae6c10f28dea87ee",
+      "size": 179,
+      "url": "https://github.com/zinovykargman-commits/wrestling/releases/download/v0.4.9/GRIP_BREAK-Archives-SHA256.txt",
+      "passed": true
+    }
+  ]
+}
