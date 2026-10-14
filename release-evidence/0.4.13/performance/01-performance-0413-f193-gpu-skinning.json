@@ -1,0 +1,16 @@
+{
+  "build": "f193",
+  "version": "0.4.13",
+  "evidence": "C:\\Users\\zinov\\Documents\\Codex\\2026-10-09\\gi\\work\\checks\\background-performance-0413-20261014-182624",
+  "averageFps": 114.32794189453125,
+  "p50FrameMs": 8.351900100708008,
+  "p95FrameMs": 11.006999969482422,
+  "frames": 3430,
+  "forcedFocus": false,
+  "nativeRenderedFrames": 4439,
+  "oldReferenceFps": 73.06165313720703,
+  "oldReferenceReused": true,
+  "scope": "Same scripted workload/1080pHigh/physics/lighting, now rendered offscreen without forced focus. Saved0.4.12 reference used the same real offscreen render; no old-build rerun.",
+  "valid": true,
+  "failures": []
+}

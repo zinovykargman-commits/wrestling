@@ -1,0 +1,141 @@
+{
+    "build": "0.4.13",
+    "engine": "6000.3.7f1",
+    "hardware": "Intel(R) Core(TM) i5-14400F / 16173 MB",
+    "graphics": "NVIDIA GeForce RTX 5060",
+    "startedUtc": "2026-10-14T22:31:20.8765278Z",
+    "duration": 1.1376080513000489,
+    "averageFps": 0.0,
+    "minFps": 1000.0,
+    "bodies": 92,
+    "issues": 0,
+    "screenWidth": 1920,
+    "screenHeight": 1080,
+    "checks": [
+        {
+            "name": "test_inputs_not_serialized",
+            "passed": true,
+            "evidence": "runtime-only input; scene cannot install an empty test array"
+        },
+        {
+            "name": "camera_clear_orange-standing",
+            "passed": true,
+            "evidence": "camera=(3.10, 5.67, -5.80) target=(0.00, 1.87, 0.00) structural bounds=45; actual capture below"
+        },
+        {
+            "name": "camera_locked_orange-standing",
+            "passed": true,
+            "evidence": "single owned-player view; viewport=(0.50, 0.50, 7.60)"
+        },
+        {
+            "name": "camera_clear_orange-raised-center",
+            "passed": true,
+            "evidence": "camera=(3.10, 5.81, -5.80) target=(0.00, 3.89, 0.00) structural bounds=45; actual capture below"
+        },
+        {
+            "name": "camera_locked_orange-raised-center",
+            "passed": true,
+            "evidence": "single owned-player view; viewport=(0.50, 0.50, 6.85)"
+        },
+        {
+            "name": "camera_clear_orange-near-corner",
+            "passed": true,
+            "evidence": "camera=(-0.60, 5.67, -9.50) target=(-3.70, 1.87, -3.70) structural bounds=45; actual capture below"
+        },
+        {
+            "name": "camera_locked_orange-near-corner",
+            "passed": true,
+            "evidence": "single owned-player view; viewport=(0.50, 0.50, 7.60)"
+        },
+        {
+            "name": "camera_clear_orange-raised-corner",
+            "passed": true,
+            "evidence": "camera=(6.80, 5.81, -2.10) target=(3.70, 3.89, 3.70) structural bounds=45; actual capture below"
+        },
+        {
+            "name": "camera_locked_orange-raised-corner",
+            "passed": true,
+            "evidence": "single owned-player view; viewport=(0.50, 0.50, 6.85)"
+        },
+        {
+            "name": "camera_clear_orange-opposite-corner",
+            "passed": true,
+            "evidence": "camera=(-0.60, 5.81, -2.10) target=(-3.70, 3.89, 3.70) structural bounds=45; actual capture below"
+        },
+        {
+            "name": "camera_locked_orange-opposite-corner",
+            "passed": true,
+            "evidence": "single owned-player view; viewport=(0.50, 0.50, 6.85)"
+        },
+        {
+            "name": "camera_clear_blue-standing",
+            "passed": true,
+            "evidence": "camera=(3.10, 5.67, -5.80) target=(0.00, 1.87, 0.00) structural bounds=45; actual capture below"
+        },
+        {
+            "name": "camera_locked_blue-standing",
+            "passed": true,
+            "evidence": "single owned-player view; viewport=(0.50, 0.50, 7.60)"
+        },
+        {
+            "name": "camera_clear_blue-raised-center",
+            "passed": true,
+            "evidence": "camera=(3.10, 5.81, -5.80) target=(0.00, 3.89, 0.00) structural bounds=45; actual capture below"
+        },
+        {
+            "name": "camera_locked_blue-raised-center",
+            "passed": true,
+            "evidence": "single owned-player view; viewport=(0.50, 0.50, 6.85)"
+        },
+        {
+            "name": "camera_clear_blue-near-corner",
+            "passed": true,
+            "evidence": "camera=(-0.60, 5.67, -9.50) target=(-3.70, 1.87, -3.70) structural bounds=45; actual capture below"
+        },
+        {
+            "name": "camera_locked_blue-near-corner",
+            "passed": true,
+            "evidence": "single owned-player view; viewport=(0.50, 0.50, 7.60)"
+        },
+        {
+            "name": "camera_clear_blue-raised-corner",
+            "passed": true,
+            "evidence": "camera=(6.80, 5.81, -2.10) target=(3.70, 3.89, 3.70) structural bounds=45; actual capture below"
+        },
+        {
+            "name": "camera_locked_blue-raised-corner",
+            "passed": true,
+            "evidence": "single owned-player view; viewport=(0.50, 0.50, 6.85)"
+        },
+        {
+            "name": "camera_clear_blue-opposite-corner",
+            "passed": true,
+            "evidence": "camera=(-0.60, 5.81, -2.10) target=(-3.70, 3.89, 3.70) structural bounds=45; actual capture below"
+        },
+        {
+            "name": "camera_locked_blue-opposite-corner",
+            "passed": true,
+            "evidence": "single owned-player view; viewport=(0.50, 0.50, 6.85)"
+        },
+        {
+            "name": "camera_structure_cached_once_per_world",
+            "passed": true,
+            "evidence": "cache builds=1;120 follow ticks do not scan renderers"
+        },
+        {
+            "name": "camera_unchanged_gameplay_geometry",
+            "passed": true,
+            "evidence": "registered bodies=92;existing colliders=102;48 original rope bodies;camera creates no colliders"
+        },
+        {
+            "name": "camera_obstruction_runtime_clean",
+            "passed": true,
+            "evidence": ""
+        },
+        {
+            "name": "connected_body_joints",
+            "passed": true,
+            "evidence": "missing frames=0 maximum physical anchor separation=0.0050 m"
+        }
+    ]
+}

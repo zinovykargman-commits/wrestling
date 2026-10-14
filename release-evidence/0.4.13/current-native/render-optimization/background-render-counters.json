@@ -1,0 +1,35 @@
+{
+    "scope": "Diagnostic counters in the current real offscreen render; no binary trace.",
+    "counters": [
+        {
+            "name": "Draw Calls Count",
+            "valid": true,
+            "frames": 0,
+            "average": 0.0
+        },
+        {
+            "name": "Batches Count",
+            "valid": true,
+            "frames": 0,
+            "average": 0.0
+        },
+        {
+            "name": "Instanced Batches Count",
+            "valid": false,
+            "frames": 0,
+            "average": 0.0
+        },
+        {
+            "name": "CPU Main Thread Frame Time",
+            "valid": true,
+            "frames": 0,
+            "average": 0.0
+        },
+        {
+            "name": "GPU Frame Time",
+            "valid": true,
+            "frames": 0,
+            "average": 0.0
+        }
+    ]
+}

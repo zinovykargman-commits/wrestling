@@ -1,9 +1,9 @@
-# GRIP BREAK 0.4.12 Windows validation
+# GRIP BREAK 0.4.13 Windows validation
 
-Native build f191: zero Unity errors/warnings. Current affected checks: 157/157 passed with zero reported runtime issues. Categories: {"physics-snapshot": 8, "momentum": 22, "camera-obstruction": 25, "stamina": 10, "pin-spam": 37, "pin-rules": 18, "hand-contact": 11, "ground-recovery": 26}.
+Native f195: zero Unity errors/warnings. Current checks: 49/49 passed, zero issues. Categories: {"render-optimization": 13, "camera-obstruction": 25, "hand-contact": 11}. Current checks cover exact shared loop geometry/materials/transforms/shadows/physics configuration, camera obstruction, and held-hand visuals. Root inspected 14 current captures.
 
-Current reports cover the actual snapshot force/elbow comparison and CPU timing, momentum, camera obstruction, stamina, pin spam/rules, held-hand visuals and pinned ground recovery. Historical 0.4.11 session, shutdown and updater results are retained only after unchanged subsystem code/method fingerprints were verified. They are not presented as new f191 network or quit runs.
+Two current actual High1080p full-scene offscreen runs measured 114.33 and 115.78 FPS; final p50=8.3415ms,p95=9.2346ms. Saved same-render reference 73.06 FPS was reused without rerunning an old build. Same workload,92 registered bodies,240Hz,64/24solver,4xMSAA,full geometry/materials/lights and unchanged audit logging. This meets the 90 FPS target on this Windows machine and workload; it is not an all-system,physical-Mac,online or grappling guarantee.
 
-Four decorative overhead light assemblies were removed; actual light sources and rendering presets remain. Static batching was rejected and is absent. Whole-scene FPS remains essentially unchanged in recorded tests (73.06 offscreen versus saved 72.70 foreground, different presentation); no improvement percentage or steady-FPS promise is made. Native paired local helper timings show reduced helper CPU cost, which is not a whole-game FPS result.
+Production changes: GPU batched skinning and sharing identical torus mesh data by exact(radius,tube). Automatic GPU instancing regressed and was removed. No static batching or manual mesh merging ships. Historical0.4.12 physics/gameplay and 0.4.11 session/shutdown/updater reports are source-verified unchanged-code evidence, not new f195 reruns.
 
-Root inspected the final native captures listed in its review. Untouched current and historical reports are published in release-evidence/0.4.12. Separate-machine internet acceptance, long human matches and physical-Mac performance remain unverified. Public bytes and the live updater are checked after publication.
+See release-evidence/0.4.13 for current and historical raw proof. Separate-machine internet acceptance,long human matches and physical-Mac performance remain unverified. Public bytes are verified after publication.

@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 
 public static partial class GBGymVisual {
+    static readonly Dictionary<Vector2,Mesh> loopMeshes=new Dictionary<Vector2,Mesh>();
     static void FinishProps(GBArena arena){
         foreach(var rb in arena.GetComponentsInChildren<Rigidbody>()){
             if(rb.name!="table top"&&rb.name!="table leg"&&rb.name!="training block")continue;
@@ -23,13 +24,17 @@ public static partial class GBGymVisual {
         var go=new GameObject(name);go.transform.SetParent(parent,false);go.transform.localPosition=at;go.AddComponent<MeshFilter>().sharedMesh=mesh;go.AddComponent<MeshRenderer>().sharedMaterial=material;return go;
     }
     static GameObject Loop(Transform p,string name,Vector3 at,float radius,float tube,Material m,Quaternion rotation){
+        var key=new Vector2(radius,tube);Mesh mesh;
+        if(!loopMeshes.TryGetValue(key,out mesh)){
         const int segments=40,rings=8;var verts=new List<Vector3>();var normals=new List<Vector3>();var uv=new List<Vector2>();var tris=new List<int>();
         for(int a=0;a<=segments;a++)for(int b=0;b<=rings;b++){
             float t=a*2*Mathf.PI/segments,s=b*2*Mathf.PI/rings;Vector3 radial=new Vector3(Mathf.Cos(t),Mathf.Sin(t),0),n=radial*Mathf.Cos(s)+Vector3.forward*Mathf.Sin(s);
             verts.Add(radial*radius+n*tube);normals.Add(n);uv.Add(new Vector2((float)a/segments,(float)b/rings));
         }
         for(int a=0;a<segments;a++)for(int b=0;b<rings;b++){int i=a*(rings+1)+b,j=i+rings+1;tris.AddRange(new[]{i,i+1,j,i+1,j+1,j});}
-        var mesh=new Mesh{name=name+" ring"};mesh.SetVertices(verts);mesh.SetNormals(normals);mesh.SetUVs(0,uv);mesh.SetTriangles(tris,0);
+        mesh=new Mesh{name=name+" ring"};mesh.SetVertices(verts);mesh.SetNormals(normals);mesh.SetUVs(0,uv);mesh.SetTriangles(tris,0);
+        loopMeshes.Add(key,mesh);
+        }
         var go=new GameObject(name);go.transform.SetParent(p,false);go.transform.localPosition=at;go.transform.localRotation=rotation;go.AddComponent<MeshFilter>().sharedMesh=mesh;go.AddComponent<MeshRenderer>().sharedMaterial=m;return go;
     }
     static void FinishRoom(Transform p){

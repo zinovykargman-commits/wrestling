@@ -1,0 +1,8 @@
+{
+    "width": 1920,
+    "height": 1080,
+    "antiAliasing": 4,
+    "cameraFrames": 489,
+    "surfaceCreated": true,
+    "scope": "Normal full-scene camera rendered offscreen; no forced focus, no geometry/lighting/physics changes."
+}

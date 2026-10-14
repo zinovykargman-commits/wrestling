@@ -7,18 +7,20 @@ public static class BuildGripBreak {
     public static void Build() {
         PlayerSettings.companyName = "Grip Break";
         PlayerSettings.productName = "GRIP BREAK";
-        PlayerSettings.bundleVersion = "0.4.12";
+        PlayerSettings.bundleVersion = "0.4.13";
         PlayerSettings.defaultScreenWidth = 1600;
         PlayerSettings.defaultScreenHeight = 900;
         PlayerSettings.fullScreenMode = FullScreenMode.Windowed;
         PlayerSettings.runInBackground = true;
         PlayerSettings.resizableWindow = true;
+        PlayerSettings.meshDeformation = MeshDeformation.GPUBatched;
         PlayerSettings.SetScriptingBackend(UnityEditor.Build.NamedBuildTarget.Standalone, ScriptingImplementation.Mono2x);
         QualitySettings.antiAliasing = 4;
         QualitySettings.shadowDistance = 55;
         QualitySettings.shadows = ShadowQuality.All;
         QualitySettings.shadowResolution = ShadowResolution.High;
         var graphics = new SerializedObject(AssetDatabase.LoadAllAssetsAtPath("ProjectSettings/GraphicsSettings.asset")[0]);
+        graphics.FindProperty("m_InstancingStripping").intValue = 0;
         var shaders = graphics.FindProperty("m_AlwaysIncludedShaders");
         var seen=new System.Collections.Generic.HashSet<Shader>();
         for(int i=shaders.arraySize-1;i>=0;i--) {

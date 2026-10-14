@@ -1,0 +1,56 @@
+{
+    "build": "0.4.12",
+    "engine": "6000.3.7f1",
+    "hardware": "Intel(R) Core(TM) i5-14400F / 16173 MB",
+    "graphics": "NVIDIA GeForce RTX 5060",
+    "startedUtc": "2026-10-14T22:05:31.3988157Z",
+    "duration": 0.13442230224609376,
+    "averageFps": 0.0,
+    "minFps": 1000.0,
+    "bodies": 92,
+    "issues": 0,
+    "screenWidth": 1920,
+    "screenHeight": 1080,
+    "checks": [
+        {
+            "name": "test_inputs_not_serialized",
+            "passed": true,
+            "evidence": "runtime-only input; scene cannot install an empty test array"
+        },
+        {
+            "name": "snapshot_spring_matches_frozen_force_math",
+            "passed": true,
+            "evidence": "seed=187012; native cases=400; exact component differences=0; maximum force error=0; masses, centers, rotations, anisotropic/zero-axis inertia and kinematic combinations"
+        },
+        {
+            "name": "snapshot_arm_matches_frozen_candidate_decisions",
+            "passed": true,
+            "evidence": "seed=187012; native cases=400; exact selected-elbow differences=0; maximum error=0m; all24 candidates and3 endpoints, ordinary/covering, rival axes0/1/2 and scaled transforms"
+        },
+        {
+            "name": "snapshot_helpers_preserve_forces_and_registry",
+            "passed": true,
+            "evidence": "before/after force+torque changes=0; initial nonzero cases=160; initial nonfinite cases=0; registered game bodies unchanged=92; actual examples in physics-snapshot-cpu.json"
+        },
+        {
+            "name": "snapshot_paired_cpu_timings_recorded",
+            "passed": true,
+            "evidence": "paired calls per helper=1200; spring old/new ms=1.5833/1.1578; elbow old/new ms=22.9874/15.9145; ratios describe local helpers, not game FPS"
+        },
+        {
+            "name": "inactive_momentum_gate_preserves_action_qualification",
+            "passed": true,
+            "evidence": "all16 shot-active/shot-consumed/jump-active/down combinations retain original branch qualification; active shot/jump transfer still requires native momentum gameplay checks"
+        },
+        {
+            "name": "snapshot_fixture_runtime_clean",
+            "passed": true,
+            "evidence": ""
+        },
+        {
+            "name": "connected_body_joints",
+            "passed": true,
+            "evidence": "missing frames=0 maximum physical anchor separation=0.0050 m"
+        }
+    ]
+}

@@ -1,0 +1,19 @@
+{
+    "scope": "Current native full-scene counters; no FPS improvement claim; capture renders excluded",
+    "graphicsApi": "Direct3D11",
+    "device": "NVIDIA GeForce RTX 5060",
+    "instancingSupported": true,
+    "countersValid": true,
+    "instancedCounterAvailable": false,
+    "frames": 90,
+    "registeredBodies": 92,
+    "chainLinks": 192,
+    "ductClamps": 25,
+    "uniqueLoopMeshes": 4,
+    "standardMaterials": 22,
+    "meanInstancedBatches": 0.0,
+    "meanBatches": 3863.0,
+    "meanDrawCalls": 3863.0,
+    "meanSetPassCalls": 1929.0,
+    "maximumInstancedBatches": 0
+}

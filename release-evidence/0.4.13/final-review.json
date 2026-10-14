@@ -1,0 +1,47 @@
+{
+  "version": "0.4.13",
+  "nativeBuild": "f195",
+  "approved": true,
+  "sourceBaselineSha256": "6f4549e5e516719b54267cba0d21935327efcb925af4ff0e74b8e890edd11e78",
+  "currentNativeChecks": 49,
+  "counts": {
+    "render-optimization": 13,
+    "camera-obstruction": 25,
+    "hand-contact": 11
+  },
+  "categories": [
+    "render-optimization",
+    "camera-obstruction",
+    "hand-contact"
+  ],
+  "reviewedCaptures": [
+    "work/checks/f195-camera-obstruction/camera-blue-near-corner.png",
+    "work/checks/f195-camera-obstruction/camera-blue-opposite-corner.png",
+    "work/checks/f195-camera-obstruction/camera-blue-raised-center.png",
+    "work/checks/f195-camera-obstruction/camera-blue-raised-corner.png",
+    "work/checks/f195-camera-obstruction/camera-blue-standing.png",
+    "work/checks/f195-camera-obstruction/camera-orange-near-corner.png",
+    "work/checks/f195-camera-obstruction/camera-orange-opposite-corner.png",
+    "work/checks/f195-camera-obstruction/camera-orange-raised-center.png",
+    "work/checks/f195-camera-obstruction/camera-orange-raised-corner.png",
+    "work/checks/f195-camera-obstruction/camera-orange-standing.png",
+    "work/checks/f195-render-optimization/render-gym-back.png",
+    "work/checks/f195-render-optimization/render-gym-forward.png",
+    "work/checks/f195-hand-contact/held-body-contact-front.png",
+    "work/checks/f195-hand-contact/held-body-contact-side.png"
+  ],
+  "performanceEvidence": [
+    "work/performance-0413-f195-final.json",
+    "work/performance-0413-f193-gpu-skinning.json"
+  ],
+  "referenceFps": 73.06165313720703,
+  "currentFps": 115.78284454345703,
+  "repeatCandidateFps": 114.32794189453125,
+  "performanceGainPercent": 58.47279601793463,
+  "p95FrameMs": 9.234600067138672,
+  "above90TargetMet": true,
+  "performanceDecision": "Two independent current-player real offscreen full High1080p runs exceeded90FPS:114.33 and115.78 versus reused73.06 same-render baseline. Same scripted inputs,92 bodies,240Hz,64/24solver,4xMSAA,full geometry/materials/lighting. No old benchmark rerun or foreground focus. Audit collision diagnostic logging retained unchanged. FPS scope is this Windows moving/reaching workload, not a physical Mac/online/grapple guarantee.",
+  "visualDecision": "Root inspected14 actual f195 captures: both controlled characters standing/raised/corners, gym forward/back, held-body front/side. Skins retain shape, hand correction, clothes, shoes and shadows; camera remains unobstructed; no new visible deformation. Raised poses are intentional fixture placements.",
+  "productionChanges": "GPU batched skinning; identical loop mesh data shared by exact(radius,tube). No automatic instancing or manual merged geometry ships. Physics/gameplay/network/updater/lighting/model assets unchanged.",
+  "limits": "Historical physics/network/updater/quit proofs remain explicitly historical for unchanged source. Windows target measured on this i5-14400F/RTX5060; Mac native verification separate and no physical Mac FPS claim."
+}

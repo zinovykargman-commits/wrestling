@@ -1,0 +1,393 @@
+{
+  "scope": "Historical 0.4.11 session/quit/updater and 0.4.12 physics/gameplay evidence retained for exact unchanged production source; NOT current rerun passes",
+  "sourceComparisons": [
+    {
+      "path": "Source/Assets/Scripts/GBNetwork.cs",
+      "baselineBuild": "f186",
+      "baselineSha256": "e607ded6e4b27774c63b13ab4ed54d674944ee8e92ded3f8b591b2e62df10619",
+      "currentSha256": "e607ded6e4b27774c63b13ab4ed54d674944ee8e92ded3f8b591b2e62df10619",
+      "comparison": "exact text, allowing release-version literal only"
+    },
+    {
+      "path": "Source/Assets/Scripts/GBTunnel.cs",
+      "baselineBuild": "f186",
+      "baselineSha256": "9a5ef61ce3b22f9799b399beba95868526ba9b7c0883a2b5c0eb3a6fc2c89cee",
+      "currentSha256": "9a5ef61ce3b22f9799b399beba95868526ba9b7c0883a2b5c0eb3a6fc2c89cee",
+      "comparison": "exact text, allowing release-version literal only"
+    },
+    {
+      "path": "Source/Assets/Scripts/GBWindowsChildJob.cs",
+      "baselineBuild": "f186",
+      "baselineSha256": "cd43939a05497954092279c583215bcecfed33d93f133c15d793ea9ab66f284b",
+      "currentSha256": "cd43939a05497954092279c583215bcecfed33d93f133c15d793ea9ab66f284b",
+      "comparison": "exact text, allowing release-version literal only"
+    },
+    {
+      "path": "Source/Assets/Scripts/GBUpdater.cs",
+      "baselineBuild": "f186",
+      "baselineSha256": "3dfd7d6b6dc92af4a93e5710db7cab02b2ffaf5bfaa808714f55a8d530b41a05",
+      "currentSha256": "3dfd7d6b6dc92af4a93e5710db7cab02b2ffaf5bfaa808714f55a8d530b41a05",
+      "comparison": "exact text, allowing release-version literal only"
+    },
+    {
+      "path": "Source/Assets/Scripts/GBApp.cs",
+      "method": "BeginMatch",
+      "baselineBuild": "f186",
+      "comparison": "exact method source unchanged"
+    },
+    {
+      "path": "Source/Assets/Scripts/GBApp.cs",
+      "method": "ReturnToMenu",
+      "baselineBuild": "f186",
+      "comparison": "exact method source unchanged"
+    },
+    {
+      "path": "Source/Assets/Scripts/GBApp.cs",
+      "method": "ReturnToOnlineLobby",
+      "baselineBuild": "f186",
+      "comparison": "exact method source unchanged"
+    },
+    {
+      "path": "Source/Assets/Scripts/GBApp.cs",
+      "method": "RoundWin",
+      "baselineBuild": "f186",
+      "comparison": "exact method source unchanged"
+    },
+    {
+      "path": "Source/Assets/Scripts/GBApp.cs",
+      "method": "ResetRound",
+      "baselineBuild": "f186",
+      "comparison": "exact method source unchanged"
+    },
+    {
+      "path": "Source/Assets/Scripts/GBApp.cs",
+      "method": "PrepareToQuit",
+      "baselineBuild": "f186",
+      "comparison": "exact method source unchanged"
+    },
+    {
+      "path": "Source/Assets/Scripts/GBApp.cs",
+      "method": "OnApplicationQuit",
+      "baselineBuild": "f186",
+      "comparison": "exact method source unchanged"
+    },
+    {
+      "path": "Source/Assets/Scripts/GBApp.cs",
+      "method": "OnDestroy",
+      "baselineBuild": "f186",
+      "comparison": "exact method source unchanged"
+    },
+    {
+      "path": "Source/Assets/Scripts/GBApp.cs",
+      "method": "SavePrefs",
+      "baselineBuild": "f186",
+      "comparison": "exact method source unchanged"
+    },
+    {
+      "path": "Update/install-update.ps1",
+      "baselineBuild": "f186",
+      "currentSha256": "5f7945aa02bf59bb8267ec1d9a10ee69302971ab19c3ac3026a42c0d161b4b87",
+      "comparison": "exact installed/repository installer bytes"
+    },
+    {
+      "path": "Source/Assets/Scripts/GBArena.cs",
+      "baselineBuild": "f191",
+      "sha256": "43a98d42b528f53c2afa75923ed46012b46351596edd23acfc5dba0d27531ef1",
+      "comparison": "exact production script bytes unchanged"
+    },
+    {
+      "path": "Source/Assets/Scripts/GBBodyVisual.cs",
+      "baselineBuild": "f191",
+      "sha256": "7194b02438be9fe19a27330443f763b0be405cc665474c4e234e38fd2a4b31e3",
+      "comparison": "exact production script bytes unchanged"
+    },
+    {
+      "path": "Source/Assets/Scripts/GBBot.cs",
+      "baselineBuild": "f191",
+      "sha256": "33ed89e8ef5ce3d461c62a6c134d513857fd0c6f3583ce5b127fa2a054eef19e",
+      "comparison": "exact production script bytes unchanged"
+    },
+    {
+      "path": "Source/Assets/Scripts/GBGymLayout.cs",
+      "baselineBuild": "f191",
+      "sha256": "f0d3292156970e6fc629134064ed434897626374ff98db375e38c316210a1ff9",
+      "comparison": "exact production script bytes unchanged"
+    },
+    {
+      "path": "Source/Assets/Scripts/GBGymVisual.cs",
+      "baselineBuild": "f191",
+      "sha256": "ff61f53f6206959925cf82390db98ff33b9db4e62e908d1a6206bc23144c0594",
+      "comparison": "exact production script bytes unchanged"
+    },
+    {
+      "path": "Source/Assets/Scripts/GBHandContactVisual.cs",
+      "baselineBuild": "f191",
+      "sha256": "d11ce2a818bdd0633a8d3984268fd4360ea1f5a460a8f55982dbbb723c7d8056",
+      "comparison": "exact production script bytes unchanged"
+    },
+    {
+      "path": "Source/Assets/Scripts/GBKit.cs",
+      "baselineBuild": "f191",
+      "sha256": "1f90e8b65c2ad8485606c3fb1be6d7f55cb83f5b61fd79d3d54fe6910d46f1e2",
+      "comparison": "exact production script bytes unchanged"
+    },
+    {
+      "path": "Source/Assets/Scripts/GBMacUpdater.cs",
+      "baselineBuild": "f191",
+      "sha256": "11ee68854f7da2ee859fc3ce7952d11f9e9e176e9a4ba441159fd4a3f166fc67",
+      "comparison": "exact production script bytes unchanged"
+    },
+    {
+      "path": "Source/Assets/Scripts/GBNetwork.cs",
+      "baselineBuild": "f191",
+      "sha256": "e607ded6e4b27774c63b13ab4ed54d674944ee8e92ded3f8b591b2e62df10619",
+      "comparison": "exact production script bytes unchanged"
+    },
+    {
+      "path": "Source/Assets/Scripts/GBPlayerCameraRig.cs",
+      "baselineBuild": "f191",
+      "sha256": "b1077ee83109bb8bbf4ca02d1e9a72245dd3d1c205e00ca078718a2e56e48bc5",
+      "comparison": "exact production script bytes unchanged"
+    },
+    {
+      "path": "Source/Assets/Scripts/GBRealisticWrestler.cs",
+      "baselineBuild": "f191",
+      "sha256": "c46b094dede10f9acd1373eff3b15dcb9d57269b98f7e0e7667cc3c5349d77c2",
+      "comparison": "exact production script bytes unchanged"
+    },
+    {
+      "path": "Source/Assets/Scripts/GBRingRestart.cs",
+      "baselineBuild": "f191",
+      "sha256": "762a61d12cdcfcbe4ed67f970b59c9a390cfbd176fe47acf0dc4936c6078a8a4",
+      "comparison": "exact production script bytes unchanged"
+    },
+    {
+      "path": "Source/Assets/Scripts/GBRopeVisual.cs",
+      "baselineBuild": "f191",
+      "sha256": "9a1938e484e9eb892ee8adb8aa6ffe453866c146bdee64f1c91e41dd98f7d38c",
+      "comparison": "exact production script bytes unchanged"
+    },
+    {
+      "path": "Source/Assets/Scripts/GBTunnel.cs",
+      "baselineBuild": "f191",
+      "sha256": "9a5ef61ce3b22f9799b399beba95868526ba9b7c0883a2b5c0eb3a6fc2c89cee",
+      "comparison": "exact production script bytes unchanged"
+    },
+    {
+      "path": "Source/Assets/Scripts/GBUpdater.cs",
+      "baselineBuild": "f191",
+      "sha256": "3dfd7d6b6dc92af4a93e5710db7cab02b2ffaf5bfaa808714f55a8d530b41a05",
+      "comparison": "exact production script bytes unchanged"
+    },
+    {
+      "path": "Source/Assets/Scripts/GBWebSocketBridge.cs",
+      "baselineBuild": "f191",
+      "sha256": "ff61f51a9243d3e9eb36794350221c2bbc9f0d5aeaa3c098de320a87851247cf",
+      "comparison": "exact production script bytes unchanged"
+    },
+    {
+      "path": "Source/Assets/Scripts/GBWindowsChildJob.cs",
+      "baselineBuild": "f191",
+      "sha256": "cd43939a05497954092279c583215bcecfed33d93f133c15d793ea9ab66f284b",
+      "comparison": "exact production script bytes unchanged"
+    },
+    {
+      "path": "Source/Assets/Scripts/GBWrestler.cs",
+      "baselineBuild": "f191",
+      "sha256": "8550214119e49d9efa1a831aded33d9623be5e7c43d9aecba67e6f55990f3d05",
+      "comparison": "exact production script bytes unchanged"
+    },
+    {
+      "path": "Source/Assets/Scripts/GBWrestlerArms.cs",
+      "baselineBuild": "f191",
+      "sha256": "0cf51d0900e078ebab322f185929f5da8ecd27f15850fe27d612ef1f7f40d667",
+      "comparison": "exact production script bytes unchanged"
+    },
+    {
+      "path": "Source/Assets/Scripts/GBWrestlerCombat.cs",
+      "baselineBuild": "f191",
+      "sha256": "2aa6731fe4fb06632a89c916760369ed4c38346dc0c511226d002d38ec3f92de",
+      "comparison": "exact production script bytes unchanged"
+    },
+    {
+      "path": "Source/Assets/Scripts/GBWrestlerCorner.cs",
+      "baselineBuild": "f191",
+      "sha256": "be1efb83c3d3ae0b0af93557c76af0c91dd461053e6e857711969cad2aba0ef8",
+      "comparison": "exact production script bytes unchanged"
+    },
+    {
+      "path": "Source/Assets/Scripts/GBWrestlerMomentum.cs",
+      "baselineBuild": "f191",
+      "sha256": "6f9658542f18233bc7c5b68ce501a6286802fbddf8f144593820bd1de51a0afb",
+      "comparison": "exact production script bytes unchanged"
+    },
+    {
+      "path": "Source/Assets/Scripts/GBWrestlerPin.cs",
+      "baselineBuild": "f191",
+      "sha256": "879c98996e2cb2f8b9a3b3af47a00905cb50bc0426986781c038efb59e1a2e96",
+      "comparison": "exact production script bytes unchanged"
+    },
+    {
+      "path": "Source/Assets/Scripts/GBWrestlerSprawl.cs",
+      "baselineBuild": "f191",
+      "sha256": "abe0bdfb623655d2e0e4c3919ba7779b39026b22f35c1c0a1f210f89b98b0707",
+      "comparison": "exact production script bytes unchanged"
+    },
+    {
+      "path": "Source/Assets/Scripts/GBWrestlerWalk.cs",
+      "baselineBuild": "f191",
+      "sha256": "c9956859833ea8a3efaa9b9f354daf436041f0c9e806327d50a60b926c62483c",
+      "comparison": "exact production script bytes unchanged"
+    }
+  ],
+  "historicalEvidence": [
+    {
+      "path": "work/checks/f186-session-lifetime-tcp-20261014-145555/summary.json",
+      "sha256": "1a966a1c207943b783ee5b9ecc9e21dfe87d9a3f6f4ab00872932b214ce6d0cc",
+      "baselineBuild": "f186",
+      "kind": "sessionEvidence"
+    },
+    {
+      "path": "work/checks/f186-session-lifetime-tcp-20261014-145555/host/session-host.json",
+      "sha256": "33a11ed94ff604892043b5e61e4b229ed9bd4c13970ffe62fa01202f644c0e92",
+      "baselineBuild": "f186",
+      "kind": "sessionEvidence"
+    },
+    {
+      "path": "work/checks/f186-session-lifetime-tcp-20261014-145555/client/session-client.json",
+      "sha256": "387807ba18b9a753630466c81978630c8400d3c573219f99a99c67d85554f49e",
+      "baselineBuild": "f186",
+      "kind": "sessionEvidence"
+    },
+    {
+      "path": "work/checks/f186-quit-lifetime-20261014-145536/summary.json",
+      "sha256": "31b0e71e1bea02037ca3ca38e53efae00cc8e3b0c0396ff460b114a26f954436",
+      "baselineBuild": "f186",
+      "kind": "quitEvidence"
+    },
+    {
+      "path": "work/checks/f186-quit-lifetime-20261014-145536/forced/player.log",
+      "sha256": "cce2b7165dc767f7f193cde1fb936618b8ab472a0c555c42fc0c4e3da3d7adb1",
+      "baselineBuild": "f186",
+      "kind": "quitEvidence"
+    },
+    {
+      "path": "work/checks/f186-quit-lifetime-20261014-145536/forced/quit-ready.json",
+      "sha256": "d171aa127a07b11fa76be8e09bd121fe780ebd276957a63aafc74472fd0db0b6",
+      "baselineBuild": "f186",
+      "kind": "quitEvidence"
+    },
+    {
+      "path": "work/checks/f186-quit-lifetime-20261014-145536/forced/result.json",
+      "sha256": "05247bf052f014372585d40b7b31bb8914a504f433dbed7ce2d321a31a3effcf",
+      "baselineBuild": "f186",
+      "kind": "quitEvidence"
+    },
+    {
+      "path": "work/checks/f186-quit-lifetime-20261014-145536/quit/player.log",
+      "sha256": "fc59fb79dc30fae979416e4011a830933804f39d477b156193d7e282c8af6d4c",
+      "baselineBuild": "f186",
+      "kind": "quitEvidence"
+    },
+    {
+      "path": "work/checks/f186-quit-lifetime-20261014-145536/quit/quit-ready.json",
+      "sha256": "b1ff8de4e0ae8e1f749ef44e88d594dc895d766491d89b4fb5445ff1de7a63ca",
+      "baselineBuild": "f186",
+      "kind": "quitEvidence"
+    },
+    {
+      "path": "work/checks/f186-quit-lifetime-20261014-145536/quit/result.json",
+      "sha256": "05b03da12d81c2301bc16d1eba2fa135dc911f24d875f7aaecd43fee8d15eb50",
+      "baselineBuild": "f186",
+      "kind": "quitEvidence"
+    },
+    {
+      "path": "work/checks/f186-quit-lifetime-20261014-145536/x/player.log",
+      "sha256": "27702ecf2ce261515e8a31cc2a9a3fecc6a433065fc37acf1b82c65de72c178d",
+      "baselineBuild": "f186",
+      "kind": "quitEvidence"
+    },
+    {
+      "path": "work/checks/f186-quit-lifetime-20261014-145536/x/quit-ready.json",
+      "sha256": "d07d864905c53bab5cf98eb27abd28c5d66c0d0f33e825dfbe9fe59e4d03756e",
+      "baselineBuild": "f186",
+      "kind": "quitEvidence"
+    },
+    {
+      "path": "work/checks/f186-quit-lifetime-20261014-145536/x/result.json",
+      "sha256": "3158e76e06f6a6795b39f6ed7daf807d6b4fcbadd3c90d1021995b75cb897b93",
+      "baselineBuild": "f186",
+      "kind": "quitEvidence"
+    },
+    {
+      "path": "work/checks/f186-public-updater/updater.json",
+      "sha256": "d8686854e05154579b29f7faa8c5fa96cb3124d76557cddac502508422ac2f32",
+      "baselineBuild": "f186",
+      "kind": "updater"
+    },
+    {
+      "category": "physics-snapshot",
+      "path": "work/checks/f191-physics-snapshot/physics-snapshots.json",
+      "sha256": "cde2e1a4d6057f20dc4aaddc0f8efaf45a4f3429d971777372ef5846d959d85a",
+      "checks": 8,
+      "baselineBuild": "f191",
+      "kind": "historical physics/gameplay checks"
+    },
+    {
+      "category": "momentum",
+      "path": "work/checks/f191-momentum/momentum.json",
+      "sha256": "6a5c00832dbd801ed11e384b09419c569e44d9ca115a6e0d46323aa5f653799d",
+      "checks": 22,
+      "baselineBuild": "f191",
+      "kind": "historical physics/gameplay checks"
+    },
+    {
+      "category": "camera-obstruction",
+      "path": "work/checks/f191-camera-obstruction/camera-obstruction.json",
+      "sha256": "3f66dd5f488d9a8eebdbc390180bdf6a546c857f3c5534a81eee6998d69f012b",
+      "checks": 25,
+      "baselineBuild": "f191",
+      "kind": "historical physics/gameplay checks"
+    },
+    {
+      "category": "stamina",
+      "path": "work/checks/f191-stamina/stamina.json",
+      "sha256": "01080647ea20706fe9dd39439f548ffb937aa5c17d91016311d6400f2da01929",
+      "checks": 10,
+      "baselineBuild": "f191",
+      "kind": "historical physics/gameplay checks"
+    },
+    {
+      "category": "pin-spam",
+      "path": "work/checks/f191-pin-spam/pin-spam.json",
+      "sha256": "34f94c41e8db83659a23b29ef746e4b60e00c60281ef3f55d03c32c6cf03063e",
+      "checks": 37,
+      "baselineBuild": "f191",
+      "kind": "historical physics/gameplay checks"
+    },
+    {
+      "category": "pin-rules",
+      "path": "work/checks/f191-pin-rules/pin-rules.json",
+      "sha256": "29076b8a4d2c0dec800172a765088e1ef02c2cdf9f529df791399919b4c7fc9a",
+      "checks": 18,
+      "baselineBuild": "f191",
+      "kind": "historical physics/gameplay checks"
+    },
+    {
+      "category": "hand-contact",
+      "path": "work/checks/f191-hand-contact/hand-contact.json",
+      "sha256": "809c0fb54cebc6689a862b86a0f29f31512f546c0df73feb0923956b0775cbb9",
+      "checks": 11,
+      "baselineBuild": "f191",
+      "kind": "historical physics/gameplay checks"
+    },
+    {
+      "category": "ground-recovery",
+      "path": "work/checks/f191-ground-recovery/ground-recovery.json",
+      "sha256": "8674080acb20f349ff10f4c1c6d15e01195c1184f5d43b1658de4e7bfd7e3236",
+      "checks": 26,
+      "baselineBuild": "f191",
+      "kind": "historical physics/gameplay checks"
+    }
+  ]
+}

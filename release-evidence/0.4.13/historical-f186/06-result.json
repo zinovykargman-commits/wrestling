@@ -1,0 +1,35 @@
+{
+  "mode": "forced",
+  "gamePid": 27588,
+  "helperPids": [
+    31804,
+    18584
+  ],
+  "observedPingDescendants": 1,
+  "listenerPort": 65230,
+  "listenerBeforeClose": [
+    "0.0.0.0:65230"
+  ],
+  "listenerAfterClose": {
+    "port": 65230,
+    "osInventoryAvailable": true,
+    "listeningEndpoints": [],
+    "osListenerAbsent": true,
+    "osInventoryError": null,
+    "connectCompletedWithin2Seconds": false,
+    "connectSucceeded": false,
+    "connectTimedOut": true,
+    "socketError": null,
+    "connectError": null,
+    "closed": true,
+    "basis": "Exact port absent from native OS LISTEN inventory"
+  },
+  "closeActionSent": true,
+  "gameExitedWithin5Seconds": true,
+  "helperAndObservedDescendantsExitedWithin5Seconds": true,
+  "listenerClosed": true,
+  "fixtureTimedOut": false,
+  "elapsedSeconds": 2.05944,
+  "exitCode": -1,
+  "passed": true
+}

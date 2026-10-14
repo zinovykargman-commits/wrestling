@@ -1,0 +1,81 @@
+{
+    "build": "0.4.13",
+    "engine": "6000.3.7f1",
+    "hardware": "Intel(R) Core(TM) i5-14400F / 16173 MB",
+    "graphics": "NVIDIA GeForce RTX 5060",
+    "startedUtc": "2026-10-14T22:31:12.0629589Z",
+    "duration": 4.401033401489258,
+    "averageFps": 118.91465759277344,
+    "minFps": 52.56739044189453,
+    "bodies": 92,
+    "issues": 0,
+    "screenWidth": 1920,
+    "screenHeight": 1080,
+    "checks": [
+        {
+            "name": "test_inputs_not_serialized",
+            "passed": true,
+            "evidence": "runtime-only input; scene cannot install an empty test array"
+        },
+        {
+            "name": "render_loop_counts_preserved",
+            "passed": true,
+            "evidence": "all229 original loops:192 chain links,25 clamps,6 rubber plates,6 steel hubs"
+        },
+        {
+            "name": "render_loop_mesh_identity_shared",
+            "passed": true,
+            "evidence": "same exact(radius,tube) geometry shares one mesh;unique meshes=4;no static batching"
+        },
+        {
+            "name": "render_loop_geometry_exact",
+            "passed": true,
+            "evidence": "(0.18, 0.01): 369 vertices;640 triangles;exact original vertex/normal/UV/index formula differences=0; (0.04, 0.01): 369 vertices;640 triangles;exact original vertex/normal/UV/index formula differences=0; (0.19, 0.06): 369 vertices;640 triangles;exact original vertex/normal/UV/index formula differences=0; (0.03, 0.01): 369 vertices;640 triangles;exact original vertex/normal/UV/index formula differences=0"
+        },
+        {
+            "name": "render_loop_transforms_preserved",
+            "passed": true,
+            "evidence": "all original positions/rotations/unit scales remain after station parenting;position tolerance10 micrometers"
+        },
+        {
+            "name": "render_loop_shadow_collision_preserved",
+            "passed": true,
+            "evidence": "individual enabled MeshRenderers cast/receive shadows;no loop colliders added"
+        },
+        {
+            "name": "render_loop_material_properties_preserved",
+            "passed": true,
+            "evidence": "original brushed steel tint/metallic/smoothness and rubber plate upholstery tint/PBR texture maps retained"
+        },
+        {
+            "name": "render_standard_material_shaders_supported",
+            "passed": true,
+            "evidence": "unique shared Standard materials=22;instancing-enabled=0 (diagnostic only);custom wrestler/canvas/text shaders retained"
+        },
+        {
+            "name": "render_physics_settings_preserved",
+            "passed": true,
+            "evidence": "92 registered bodies;48 original rope colliders/joints;240Hz;wrestlers64/24 iterations"
+        },
+        {
+            "name": "render_native_full_scene_counters_recorded",
+            "passed": true,
+            "evidence": "90 full-scene frames;instanced mean=0 (diagnostic only);draws=3863;batches=3863;SetPass=1929;neither positive instancing nor an FPS gain is assumed"
+        },
+        {
+            "name": "render_registry_and_colliders_unchanged",
+            "passed": true,
+            "evidence": "read-only geometry/counter checks retain registered bodies/collider count;two actual full-detail views captured separately"
+        },
+        {
+            "name": "render_optimization_runtime_clean",
+            "passed": true,
+            "evidence": ""
+        },
+        {
+            "name": "connected_body_joints",
+            "passed": true,
+            "evidence": "missing frames=0 maximum physical anchor separation=0.0050 m"
+        }
+    ]
+}
