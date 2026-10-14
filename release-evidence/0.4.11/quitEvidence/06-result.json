@@ -1,0 +1,35 @@
+{
+  "mode": "quit",
+  "gamePid": 17012,
+  "helperPids": [
+    28296,
+    31348
+  ],
+  "observedPingDescendants": 1,
+  "listenerPort": 50018,
+  "listenerBeforeClose": [
+    "0.0.0.0:50018"
+  ],
+  "listenerAfterClose": {
+    "port": 50018,
+    "osInventoryAvailable": true,
+    "listeningEndpoints": [],
+    "osListenerAbsent": true,
+    "osInventoryError": null,
+    "connectCompletedWithin2Seconds": false,
+    "connectSucceeded": false,
+    "connectTimedOut": true,
+    "socketError": null,
+    "connectError": null,
+    "closed": true,
+    "basis": "Exact port absent from native OS LISTEN inventory"
+  },
+  "closeActionSent": true,
+  "gameExitedWithin5Seconds": true,
+  "helperAndObservedDescendantsExitedWithin5Seconds": true,
+  "listenerClosed": true,
+  "fixtureTimedOut": false,
+  "elapsedSeconds": 2.8083506,
+  "exitCode": 0,
+  "passed": true
+}

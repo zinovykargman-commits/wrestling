@@ -1,0 +1,11 @@
+{
+  "pid": 25748,
+  "reason": "User requested game not remain running after close; exact old installed process has no window",
+  "mainWindowHandle": 0,
+  "cpuSeconds": 2537.9375,
+  "enumeratedTopLevelWindows": 0,
+  "startedUtc": "2026-10-14T17:09:56.6753874Z",
+  "path": "C:\\Users\\zinov\\OneDrive\\Desktop\\GRIP BREAK\\Build\\GRIP_BREAK.exe",
+  "action": "Stop exact orphaned game process only",
+  "exited": true
+}

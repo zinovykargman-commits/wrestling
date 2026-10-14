@@ -1,4 +1,4 @@
-# GRIP BREAK 0.4.10 known limits
+# GRIP BREAK 0.4.11 known limits
 
 Shoulder weights, render-only shoulder volume pivots, shared body/cloth deformation and elbow routing were refined and inspected in native neutral front/back/side, overhead and live-reach views. The original deferred arm defects have been addressed in this pass, but extreme raised/armpit poses can still fold the clothing trim. Small white wisps near Cobalt's neckline remain cosmetic. Do not interpret the checked poses as a guarantee of perfect anatomy in every possible physics configuration.
 
@@ -10,4 +10,6 @@ The previous 0.4.9 Windows build f180 passed 412 of 413 assertions across 19 nat
 
 Earlier rejected f179 measured a normal supported Ctrl stance but missed an arbitrary 13 cm hip-drop threshold by 0.3 mm. Root approved an explicit 5 mm solver/contact tolerance in the final audit, retaining independent knee, head/chest, boot-support and free-cost checks; gameplay was unchanged. The f179 failed report and the earlier f178 client-render failure remain historical evidence, separately from current f180 results.
 
-Physical keyboard/controller events, independent-machine internet play, long human matches, balance and enjoyment require hands-on acceptance. Mac joins Windows-hosted invites and uses keyboard/mouse; Mac hosting/controllers and automatic replacement updates are outside the current package. Mac uses manual downloads and is not Developer ID signed or notarized. Hosted Mac-runner checks do not establish physical-Mac GPU performance.
+Physical keyboard/controller events, independent-machine internet play, long human matches, balance and enjoyment require hands-on acceptance. Mac joins Windows-hosted invites and uses keyboard/mouse; Mac hosting/controllers are outside the current package. Mac 0.4.11 introduces automatic replacement updates; older Mac builds require one manual download/app replacement to install that updater. A read-only location must be moved to a writable folder. Mac is not Developer ID signed or notarized. Hosted Mac-runner checks do not establish physical-Mac GPU performance.
+
+Current session fixtures cover real authenticated host/client connections, deliberately staged round-win events, results, rematch and returning to the same room. They do not constitute two-person physical pinning over separate internet connections. Windows shutdown fixtures cover the owned game, a real room listener and a harmless owned helper tree; unrelated applications are never terminated. Measured rendering comparisons are separate from correctness and are not a promise of steady FPS.

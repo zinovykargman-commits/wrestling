@@ -14,11 +14,13 @@ using Process=System.Diagnostics.Process;
 public class GBUpdater:MonoBehaviour {
     public const string Repository="zinovykargman-commits/wrestling";
     public const string LatestReleaseApi="https://api.github.com/repos/"+Repository+"/releases/latest";
-    public string Status {get;private set;}="CHECK FOR UPDATE";
-    public bool Busy {get;private set;}
-    public bool HasUpdate {get;private set;}
-    public string LatestVersion {get;private set;}="";
+    GBMacUpdater mac;string windowsStatus="CHECK FOR UPDATE",windowsLatestVersion="";bool windowsBusy,windowsHasUpdate;
+    public string Status {get{return mac?mac.Status:windowsStatus;}private set{windowsStatus=value;}}
+    public bool Busy {get{return mac?mac.Busy:windowsBusy;}private set{windowsBusy=value;}}
+    public bool HasUpdate {get{return mac?mac.HasUpdate:windowsHasUpdate;}private set{windowsHasUpdate=value;}}
+    public string LatestVersion {get{return mac?mac.LatestVersion:windowsLatestVersion;}private set{windowsLatestVersion=value;}}
     Manifest available;
+    void Awake(){if(Application.platform==RuntimePlatform.OSXPlayer)mac=gameObject.AddComponent<GBMacUpdater>();}
 
     [Serializable] class Asset {public string name,browser_download_url;public long size;}
     [Serializable] class Release {public string tag_name;public Asset[] assets;}
@@ -26,6 +28,7 @@ public class GBUpdater:MonoBehaviour {
     [Serializable] class Job {public string installRoot,packageRoot,zipPath,expectedSha,version,restartArguments;public int parentPid;}
 
     public void CheckOrInstall(){
+        if(mac){mac.CheckOrInstall();return;}
         if(Busy)return;
         if(Application.isEditor){Status="UPDATES ARE AVAILABLE IN THE WINDOWS GAME";return;}
         if(Application.platform!=RuntimePlatform.WindowsPlayer){Status="WINDOWS UPDATES ONLY";return;}

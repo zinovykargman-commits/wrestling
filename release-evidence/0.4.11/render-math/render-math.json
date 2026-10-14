@@ -1,0 +1,31 @@
+{
+    "build": "0.4.11",
+    "engine": "6000.3.7f1",
+    "hardware": "Intel(R) Core(TM) i5-14400F / 16173 MB",
+    "graphics": "Null Device",
+    "startedUtc": "2026-10-14T18:26:43.1199682Z",
+    "duration": 0.06239470839500427,
+    "averageFps": 0.0,
+    "minFps": 1000.0,
+    "bodies": 92,
+    "issues": 0,
+    "screenWidth": 1424,
+    "screenHeight": 714,
+    "checks": [
+        {
+            "name": "test_inputs_not_serialized",
+            "passed": true,
+            "evidence": "runtime-only input; scene cannot install an empty test array"
+        },
+        {
+            "name": "cached_transform_math_preserves_point_and_direction",
+            "passed": true,
+            "evidence": "64 translated/rotated/nonuniform-scaled cases; max point error=1.06624E-06m; direction=1.884864E-07; no physics/mesh/sample change"
+        },
+        {
+            "name": "connected_body_joints",
+            "passed": true,
+            "evidence": "missing frames=0 maximum physical anchor separation=0.0050 m"
+        }
+    ]
+}

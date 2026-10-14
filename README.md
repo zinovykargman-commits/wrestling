@@ -4,11 +4,11 @@
 
 This repository contains the editable Unity source, update installer, and build instructions. The playable Windows build is distributed as a release asset.
 
-# GRIP BREAK 0.4.10
+# GRIP BREAK 0.4.11
 
 Extract **GRIP_BREAK-Windows.zip** and open **PLAY.cmd**. No Unity installation is needed to play. **PLAY AGAINST AI** and **PRIVATE ONLINE** use the same Pin Wrestling rules: first to three pins wins. There is one full-window camera locked to the wrestler you control. Training, split screen and other modes are inactive.
 
-0.4.10 adds passive ground stamina recovery after 2.5 seconds. This applies under pin control too; paid movement and Ctrl-spam still prevent free recovery.
+0.4.11 fixes room lifetime across rounds, match results and returning to the lobby, and closes the game and its own room helper on Windows exit. It removes the mat's moving white glare and reduces repeated rendering work while preserving gameplay, models, textures, lights and graphics presets. Passive ground stamina recovery after 2.5 seconds, including while pinned, remains unchanged.
 
 ## Controls
 
@@ -52,13 +52,15 @@ The realistic athletes use licensed skin, hair and eye textures, fitted cloth si
 
 ## Private online
 
-Use matching **0.4.10** builds on both computers. Protocol 12 retains host authority and the same 92 registered bodies. Windows hosts: **PRIVATE ONLINE → HOST & MAKE LINK → COPY INVITE**. Send the complete copied invite to your friend. They paste it into Join, select **JOIN FRIEND**, ready up, then the host starts.
+Use matching **0.4.11** builds on both computers. Protocol 12 retains host authority and the same 92 registered bodies. Windows hosts: **PRIVATE ONLINE → HOST & MAKE LINK → COPY INVITE**. Send the complete copied invite to your friend. They paste it into Join, select **JOIN FRIEND**, ready up, then the host starts.
 
 The bundled Windows Cloudflare helper creates a temporary authenticated tunnel without router setup, VPN or a Cloudflare account. Closing the room expires the invite. The game streams existing bodies, grips, shoulder contacts and pin state. Mac joins a Windows-hosted invite; native Mac hosting/controllers are outside the current Mac package. Current separate-machine internet play and physical-Mac performance require hands-on verification. Temporary service availability is external.
 
+Rounds restart without disconnecting either player. Match results and **LOBBY / RETURN TO LOBBY** keep the same private room and invite. Use **LEAVE ROOM** to disconnect deliberately; quitting or a real transport failure also closes the connection.
+
 ## Updates and editable source
 
-Windows: use **CHECK FOR UPDATE**, then **UPDATE & RESTART** when a newer release is available. The game verifies repository/version/URL, size and SHA256, stages a contained archive, backs up the old runtime and restarts. Preferences and editable Source are preserved. Extract into a writable folder. Mac's update button opens the Mac release download; replace the extracted app manually.
+Windows: use **CHECK FOR UPDATE**, then **UPDATE & RESTART** when a newer release is available. The game verifies repository/version/URL, size and SHA256, stages a contained archive, backs up the old runtime and restarts. Preferences and editable Source are preserved. Extract into a writable folder. Mac 0.4.11 adds an automatic GitHub update path that downloads, verifies, replaces and relaunches the app from a writable installation. Older Mac versions still use their existing download-page button: manually download and replace the app once to reach 0.4.11. Future updates can then use its new button. Mac apps remain ad-hoc signed, without Developer ID notarization; follow normal macOS per-app approval if needed.
 
 Windows downloads: https://github.com/zinovykargman-commits/wrestling/releases/latest
 
@@ -68,6 +70,10 @@ The Source archive contains Unity Assets/Packages/ProjectSettings, licensed runt
 
 The previous 0.4.9 Windows build **f180** passed **412 of 413 native assertions**, with zero build errors/warnings and zero runtime issues. All new feature checks, the dedicated 20-check locomotion suite, the manual standing pin exchange and 32 host/client checks passed. One older walking fixture still failed its boot-height criterion; the untouched failure remains in the evidence. VALIDATION.md records the category results.
 
-Current0.4.10 build **f182** passed **125/125 focused native assertions**, with zero build errors/warnings and zero runtime issues: pinned ground recovery, stamina costs, Ctrl-spam protection, pin rules, host/client state and rendered menu. This is a focused follow-up; prior full0.4.9 evidence and its legacy walking-height limitation remain unchanged.
+Prior 0.4.10 build **f182** passed **125/125 focused native assertions**, with zero build errors/warnings and zero runtime issues: pinned ground recovery, stamina costs, Ctrl-spam protection, pin rules, host/client state and rendered menu. This is a focused follow-up; prior full 0.4.9 evidence and its legacy walking-height limitation remain unchanged.
 
-Untouched report JSON and inspected key captures are published in the [repository release evidence](https://github.com/zinovykargman-commits/wrestling/tree/main/release-evidence/0.4.9). Test screenshots, videos and reports are excluded from the playable ZIP. MANUAL_CHECKS.md separates hardware, human feel and independent-network checks. Public archive byte verification and the live updater check are recorded after publication in the repository. Automated evidence does not establish long-session or human-balance acceptance.
+Current 0.4.11 results, lifecycle evidence, inspected mat viewpoints and measured performance comparisons are recorded in VALIDATION.md and the final review. Performance depends on hardware and scene; this change does not promise a fixed FPS increase.
+
+Untouched report JSON and inspected key captures are published in the [repository release evidence](https://github.com/zinovykargman-commits/wrestling/tree/main/release-evidence/0.4.11). Test screenshots, videos and reports are excluded from the playable ZIP. MANUAL_CHECKS.md separates hardware, human feel and independent-network checks. Public archive byte verification and the live updater check are recorded after publication in the repository. Automated evidence does not establish long-session or human-balance acceptance.
+
+Current Windows 0.4.11 measured 76.45 FPS versus72.89 FPS in two foreground1080p High movement/reaching trials on the same PC (about4.9% observed improvement, with trial variation). It is not a grappling or physical Mac benchmark. See release-evidence/0.4.11/performance-comparison-0411.json.

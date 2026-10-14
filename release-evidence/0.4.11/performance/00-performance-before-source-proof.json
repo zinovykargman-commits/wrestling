@@ -1,0 +1,27 @@
+{
+  "baseline": "f182-source-build-baseline.json",
+  "expectedFiles": 299,
+  "copiedFiles": 301,
+  "missing": [],
+  "mismatched": [],
+  "additionalFiles": [],
+  "beforeFixtureExactMatch": true,
+  "fixtureSha256": "99f9877cb0cdcfcd431860736aefe1ef2a0e59097c295280d3e89aa8501b50c0",
+  "diagnosticHookChanges": [
+    {
+      "file": "Assets/Scripts/GBApp.cs",
+      "diff": "--- Assets/Scripts/GBApp.cs published\n+++ Assets/Scripts/GBApp.cs benchmark hook only\n@@ -67,7 +67,7 @@\n         Views=gameObject.AddComponent<GBPlayerCameraRig>();Views.Setup(this,cam);\n         BuildWorld(3,1,false);PlaceMenuCamera();\n         pixel=Texture2D.whiteTexture;font=Resources.GetBuiltinResource<Font>(\"LegacyRuntime.ttf\");\n-        string[] args=Environment.GetCommandLineArgs();if(Array.IndexOf(args,\"--ground-recovery-test\")>=0||Array.IndexOf(args,\"--corner-test\")>=0||Array.IndexOf(args,\"--top-control-test\")>=0||Array.IndexOf(args,\"--hand-contact-test\")>=0||Array.IndexOf(args,\"--stance-test\")>=0||Array.IndexOf(args,\"--appearance-test\")>=0||Array.IndexOf(args,\"--locomotion-quality-test\")>=0||Array.IndexOf(args,\"--pin-spam-test\")>=0||Array.IndexOf(args,\"--gym-test\")>=0||Array.IndexOf(args,\"--ringout-test\")>=0||Array.IndexOf(args,\"--scramble-test\")>=0||Array.IndexOf(args,\"--stamina-test\")>=0||Array.IndexOf(args,\"--pin-rules-test\")>=0||Array.IndexOf(args,\"--carry-test\")>=0||Array.IndexOf(args,\"--pin-test\")>=0||Array.IndexOf(args,\"--momentum-test\")>=0||Array.IndexOf(args,\"--throw-test\")>=0||Array.IndexOf(args,\"--input-test\")>=0||Array.IndexOf(args,\"--ai-test\")>=0||Array.IndexOf(args,\"--updater-test\")>=0||Array.IndexOf(args,\"--overhaul-test\")>=0||Array.IndexOf(args,\"--audit\")>=0||Array.IndexOf(args,\"--camera-test\")>=0||Array.IndexOf(args,\"--moves\")>=0||Array.IndexOf(args,\"--host-test\")>=0||Array.IndexOf(args,\"--client-test\")>=0||Array.IndexOf(args,\"--soak\")>=0||Array.IndexOf(args,\"--record\")>=0||Array.IndexOf(args,\"--menu-shot\")>=0){Automated=true;gameObject.AddComponent<GBAudit>();}\n+        string[] args=Environment.GetCommandLineArgs();if(Array.IndexOf(args,\"--performance-test\")>=0||Array.IndexOf(args,\"--ground-recovery-test\")>=0||Array.IndexOf(args,\"--corner-test\")>=0||Array.IndexOf(args,\"--top-control-test\")>=0||Array.IndexOf(args,\"--hand-contact-test\")>=0||Array.IndexOf(args,\"--stance-test\")>=0||Array.IndexOf(args,\"--appearance-test\")>=0||Array.IndexOf(args,\"--locomotion-quality-test\")>=0||Array.IndexOf(args,\"--pin-spam-test\")>=0||Array.IndexOf(args,\"--gym-test\")>=0||Array.IndexOf(args,\"--ringout-test\")>=0||Array.IndexOf(args,\"--scramble-test\")>=0||Array.IndexOf(args,\"--stamina-test\")>=0||Array.IndexOf(args,\"--pin-rules-test\")>=0||Array.IndexOf(args,\"--carry-test\")>=0||Array.IndexOf(args,\"--pin-test\")>=0||Array.IndexOf(args,\"--momentum-test\")>=0||Array.IndexOf(args,\"--throw-test\")>=0||Array.IndexOf(args,\"--input-test\")>=0||Array.IndexOf(args,\"--ai-test\")>=0||Array.IndexOf(args,\"--updater-test\")>=0||Array.IndexOf(args,\"--overhaul-test\")>=0||Array.IndexOf(args,\"--audit\")>=0||Array.IndexOf(args,\"--camera-test\")>=0||Array.IndexOf(args,\"--moves\")>=0||Array.IndexOf(args,\"--host-test\")>=0||Array.IndexOf(args,\"--client-test\")>=0||Array.IndexOf(args,\"--soak\")>=0||Array.IndexOf(args,\"--record\")>=0||Array.IndexOf(args,\"--menu-shot\")>=0){Automated=true;gameObject.AddComponent<GBAudit>();}\n     }\n     void Defaults() {\n         KeyCode[] defaults={KeyCode.Mouse0,KeyCode.Mouse1,KeyCode.LeftShift,KeyCode.Space,KeyCode.R,KeyCode.Q,KeyCode.LeftControl,KeyCode.C,KeyCode.E,KeyCode.W,KeyCode.S,KeyCode.A,KeyCode.D};\n"
+    },
+    {
+      "file": "Assets/Scripts/GBAudit.cs",
+      "diff": "--- Assets/Scripts/GBAudit.cs published\n+++ Assets/Scripts/GBAudit.cs benchmark hook only\n@@ -18,6 +18,7 @@\n         if(Has(\"--input-test\")){yield return InputRun();Finish(\"input.json\");yield break;}\n         if(Has(\"--ai-test\")){yield return AIRun();Finish(\"ai.json\");yield break;}\n         app.ScriptedInputs=new GBInput[2];\n+        if(Has(\"--performance-test\")){yield return PerformanceRun();Finish(\"performance-report.json\");yield break;}\n         if(Has(\"--ground-recovery-test\")){yield return GBAuditGroundRecovery.Run(app,Check);Finish(\"ground-recovery.json\");yield break;}\n         if(Has(\"--top-control-test\")){yield return GBAuditTopControl.Run(app,Check);Finish(\"top-control.json\");yield break;}\n         if(Has(\"--hand-contact-test\")){yield return GBAuditHandContact.Run(app,directory,Check);Finish(\"hand-contact.json\");yield break;}\n"
+    }
+  ],
+  "addedFiles": [
+    "Assets/Scripts/GBAuditPerformance.cs",
+    "Assets/Scripts/GBAuditPerformance.cs.meta"
+  ],
+  "onlyTwoExistingFilesModified": true,
+  "rejectedWorkloadEvidence": "work/checks/performance-before-0411-20261014-140034/trial-1/performance-report.json",
+  "fixtureScope": "Controlled movement/manual reach. Earned grips recorded truthfully; zero grips allowed, no grapple performance claim. Existing native hand-contact audit separately checks held-contact optimization."
+}

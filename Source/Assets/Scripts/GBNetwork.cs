@@ -35,7 +35,7 @@ public class GBNetwork:MonoBehaviour {
     public string LastConnectionDiagnostic {get;private set;}="";
     readonly List<Delayed> delayed=new List<Delayed>();
     class Delayed {public float at;public byte[] bytes;}
-    string password,nonce;double lastSnapshot;int inputSequence;float heartbeat;
+    string password,nonce;double lastSnapshot;int inputSequence,lastRemoteInputSequence;float heartbeat;
     public const int Protocol=12;
     public bool Authority {get{return role!=Role.Client;}}
     void Awake(){role=Role.Offline;}
@@ -158,6 +158,8 @@ public class GBNetwork:MonoBehaviour {
     public void SetReady(bool value){ready=value;if(role==Role.Client)Send(Packet(2,w=>w.Write(value)));}
     public void StartMatch(){if(role==Role.Host&&connected&&ready&&peerReady){GBApp.I.BeginMatch(GBApp.I.SelectedArena,GBApp.I.SelectedMode);}}
     public void Lobby(){if(role==Role.Host&&connected)Send(Packet(6,w=>{w.Write(GBApp.I.SelectedArena);w.Write(GBApp.I.SelectedMode);w.Write(ready);w.Write(GBApp.I.PlayerName);}),false);}
+    public void RequestLobby(){if(role==Role.Client&&connected)Send(Packet(8,w=>{}));else if(role==Role.Host&&connected)GBApp.I.ReturnToOnlineLobby();}
+    public void ResetRoomReady(){ready=peerReady=false;remoteInput=default;Lobby();}
     public void SendInput(GBInput i){if(role!=Role.Client||!connected)return;i=i.Sanitize();i.sequence=++inputSequence;i.stamp=Time.realtimeSinceStartupAsDouble;Send(Packet(3,w=>{w.Write(i.sequence);w.Write(i.stamp);w.Write(i.x);w.Write(i.z);w.Write(i.ax);w.Write(i.az);w.Write(i.hx);w.Write(i.hy);w.Write(i.hz);w.Write(i.flags);}),true);}
     public void Pump() {
         string diagnostic;while(diagnostics.TryDequeue(out diagnostic)){LastConnectionDiagnostic=diagnostic;Debug.Log("GRIP_NETWORK "+diagnostic);}
@@ -176,9 +178,10 @@ public class GBNetwork:MonoBehaviour {
                 else if(type==5&&role==Role.Client){peerName=r.ReadString();if(r.ReadInt32()!=Protocol)throw new IOException("Different game versions");connected=true;GBApp.I.ClientSnapshotAt=Time.realtimeSinceStartup;status="Connected to "+peerName;}
                 else if(!connected)continue;
                 else if(type==2&&role==Role.Host){peerReady=r.ReadBoolean();Lobby();}
-                else if(type==3&&role==Role.Host){var cmd=new GBInput{sequence=r.ReadInt32(),stamp=r.ReadDouble(),x=r.ReadSingle(),z=r.ReadSingle(),ax=r.ReadSingle(),az=r.ReadSingle(),hx=r.ReadSingle(),hy=r.ReadSingle(),hz=r.ReadSingle(),flags=r.ReadInt32()}.Sanitize();if(cmd.sequence>remoteInput.sequence){remoteInput=cmd;lastInput=Time.realtimeSinceStartup;inputsReceived++;}}
+                else if(type==3&&role==Role.Host){var cmd=new GBInput{sequence=r.ReadInt32(),stamp=r.ReadDouble(),x=r.ReadSingle(),z=r.ReadSingle(),ax=r.ReadSingle(),az=r.ReadSingle(),hx=r.ReadSingle(),hy=r.ReadSingle(),hz=r.ReadSingle(),flags=r.ReadInt32()}.Sanitize();if(cmd.sequence>lastRemoteInputSequence){lastRemoteInputSequence=cmd.sequence;remoteInput=cmd;lastInput=Time.realtimeSinceStartup;inputsReceived++;}}
                 else if(type==4&&role==Role.Client){ReadSnapshot(r);snapshotsReceived++;}
                 else if(type==6&&role==Role.Client){GBApp.I.SelectedArena=Mathf.Clamp(r.ReadInt32(),0,3);GBApp.I.SelectedMode=Mathf.Clamp(r.ReadInt32(),0,2);peerReady=r.ReadBoolean();peerName=r.ReadString();}
+                else if(type==8&&role==Role.Host){GBApp.I.ReturnToOnlineLobby();}
             }}catch(Exception e){if(role==Role.Host&&!connected&&socket!=null){DropPendingPeer();GBApp.I.Toast("Room authentication failed • waiting for your friend",4);}else errors.Enqueue("Session error: "+e.Message);}
         }
         if(role==Role.Host&&connected&&Time.realtimeSinceStartup-lastInput>.35f)remoteInput=default;
@@ -203,7 +206,9 @@ public class GBNetwork:MonoBehaviour {
         if(r.ReadInt32()!=Protocol)throw new IOException("Snapshot version mismatch");int epoch=r.ReadInt32();double hostTime=r.ReadDouble();int arena=r.ReadInt32();int mode=r.ReadInt32();int phase=r.ReadInt32();int s0=r.ReadInt32();int s1=r.ReadInt32();float remaining=r.ReadSingle();float pin=r.ReadSingle();int pinAttacker=r.ReadInt32();string pinStatus=r.ReadString();if(pinAttacker<-1||pinAttacker>1||pinStatus.Length>100||!Finite(pin)||!Finite(remaining)||double.IsNaN(hostTime)||double.IsInfinity(hostTime))throw new IOException("Invalid pin match state");bool sudden=r.ReadBoolean();float st=r.ReadSingle();string message=r.ReadString();
         var a=GBApp.I;if(a.Epoch!=epoch||a.World==null){a.BuildWorld(arena,mode,true);a.Epoch=epoch;}
         bool whistle=a.RingRestartCountdown&&phase==(int)GBApp.GamePhase.Fighting;
+        bool wasInMatch=a.InMatch;
         a.Phase=(GBApp.GamePhase)phase;a.InMatch=a.Phase!=GBApp.GamePhase.Menu;a.Scores[0]=s0;a.Scores[1]=s1;a.Remaining=remaining;a.PinCount=pin;a.PinAttacker=pinAttacker;a.PinStatus=pinStatus;a.Arena.sudden=sudden;a.Arena.suddenTime=st;a.RoundMessage=message;
+        if(wasInMatch&&!a.InMatch){ready=false;a.Paused=false;a.ControlsVisible=false;a.ShowMenu("online");}
         if(whistle)a.Sfx.Play("whistle",.65f);
         int count=r.ReadInt32();if(count!=a.Registry.Count)throw new IOException("Arena objects differ; use the same build");
         for(int i=0;i<count;i++){bool active=r.ReadBoolean();var p=Read(r);var q=new Quaternion(r.ReadSingle(),r.ReadSingle(),r.ReadSingle(),r.ReadSingle());float norm=q.x*q.x+q.y*q.y+q.z*q.z+q.w*q.w;if(!Finite(q.x)||!Finite(q.y)||!Finite(q.z)||!Finite(q.w)||!Finite(norm)||norm<.0001f||norm>4)throw new IOException("Invalid snapshot rotation");a.Registry[i].gameObject.SetActive(active);a.TargetPositions[i]=p;a.TargetRotations[i]=q;}
@@ -213,24 +218,30 @@ public class GBNetwork:MonoBehaviour {
         a.ClientSnapshotAt=Time.realtimeSinceStartup;a.LastHostTime=hostTime;
     }
     public void Stop(bool clearStatus=true) {
+        CancellationTokenSource oldCancel,oldConnectionCancel;TcpListener oldListener;TcpClient oldSocket;ClientWebSocket oldWebsocket;BlockingCollection<byte[]> oldOutgoing;GBTunnel oldTunnel;
         lock(transportGate){
             Interlocked.Increment(ref sessionId);
-            if(cancel!=null){cancel.Cancel();cancel.Dispose();cancel=null;}
-            if(connectionCancel!=null){connectionCancel.Cancel();connectionCancel.Dispose();connectionCancel=null;}handshakeStarted=0;
-            try{listener?.Stop();}catch{}listener=null;try{socket?.Close();}catch{}socket=null;
-            try{websocket?.Abort();websocket?.Dispose();}catch{}websocket=null;
-            try{outgoing?.CompleteAdding();outgoing?.Dispose();}catch{}outgoing=null;
+            oldCancel=cancel;cancel=null;oldConnectionCancel=connectionCancel;connectionCancel=null;handshakeStarted=0;
+            oldListener=listener;listener=null;oldSocket=socket;socket=null;oldWebsocket=websocket;websocket=null;
+            oldOutgoing=outgoing;outgoing=null;oldTunnel=tunnel;tunnel=null;
             byte[] b;while(incoming.TryDequeue(out b)){}string e;while(errors.TryDequeue(out e)){}
             while(diagnostics.TryDequeue(out e)){}LastConnectionDiagnostic="";
         }
-        try{tunnel?.Dispose();}catch{}tunnel=null;
-        connected=ready=peerReady=false;remoteInput=default;role=Role.Offline;delayed.Clear();lastSnapshot=0;inputSequence=0;heartbeat=0;connectStarted=0;nonce=null;if(clearStatus)status="Local play";
+        // Cancellation and socket callbacks may enter transportGate. Detach
+        // the expired session under the lock, then shut it down outside it.
+        try{oldTunnel?.Dispose();}catch{}
+        try{oldCancel?.Cancel();}catch{}try{oldConnectionCancel?.Cancel();}catch{}
+        try{oldListener?.Stop();}catch{}try{oldSocket?.Close();}catch{}
+        try{oldWebsocket?.Abort();oldWebsocket?.Dispose();}catch{}
+        try{oldOutgoing?.CompleteAdding();oldOutgoing?.Dispose();}catch{}
+        try{oldConnectionCancel?.Dispose();oldCancel?.Dispose();}catch{}
+        connected=ready=peerReady=false;remoteInput=default;role=Role.Offline;delayed.Clear();lastSnapshot=0;inputSequence=lastRemoteInputSequence=0;heartbeat=0;connectStarted=0;nonce=null;if(clearStatus)status="Local play";
     }
     void DropPendingPeer(){
         lock(transportGate){
             if(connectionCancel!=null){connectionCancel.Cancel();connectionCancel.Dispose();connectionCancel=null;}
             try{socket?.Close();}catch{}socket=null;try{outgoing?.CompleteAdding();outgoing?.Dispose();}catch{}outgoing=null;
-            byte[] packet;while(incoming.TryDequeue(out packet)){}string error;while(errors.TryDequeue(out error)){}nonce=null;handshakeStarted=0;peerReady=false;remoteInput=default;
+            byte[] packet;while(incoming.TryDequeue(out packet)){}string error;while(errors.TryDequeue(out error)){}nonce=null;handshakeStarted=0;peerReady=false;remoteInput=default;lastRemoteInputSequence=0;
         }
         status=tunnel!=null&&tunnel.Ready?"Invite ready • waiting for your friend":"Waiting for your friend…";
     }

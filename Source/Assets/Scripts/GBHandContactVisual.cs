@@ -21,7 +21,8 @@ public sealed class GBHandContactVisual:MonoBehaviour {
     public float CorrectedContactGap(int hand){
         var target=owner.hands[hand].target;if(!target||palmSamples[hand].Length==0)return 0;
         Vector3 contact=target.transform.TransformPoint(owner.hands[hand].localAnchor);float best=float.PositiveInfinity;
-        foreach(var p in palmSamples[hand])best=Mathf.Min(best,(shownHands[hand].TransformPoint(p)-contact).sqrMagnitude);
+        var shownMatrix=shownHands[hand].localToWorldMatrix;
+        foreach(var p in palmSamples[hand])best=Mathf.Min(best,(shownMatrix.MultiplyPoint3x4(p)-contact).sqrMagnitude);
         return Mathf.Sqrt(best);
     }
 
@@ -72,10 +73,13 @@ public sealed class GBHandContactVisual:MonoBehaviour {
                 // motor's nominal reach. Actual skin proximity below is the
                 // bound; the visual pass grants no hold or physical reach.
                 if(shape&&shape.enabled){
-                    Vector3 nearest=real.TransformPoint(palmSamples[hand][0]);
+                    // Sample one unchanged interpolated transform for the whole
+                    // palm, avoiding a native transform lookup for every vertex.
+                    var handMatrix=real.localToWorldMatrix;
+                    Vector3 nearest=handMatrix.MultiplyPoint3x4(palmSamples[hand][0]);
                     float best=(nearest-contact).sqrMagnitude;
                     for(int p=1;p<palmSamples[hand].Length;p++){
-                        Vector3 point=real.TransformPoint(palmSamples[hand][p]);
+                        Vector3 point=handMatrix.MultiplyPoint3x4(palmSamples[hand][p]);
                         float distance=(point-contact).sqrMagnitude;
                         if(distance<best){best=distance;nearest=point;}
                     }

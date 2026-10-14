@@ -1,0 +1,146 @@
+{
+    "build": "0.4.11",
+    "engine": "6000.3.7f1",
+    "hardware": "Intel(R) Core(TM) i5-14400F / 16173 MB",
+    "graphics": "Null Device",
+    "startedUtc": "2026-10-14T18:26:45.0810240Z",
+    "duration": 1.9498200416564942,
+    "averageFps": 0.0,
+    "minFps": 1000.0,
+    "bodies": 92,
+    "issues": 0,
+    "screenWidth": 1424,
+    "screenHeight": 714,
+    "checks": [
+        {
+            "name": "test_inputs_not_serialized",
+            "passed": true,
+            "evidence": "runtime-only input; scene cannot install an empty test array"
+        },
+        {
+            "name": "ground_recovery_delay_is_2_5_seconds",
+            "passed": true,
+            "evidence": "production delay, original19 stamina/s rate retained"
+        },
+        {
+            "name": "back_rest_waits_before_2_5_seconds",
+            "passed": true,
+            "evidence": "actual ground seconds=2.487505 stamina=40"
+        },
+        {
+            "name": "back_rest_recovers_after_delay",
+            "passed": true,
+            "evidence": "ready=True rate=18.99994 ground seconds=2.5"
+        },
+        {
+            "name": "back_active_scramble_still_costs",
+            "passed": true,
+            "evidence": "funded ground escape cannot regenerate while paying effort"
+        },
+        {
+            "name": "back_rapid_ctrl_taps_do_not_refill",
+            "passed": true,
+            "evidence": "ready ground timer does not bypass raw Ctrl recovery block"
+        },
+        {
+            "name": "back_rest_after_scramble_recovers",
+            "passed": true,
+            "evidence": "original0.8s attempt recovery delay expires; ground timer need not restart"
+        },
+        {
+            "name": "back_airborne_is_not_ground_rest",
+            "passed": true,
+            "evidence": "lifted core has no mat contact"
+        },
+        {
+            "name": "back_real_pin_control_fixture",
+            "passed": true,
+            "evidence": "existing live grip/C and physically grounded opponent"
+        },
+        {
+            "name": "back_pinned_rest_waits_before_delay",
+            "passed": true,
+            "evidence": "pinning blocks early passive recovery"
+        },
+        {
+            "name": "back_pinned_rest_recovers_after_delay",
+            "passed": true,
+            "evidence": "live opponent pressure retained; rate=18.99994"
+        },
+        {
+            "name": "back_own_grip_still_costs",
+            "passed": true,
+            "evidence": "own grip remains2/s"
+        },
+        {
+            "name": "back_reset_clears_ground_delay",
+            "passed": true,
+            "evidence": "fresh standing round uses original immediate recovery"
+        },
+        {
+            "name": "chest_rest_waits_before_2_5_seconds",
+            "passed": true,
+            "evidence": "actual ground seconds=2.487505 stamina=40"
+        },
+        {
+            "name": "chest_rest_recovers_after_delay",
+            "passed": true,
+            "evidence": "ready=True rate=18.99994 ground seconds=2.5"
+        },
+        {
+            "name": "chest_active_scramble_still_costs",
+            "passed": true,
+            "evidence": "funded ground escape cannot regenerate while paying effort"
+        },
+        {
+            "name": "chest_rapid_ctrl_taps_do_not_refill",
+            "passed": true,
+            "evidence": "ready ground timer does not bypass raw Ctrl recovery block"
+        },
+        {
+            "name": "chest_rest_after_scramble_recovers",
+            "passed": true,
+            "evidence": "original0.8s attempt recovery delay expires; ground timer need not restart"
+        },
+        {
+            "name": "chest_airborne_is_not_ground_rest",
+            "passed": true,
+            "evidence": "lifted core has no mat contact"
+        },
+        {
+            "name": "chest_real_pin_control_fixture",
+            "passed": true,
+            "evidence": "existing live grip/C and physically grounded opponent"
+        },
+        {
+            "name": "chest_pinned_rest_waits_before_delay",
+            "passed": true,
+            "evidence": "pinning blocks early passive recovery"
+        },
+        {
+            "name": "chest_pinned_rest_recovers_after_delay",
+            "passed": true,
+            "evidence": "live opponent pressure retained; rate=18.99994"
+        },
+        {
+            "name": "chest_own_grip_still_costs",
+            "passed": true,
+            "evidence": "own grip remains2/s"
+        },
+        {
+            "name": "chest_reset_clears_ground_delay",
+            "passed": true,
+            "evidence": "fresh standing round uses original immediate recovery"
+        },
+        {
+            "name": "ground_recovery_runtime_clean",
+            "passed": true,
+            "evidence": ""
+        },
+        {
+            "name": "connected_body_joints",
+            "passed": true,
+            "evidence": "missing frames=0 maximum physical anchor separation=0.0000 m"
+        }
+    ]
+}

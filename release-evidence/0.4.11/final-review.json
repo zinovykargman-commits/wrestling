@@ -1,0 +1,139 @@
+{
+  "version": "0.4.11",
+  "nativeBuild": "f185",
+  "approved": true,
+  "sourceBaselineSha256": "cc6e99cb0c2f4f955e29f09505b78ae00b664b9d2b9a0891195abff2300c3fba",
+  "sessionPersistenceVerified": true,
+  "windowsQuitVerified": true,
+  "sessionEvidence": [
+    {
+      "path": "work/checks/f185-session-lifetime-tcp-20261014-142958/summary.json",
+      "sha256": "0ccdd63d30b5fa658b9c42ba9830b50593d1f2cb39fb34db9f962b2abc1bc322"
+    },
+    {
+      "path": "work/checks/f185-session-lifetime-tcp-20261014-142958/host/session-host.json",
+      "sha256": "cd2546b30834826f9f5f87379b29d388ce36ce1d8daa39a78e3620934b1921ab"
+    },
+    {
+      "path": "work/checks/f185-session-lifetime-tcp-20261014-142958/client/session-client.json",
+      "sha256": "607ed30fcfe83c8d3f8920bb5c7c3ae8c7d224d8cbce6ca452440c5d00818062"
+    }
+  ],
+  "quitEvidence": [
+    {
+      "path": "work/checks/f185-quit-lifetime-20261014-142939/summary.json",
+      "sha256": "a8df30f40513ed08e0d804e4e5d7d5edd1d7bed2bf1200728205e04dbe50f1b9"
+    },
+    {
+      "path": "work/checks/f185-quit-lifetime-20261014-142939/forced/player.log",
+      "sha256": "43f0b6e43177c9f2d7d86a74c1db1e1f1d399d7c0e6bba27b817bc0824e657b9"
+    },
+    {
+      "path": "work/checks/f185-quit-lifetime-20261014-142939/forced/quit-ready.json",
+      "sha256": "b41c91ba0c641ea847ebd5a1391b658bb1cc9bba06267af1b7589e29a45c3340"
+    },
+    {
+      "path": "work/checks/f185-quit-lifetime-20261014-142939/forced/result.json",
+      "sha256": "eca17f93078f5719e18ba74c66814782a89ee64e3e4d3926a5f098fc4dc96f96"
+    },
+    {
+      "path": "work/checks/f185-quit-lifetime-20261014-142939/quit/player.log",
+      "sha256": "92f1a68c835b421e406e4dc18e9158da94ba4b75adb4ec53ca6b169d7aeefb54"
+    },
+    {
+      "path": "work/checks/f185-quit-lifetime-20261014-142939/quit/quit-ready.json",
+      "sha256": "dff4984dfce0decbee7ab10de7a7f9abed21ec74a150a1863a39120a5ae669aa"
+    },
+    {
+      "path": "work/checks/f185-quit-lifetime-20261014-142939/quit/result.json",
+      "sha256": "f50a43b9bbfa347f4b83d78062f214647a550bcd7a98c59cc982d964db93e6a0"
+    },
+    {
+      "path": "work/checks/f185-quit-lifetime-20261014-142939/x/player.log",
+      "sha256": "ea52648fbb2906695d727e512ea15d79193a1c4cdf525bf6c9592bf0345abb97"
+    },
+    {
+      "path": "work/checks/f185-quit-lifetime-20261014-142939/x/quit-ready.json",
+      "sha256": "b7312bc94a5ee301655e43f1c371ae6478e27225a0befd7df3081bd0ec77c265"
+    },
+    {
+      "path": "work/checks/f185-quit-lifetime-20261014-142939/x/result.json",
+      "sha256": "63380138750ed77574a670f64d70fdb0f9ce7f1834b253d24551132ca3614583"
+    }
+  ],
+  "publicInviteEvidence": [
+    {
+      "path": "work/checks/f185-session-lifetime-public-20261014-143144/summary.json",
+      "sha256": "7107199f24591e59d19cdfd5008cab932ec6875c38655a048d48c04d653d1ecf"
+    },
+    {
+      "path": "work/checks/f185-session-lifetime-public-20261014-143144/host/session-host.json",
+      "sha256": "ce3f93935588c9f19902779abca5aa22e848ac9ae831e5050950912c9839505a"
+    },
+    {
+      "path": "work/checks/f185-session-lifetime-public-20261014-143144/client/session-client.json",
+      "sha256": "43bc771cca6ff413ddf30a6cf961b4cc781af4296aaccb259a9f123640b2748e"
+    }
+  ],
+  "publicInviteLifecycleVerified": true,
+  "performanceEvidence": [
+    {
+      "path": "work/performance-before-source-proof.json",
+      "sha256": "042237e8a78bb44a33a733898f7b200d456e27f80bb629ff27b7f01a37997c89"
+    },
+    {
+      "path": "work/performance-before-0411.json",
+      "sha256": "7147af12f482190a5cf3d7422d58d38d1d35bcb7ae8c834cf2f12480a21083bd"
+    },
+    {
+      "path": "work/performance-after-0411.json",
+      "sha256": "384d7ac77364f90f231f809888927bc95be6db0cad740127f994811a12e6783b"
+    },
+    {
+      "path": "work/performance-comparison-0411.json",
+      "sha256": "a1c7b5d336f296f305be8f5ffeadffcd7ffc865d75e7485a54ce224a24c29ab8"
+    },
+    {
+      "path": "work/checks/performance-before-0411-20261014-140608/trial-1/performance-metrics.json",
+      "sha256": "8dd053c9a84e13a2756b56456e172044954abd189f02118f1156e42f959e5c4b"
+    },
+    {
+      "path": "work/checks/performance-before-0411-20261014-140608/trial-1/performance-report.json",
+      "sha256": "a58b9cec5792dc90a426880fb633c7e8166ffa5f61d5328d8364fc5a9179055c"
+    },
+    {
+      "path": "work/checks/performance-before-0411-20261014-140608/trial-2/performance-metrics.json",
+      "sha256": "320412cb7b336564e6b59e509147672364cf6a9e875354c555eedde3f579ea7d"
+    },
+    {
+      "path": "work/checks/performance-before-0411-20261014-140608/trial-2/performance-report.json",
+      "sha256": "cbbcd7284b3b12d33c2612ececb1281b469d98150ec40f03a181dd97409a0bb5"
+    },
+    {
+      "path": "work/checks/performance-after-0411-20261014-142739/trial-1/performance-metrics.json",
+      "sha256": "74abc016f849e26e46092c623dd9ddfa7a023c3a18aaf7ec6115cb6c70b48f48"
+    },
+    {
+      "path": "work/checks/performance-after-0411-20261014-142739/trial-1/performance-report.json",
+      "sha256": "cfb9f9bafb1b3802052401cb5f32d0cf0ad95775a4ca53f17d183bad5379a7a7"
+    },
+    {
+      "path": "work/checks/performance-after-0411-20261014-142739/trial-2/performance-metrics.json",
+      "sha256": "b4e633f46e0a3e9f61d3217b3774f19513c4dade5fb05d414d6c819cfb6a162c"
+    },
+    {
+      "path": "work/checks/performance-after-0411-20261014-142739/trial-2/performance-report.json",
+      "sha256": "14d8c49c0121cc5806a0669ca68da968a8b03e9a5a97b83f4ed03cd49bcd1094"
+    }
+  ],
+  "reviewedCaptures": [
+    "work/checks/f185-gym/gym-mat-downward.png",
+    "work/checks/f185-gym/gym-mat-opposite.png",
+    "work/checks/f185-gym/gym-corner-detail.png",
+    "work/checks/f185-hand-contact/held-body-contact-front.png",
+    "work/checks/f185-hand-contact/held-body-contact-side.png"
+  ],
+  "visualDecision": "Root inspected final native downward/opposing mat views and corner view: moving white pools/stripe removed by explicit diffuse-only normal-mapped shader; original canvas textures, weave, lines, scenery, ropes, lighting layout and collision retained. Rejected f184 keyword-only screenshots remain locally. Hand front/side captures inspected: same constrained 2.8cm visual correction and original model/target markers, with existing visual limits.",
+  "behaviorDecision": "Actual two-process loopback and public-invite sessions retain the same authenticated transport through staged RoundWin events, automatic reset, results25s idle, rematch, both room-return actions and25s lobby idle. Staged wins do not claim physically earned network pins. Existing pin and stamina audits passed current build separately. Quit/X/forced tests prove real listener present before/absent afterward plus exact owned helper descendant exits.",
+  "remainingLimits": "Physical Mac FPS, independent-machine friend-session acceptance and long-session play remain unmeasured; existing extreme-pose clothing/trim and legacy walking-height limits remain. Mac installer/native public-update verification is separate and pending at this Windows packaging step."
+}

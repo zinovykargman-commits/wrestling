@@ -14,6 +14,7 @@ public partial class GBAudit {
         foreach(var rope in app.Arena.ropes)roundRopes&=!rope.GetComponent<Renderer>().enabled&&rope.GetComponent<BoxCollider>().enabled&&rope.GetComponent<ConfigurableJoint>();
         Check("gym_rope_skins_follow_physics",roundRopes&&ropeSkins==12,"12 rounded continuous skins smoothly follow48 original physical segments; original colliders/constraints stay enabled, no new collision bodies");
         var canvas=details.Find("Printed woven canvas").GetComponent<Renderer>();
+        Check("gym_matte_canvas_shader",canvas.sharedMaterial.shader&&canvas.sharedMaterial.shader.name=="GripBreak/MatteCanvas"&&canvas.sharedMaterial.shader.isSupported,"native shader="+canvas.sharedMaterial.shader.name+" keywords="+string.Join(",",canvas.sharedMaterial.shaderKeywords)+"; actual mat views captured below");
         Check("gym_textured_canvas",canvas.sharedMaterial.mainTexture&&canvas.sharedMaterial.mainTexture.width==2048&&canvas.sharedMaterial.GetTexture("_BumpMap")&&canvas.sharedMaterial.GetTexture("_MetallicGlossMap"),"2k photographed weave, normal and roughness-derived smoothness");
         Check("gym_roof_and_real_materials",details.Find("Solid concrete ceiling")&&Resources.Load<Texture2D>("Gym/rubber_tiles_normal")&&Resources.Load<Texture2D>("Gym/painted_plaster_wall_color"),"closed ceiling and licensed PBR surface maps");
         int pads=0,benches=0,banners=0,bags=0,weights=0;foreach(Transform t in details.GetComponentsInChildren<Transform>()){if(t.name=="Upholstered corner cushion")pads++;if(t.name=="Timber ringside bench")benches++;if(t.name=="Hanging club banner")banners++;if(t.name=="Hanging heavy bag")bags++;if(t.name=="Dumbbell handle")weights++;}
@@ -25,6 +26,9 @@ public partial class GBAudit {
         // Ordinary frames rendered by Unity; no extra manual render targets.
         app.enabled=false;var camera=app.Views.Primary;var oldPosition=camera.transform.position;var oldRotation=camera.transform.rotation;float oldFov=camera.fieldOfView;
         foreach(var rb in app.Wrestlers[0].bodies)rb.isKinematic=true;foreach(var rb in app.Wrestlers[1].bodies)rb.isKinematic=true;
+        // Compare the same lit mat from opposing downward gameplay views.
+        camera.fieldOfView=58;camera.transform.position=new Vector3(-2.5f,4,-3.5f);camera.transform.LookAt(new Vector3(0,.2f,0));yield return Wait(.3f);ScreenCapture.CaptureScreenshot(Path.Combine(directory,"gym-mat-downward.png"));yield return Wait(.3f);
+        camera.transform.position=new Vector3(2.5f,4,3.5f);camera.transform.LookAt(new Vector3(0,.2f,0));yield return Wait(.3f);ScreenCapture.CaptureScreenshot(Path.Combine(directory,"gym-mat-opposite.png"));yield return Wait(.3f);
         camera.fieldOfView=68;camera.transform.position=new Vector3(11.8f,5.6f,-9.2f);camera.transform.LookAt(new Vector3(0,1.5f,2));yield return Wait(.3f);ScreenCapture.CaptureScreenshot(Path.Combine(directory,"gym-wide.png"));yield return Wait(.3f);
         camera.fieldOfView=49;camera.transform.position=new Vector3(-2.5f,2,-6.0f);camera.transform.LookAt(new Vector3(-4.1f,.8f,-4.25f));yield return Wait(.3f);ScreenCapture.CaptureScreenshot(Path.Combine(directory,"gym-corner-detail.png"));yield return Wait(.3f);
         var roof=new System.Collections.Generic.List<Renderer>();foreach(var renderer in details.GetComponentsInChildren<Renderer>())if(renderer.enabled&&renderer.bounds.min.y>4.7f){renderer.enabled=false;roof.Add(renderer);}

@@ -1,0 +1,52 @@
+{
+  "phase": "before",
+  "build": "0.4.10 frozen f182 plus same diagnostic fixture/hooks",
+  "evidence": "C:\\Users\\zinov\\Documents\\Codex\\2026-10-09\\gi\\work\\checks\\performance-before-0411-20261014-140608",
+  "fixtureSha256": "99f9877cb0cdcfcd431860736aefe1ef2a0e59097c295280d3e89aa8501b50c0",
+  "scope": "Visible 1080p High native D3D11; 30s controlled movement and manual reaching (earned grips recorded, not required); 6s warmup; identical 240Hz, 64+24 solver and 120fps cap; no measurement screenshots. This is not a grapple benchmark.",
+  "trials": [
+    {
+      "trial": 1,
+      "phase": "before",
+      "metrics": "C:\\Users\\zinov\\Documents\\Codex\\2026-10-09\\gi\\work\\checks\\performance-before-0411-20261014-140608\\trial-1\\performance-metrics.json",
+      "report": "C:\\Users\\zinov\\Documents\\Codex\\2026-10-09\\gi\\work\\checks\\performance-before-0411-20261014-140608\\trial-1\\performance-report.json",
+      "averageFps": 69.94053649902344,
+      "minimumFps": 33.171016693115234,
+      "p50FrameMs": 13.907099723815918,
+      "p95FrameMs": 17.744400024414062,
+      "frames": 2099,
+      "duration": 30.011207580566406,
+      "heldFrames": 0,
+      "reciprocalGripFrames": 0,
+      "maximumHeldHands": 0,
+      "focusedFrames": 2099,
+      "checks": 6,
+      "failures": [],
+      "issues": 0,
+      "settingsValid": true,
+      "valid": true
+    },
+    {
+      "trial": 2,
+      "phase": "before",
+      "metrics": "C:\\Users\\zinov\\Documents\\Codex\\2026-10-09\\gi\\work\\checks\\performance-before-0411-20261014-140608\\trial-2\\performance-metrics.json",
+      "report": "C:\\Users\\zinov\\Documents\\Codex\\2026-10-09\\gi\\work\\checks\\performance-before-0411-20261014-140608\\trial-2\\performance-report.json",
+      "averageFps": 75.83267974853516,
+      "minimumFps": 50.30029296875,
+      "p50FrameMs": 13.05620002746582,
+      "p95FrameMs": 15.502599716186523,
+      "frames": 2275,
+      "duration": 30.000259399414062,
+      "heldFrames": 0,
+      "reciprocalGripFrames": 0,
+      "maximumHeldHands": 0,
+      "focusedFrames": 2275,
+      "checks": 6,
+      "failures": [],
+      "issues": 0,
+      "settingsValid": true,
+      "valid": true
+    }
+  ],
+  "valid": true
+}

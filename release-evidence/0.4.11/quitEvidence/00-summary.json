@@ -1,0 +1,115 @@
+{
+  "build": "f185",
+  "evidence": "C:\\Users\\zinov\\Documents\\Codex\\2026-10-09\\gi\\work\\checks\\f185-quit-lifetime-20261014-142939",
+  "runnerSha256": "9996de6f9903255db37a5ad6d34791134768b985d9c28ea0aa3e09ac6077a50b",
+  "executableSha256": "4bf762016829b0c975960cf300aac5a5bb1f84d25745f2aa8f4a508f9af5243f",
+  "scope": "owned native Windows game; real hosting listener proven present before close and absent afterward in native OS LISTEN inventory; job-owned harmless cmd/ping helper; normal Quit, owned window close and forced process termination",
+  "cases": [
+    {
+      "mode": "quit",
+      "gamePid": 17012,
+      "helperPids": [
+        28296,
+        31348
+      ],
+      "observedPingDescendants": 1,
+      "listenerPort": 50018,
+      "listenerBeforeClose": [
+        "0.0.0.0:50018"
+      ],
+      "listenerAfterClose": {
+        "port": 50018,
+        "osInventoryAvailable": true,
+        "listeningEndpoints": [],
+        "osListenerAbsent": true,
+        "osInventoryError": null,
+        "connectCompletedWithin2Seconds": false,
+        "connectSucceeded": false,
+        "connectTimedOut": true,
+        "socketError": null,
+        "connectError": null,
+        "closed": true,
+        "basis": "Exact port absent from native OS LISTEN inventory"
+      },
+      "closeActionSent": true,
+      "gameExitedWithin5Seconds": true,
+      "helperAndObservedDescendantsExitedWithin5Seconds": true,
+      "listenerClosed": true,
+      "fixtureTimedOut": false,
+      "elapsedSeconds": 2.8083506,
+      "exitCode": 0,
+      "passed": true
+    },
+    {
+      "mode": "x",
+      "gamePid": 15072,
+      "helperPids": [
+        28296,
+        25856
+      ],
+      "observedPingDescendants": 1,
+      "listenerPort": 50030,
+      "listenerBeforeClose": [
+        "0.0.0.0:50030"
+      ],
+      "listenerAfterClose": {
+        "port": 50030,
+        "osInventoryAvailable": true,
+        "listeningEndpoints": [],
+        "osListenerAbsent": true,
+        "osInventoryError": null,
+        "connectCompletedWithin2Seconds": false,
+        "connectSucceeded": false,
+        "connectTimedOut": true,
+        "socketError": null,
+        "connectError": null,
+        "closed": true,
+        "basis": "Exact port absent from native OS LISTEN inventory"
+      },
+      "closeActionSent": true,
+      "gameExitedWithin5Seconds": true,
+      "helperAndObservedDescendantsExitedWithin5Seconds": true,
+      "listenerClosed": true,
+      "fixtureTimedOut": false,
+      "elapsedSeconds": 2.4269409,
+      "exitCode": 0,
+      "passed": true
+    },
+    {
+      "mode": "forced",
+      "gamePid": 15516,
+      "helperPids": [
+        15420,
+        24236
+      ],
+      "observedPingDescendants": 1,
+      "listenerPort": 51435,
+      "listenerBeforeClose": [
+        "0.0.0.0:51435"
+      ],
+      "listenerAfterClose": {
+        "port": 51435,
+        "osInventoryAvailable": true,
+        "listeningEndpoints": [],
+        "osListenerAbsent": true,
+        "osInventoryError": null,
+        "connectCompletedWithin2Seconds": false,
+        "connectSucceeded": false,
+        "connectTimedOut": true,
+        "socketError": null,
+        "connectError": null,
+        "closed": true,
+        "basis": "Exact port absent from native OS LISTEN inventory"
+      },
+      "closeActionSent": true,
+      "gameExitedWithin5Seconds": true,
+      "helperAndObservedDescendantsExitedWithin5Seconds": true,
+      "listenerClosed": true,
+      "fixtureTimedOut": false,
+      "elapsedSeconds": 2.0686072,
+      "exitCode": -1,
+      "passed": true
+    }
+  ],
+  "passed": true
+}

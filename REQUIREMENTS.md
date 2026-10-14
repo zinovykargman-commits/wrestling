@@ -1,4 +1,4 @@
-# GRIP BREAK 0.4.10 acceptance ledger
+# GRIP BREAK 0.4.11 acceptance ledger
 
 The latest authorized update supersedes the earlier Mac pause and preview-only model restriction. Windows and Mac receive the approved current game. Four authorized specialists assist; no further subagents are required. Existing physics/controls/online delivery remain acceptance requirements.
 
@@ -14,9 +14,14 @@ The latest authorized update supersedes the earlier Mac pause and preview-only m
 - Approved realistic proportions, hair/eyes/brows, full chest, straight legs, foot-bound matte shoes and fitted singlets. Inspect native front/back/both sides, overhead and live raised reach, garment deformation and actual held contact. Residual extreme trim folds/neckline wisps must be disclosed; no all-pose-perfect claim.
 - Preserve logical separated textured gym equipment, roof and rounded visually smoothed ropes without changing 48 physical rope segments. Menu camera remains inside the gym. High/Balanced/Performance rendering alters visual settings only; defaults Windows High/Mac Balanced.
 - Exited wrestler starts on hands/knees even when thrown out; top kneels behind. Connected nonoverlapping restart, 1.5-second 3/2/1 then whistle, cleared grips and unchanged scores.
-- Copied temporary tunnel invite, Paste Join, authentication/ready/start/disconnect cleanup. Windows hosts; Mac joins the same 0.4.10 protocol 12 room. Current independent-network acceptance must be distinguished from native/same-PC fixtures.
-- Current-source zero-error/zero-warning native build, exact frozen source/runtime hashes, untouched report JSON, inspected screenshots and packed editable master. Windows updater/installer and Mac manual update button remain available.
-- Publish exact current playable/source archives and hash manifest to the requested repositories, independently fetch public bytes, and install Windows on the real Desktop with one current GRIP BREAK shortcut. Preserve unrelated files/shortcuts.
+- Copied temporary tunnel invite, Paste Join, authentication/ready/start/disconnect cleanup. Windows hosts; Mac joins the same 0.4.11 protocol 12 room. Current independent-network acceptance must be distinguished from native/same-PC fixtures.
+- Current-source zero-error/zero-warning native build, exact frozen source/runtime hashes, untouched report JSON, inspected screenshots and packed editable master. Windows updater/installer and Mac verified automatic update path remain available. Older Mac versions need one manual bootstrap to 0.4.11.
+- Publish exact current playable/source archives and hash manifest to the requested repositories, independently fetch public bytes, and install Windows on the real Desktop with one current GRIP BREAK shortcut. Do not launch the game after delivery or terminate a user's active game to install it. Preserve unrelated files/shortcuts.
 - Clear unused test/old-build storage only after auditing exact project-contained targets and preserving current builds, source, editable authoring assets, reports and recoverable/public archives. No broad unreviewed deletion.
+
+- Windows X and in-game QUIT exit the game and its own private-room helper/listener. Forced game exit also closes assigned helper descendants; unrelated processes must remain untouched. Preferences must not prevent shutdown.
+- Preserve the same private online room through a pin, automatic round restart, three-pin result, result-screen idle, rematch and LOBBY / RETURN TO LOBBY. LEAVE ROOM deliberately disconnects; genuine transport failure still reports/cleans up. Protocol 12 and 92 physical bodies remain unchanged.
+- Reduce repeated rendering calculations without changing physics, inputs, visual geometry, textures, lighting layout, rendering resolution or graphics presets. Actual measured FPS comparisons are distinct evidence; no guaranteed speed increase.
+- Remove the supplied reference's large camera-dependent white hotspots from the mat; keep gray weave, normal detail, printed lines and diffuse lighting. Inspect native downward/opposing viewpoints.
 
 VALIDATION.md owns actual current results. Native checks cannot replace hardware, independent-machine online, human balance or visual inspection.

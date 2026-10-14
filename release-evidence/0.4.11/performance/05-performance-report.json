@@ -1,0 +1,46 @@
+{
+    "build": "0.4.10",
+    "engine": "6000.3.7f1",
+    "hardware": "Intel(R) Core(TM) i5-14400F / 16173 MB",
+    "graphics": "NVIDIA GeForce RTX 5060",
+    "startedUtc": "2026-10-14T18:06:12.7791611Z",
+    "duration": 39.418304443359378,
+    "averageFps": 69.87860107421875,
+    "minFps": 46.467750549316409,
+    "bodies": 92,
+    "issues": 0,
+    "screenWidth": 1920,
+    "screenHeight": 1080,
+    "checks": [
+        {
+            "name": "test_inputs_not_serialized",
+            "passed": true,
+            "evidence": "runtime-only input; scene cannot install an empty test array"
+        },
+        {
+            "name": "performance_fixed_high_1080p_settings",
+            "passed": true,
+            "evidence": "same native High1080p;120fps cap;240Hz;64/24 wrestler solver;92 registered bodies;30 active wrestler bodies"
+        },
+        {
+            "name": "performance_real_movement_and_manual_reach",
+            "passed": true,
+            "evidence": "actual maximum displacement=1.481279/1.093288m; held frames=0/2099; maximum held hands=0; this measures moving/reaching and records any earned grips; no grapple benchmark claim"
+        },
+        {
+            "name": "performance_full_window_without_capture",
+            "passed": true,
+            "evidence": "seconds=30.01121; frames=2099; avgFPS=69.94054;p50/p95ms=13.9071/17.7444; no screenshots or round resets during window"
+        },
+        {
+            "name": "performance_runtime_clean",
+            "passed": true,
+            "evidence": ""
+        },
+        {
+            "name": "connected_body_joints",
+            "passed": true,
+            "evidence": "missing frames=0 maximum physical anchor separation=0.0050 m"
+        }
+    ]
+}

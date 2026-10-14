@@ -1,0 +1,52 @@
+{
+  "phase": "after",
+  "build": "f185",
+  "evidence": "C:\\Users\\zinov\\Documents\\Codex\\2026-10-09\\gi\\work\\checks\\performance-after-0411-20261014-142739",
+  "fixtureSha256": "99f9877cb0cdcfcd431860736aefe1ef2a0e59097c295280d3e89aa8501b50c0",
+  "scope": "Visible 1080p High native D3D11; 30s controlled movement and manual reaching (earned grips recorded, not required); 6s warmup; identical 240Hz, 64+24 solver and 120fps cap; no measurement screenshots. This is not a grapple benchmark.",
+  "trials": [
+    {
+      "trial": 1,
+      "phase": "after",
+      "metrics": "C:\\Users\\zinov\\Documents\\Codex\\2026-10-09\\gi\\work\\checks\\performance-after-0411-20261014-142739\\trial-1\\performance-metrics.json",
+      "report": "C:\\Users\\zinov\\Documents\\Codex\\2026-10-09\\gi\\work\\checks\\performance-after-0411-20261014-142739\\trial-1\\performance-report.json",
+      "averageFps": 76.04045104980469,
+      "minimumFps": 35.676570892333984,
+      "p50FrameMs": 12.742899894714355,
+      "p95FrameMs": 16.680200576782227,
+      "frames": 2282,
+      "duration": 30.01034164428711,
+      "heldFrames": 0,
+      "reciprocalGripFrames": 0,
+      "maximumHeldHands": 0,
+      "focusedFrames": 2282,
+      "checks": 6,
+      "failures": [],
+      "issues": 0,
+      "settingsValid": true,
+      "valid": true
+    },
+    {
+      "trial": 2,
+      "phase": "after",
+      "metrics": "C:\\Users\\zinov\\Documents\\Codex\\2026-10-09\\gi\\work\\checks\\performance-after-0411-20261014-142739\\trial-2\\performance-metrics.json",
+      "report": "C:\\Users\\zinov\\Documents\\Codex\\2026-10-09\\gi\\work\\checks\\performance-after-0411-20261014-142739\\trial-2\\performance-report.json",
+      "averageFps": 76.85910034179688,
+      "minimumFps": 43.88621139526367,
+      "p50FrameMs": 12.656000137329102,
+      "p95FrameMs": 16.867799758911133,
+      "frames": 2306,
+      "duration": 30.002954483032227,
+      "heldFrames": 0,
+      "reciprocalGripFrames": 0,
+      "maximumHeldHands": 0,
+      "focusedFrames": 2306,
+      "checks": 6,
+      "failures": [],
+      "issues": 0,
+      "settingsValid": true,
+      "valid": true
+    }
+  ],
+  "valid": true
+}

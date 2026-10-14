@@ -7,7 +7,7 @@ public static class BuildGripBreak {
     public static void Build() {
         PlayerSettings.companyName = "Grip Break";
         PlayerSettings.productName = "GRIP BREAK";
-        PlayerSettings.bundleVersion = "0.4.10";
+        PlayerSettings.bundleVersion = "0.4.11";
         PlayerSettings.defaultScreenWidth = 1600;
         PlayerSettings.defaultScreenHeight = 900;
         PlayerSettings.fullScreenMode = FullScreenMode.Windowed;
@@ -25,7 +25,7 @@ public static class BuildGripBreak {
             var shader=shaders.GetArrayElementAtIndex(i).objectReferenceValue as Shader;
             if(!shader||shader.name=="GUI/Text Shader"||!seen.Add(shader)){shaders.GetArrayElementAtIndex(i).objectReferenceValue=null;shaders.DeleteArrayElementAtIndex(i);}
         }
-        foreach(string name in new[]{"Standard", "Skybox/Procedural", "GripBreak/WorldText"}) {
+        foreach(string name in new[]{"Standard", "Skybox/Procedural", "GripBreak/WorldText", "GripBreak/MatteCanvas"}) {
             var shader=Shader.Find(name);if(shader&&seen.Add(shader)){int index=shaders.arraySize;shaders.InsertArrayElementAtIndex(index);shaders.GetArrayElementAtIndex(index).objectReferenceValue=shader;}
         }
         graphics.ApplyModifiedPropertiesWithoutUndo();

@@ -34,6 +34,7 @@ public partial class GBApp:MonoBehaviour {
     [NonSerialized] public Vector3? AuditMousePosition;
     GBBot bot=new GBBot();
     bool focusPaused;
+    bool quitPrepared;
     public bool LocalAI {get{return Network.role==GBNetwork.Role.Offline&&!Practice;}}
     bool Scripted(int p){return Automated&&ScriptedInputs!=null&&p>=0&&p<ScriptedInputs.Length;}
     bool KeyHeld(KeyCode k){return Automated&&AuditKeyState!=null?AuditKeyState(k):Input.GetKey(k);}
@@ -62,12 +63,13 @@ public partial class GBApp:MonoBehaviour {
         Application.logMessageReceived+=(message,stack,type)=>{if(type==LogType.Exception||type==LogType.Error){if(!Issues.Contains(message))Issues.Add(message);}};
         Physics.defaultSolverIterations=16;Physics.defaultSolverVelocityIterations=8;Physics.defaultContactOffset=.012f;
         Sfx=gameObject.AddComponent<GBSound>();Network=gameObject.AddComponent<GBNetwork>();Updater=gameObject.AddComponent<GBUpdater>();
+        Application.wantsToQuit+=PrepareToQuit;
         Defaults();LoadPrefs();ScriptedInputs=null;
         GBArt.WorldLighting();cam=new GameObject("Shared match camera").AddComponent<Camera>();cam.gameObject.AddComponent<AudioListener>();cam.fieldOfView=47;cam.nearClipPlane=.15f;cam.farClipPlane=200;cam.backgroundColor=new Color(.06f,.09f,.14f);cam.allowHDR=true;cam.allowMSAA=true;
         Views=gameObject.AddComponent<GBPlayerCameraRig>();Views.Setup(this,cam);
         BuildWorld(3,1,false);PlaceMenuCamera();
         pixel=Texture2D.whiteTexture;font=Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
-        string[] args=Environment.GetCommandLineArgs();if(Array.IndexOf(args,"--ground-recovery-test")>=0||Array.IndexOf(args,"--corner-test")>=0||Array.IndexOf(args,"--top-control-test")>=0||Array.IndexOf(args,"--hand-contact-test")>=0||Array.IndexOf(args,"--stance-test")>=0||Array.IndexOf(args,"--appearance-test")>=0||Array.IndexOf(args,"--locomotion-quality-test")>=0||Array.IndexOf(args,"--pin-spam-test")>=0||Array.IndexOf(args,"--gym-test")>=0||Array.IndexOf(args,"--ringout-test")>=0||Array.IndexOf(args,"--scramble-test")>=0||Array.IndexOf(args,"--stamina-test")>=0||Array.IndexOf(args,"--pin-rules-test")>=0||Array.IndexOf(args,"--carry-test")>=0||Array.IndexOf(args,"--pin-test")>=0||Array.IndexOf(args,"--momentum-test")>=0||Array.IndexOf(args,"--throw-test")>=0||Array.IndexOf(args,"--input-test")>=0||Array.IndexOf(args,"--ai-test")>=0||Array.IndexOf(args,"--updater-test")>=0||Array.IndexOf(args,"--overhaul-test")>=0||Array.IndexOf(args,"--audit")>=0||Array.IndexOf(args,"--camera-test")>=0||Array.IndexOf(args,"--moves")>=0||Array.IndexOf(args,"--host-test")>=0||Array.IndexOf(args,"--client-test")>=0||Array.IndexOf(args,"--soak")>=0||Array.IndexOf(args,"--record")>=0||Array.IndexOf(args,"--menu-shot")>=0){Automated=true;gameObject.AddComponent<GBAudit>();}
+        string[] args=Environment.GetCommandLineArgs();if(Array.IndexOf(args,"--render-math-test")>=0||Array.IndexOf(args,"--performance-test")>=0||Array.IndexOf(args,"--mac-updater-test")>=0||Array.IndexOf(args,"--mac-updater-public-test")>=0||Array.IndexOf(args,"--mac-updater-public-install-test")>=0||Array.IndexOf(args,"--mac-updater-ack-test")>=0||Array.IndexOf(args,"--session-host-test")>=0||Array.IndexOf(args,"--session-client-test")>=0||Array.IndexOf(args,"--quit-lifecycle-test")>=0||Array.IndexOf(args,"--ground-recovery-test")>=0||Array.IndexOf(args,"--corner-test")>=0||Array.IndexOf(args,"--top-control-test")>=0||Array.IndexOf(args,"--hand-contact-test")>=0||Array.IndexOf(args,"--stance-test")>=0||Array.IndexOf(args,"--appearance-test")>=0||Array.IndexOf(args,"--locomotion-quality-test")>=0||Array.IndexOf(args,"--pin-spam-test")>=0||Array.IndexOf(args,"--gym-test")>=0||Array.IndexOf(args,"--ringout-test")>=0||Array.IndexOf(args,"--scramble-test")>=0||Array.IndexOf(args,"--stamina-test")>=0||Array.IndexOf(args,"--pin-rules-test")>=0||Array.IndexOf(args,"--carry-test")>=0||Array.IndexOf(args,"--pin-test")>=0||Array.IndexOf(args,"--momentum-test")>=0||Array.IndexOf(args,"--throw-test")>=0||Array.IndexOf(args,"--input-test")>=0||Array.IndexOf(args,"--ai-test")>=0||Array.IndexOf(args,"--updater-test")>=0||Array.IndexOf(args,"--overhaul-test")>=0||Array.IndexOf(args,"--audit")>=0||Array.IndexOf(args,"--camera-test")>=0||Array.IndexOf(args,"--moves")>=0||Array.IndexOf(args,"--host-test")>=0||Array.IndexOf(args,"--client-test")>=0||Array.IndexOf(args,"--soak")>=0||Array.IndexOf(args,"--record")>=0||Array.IndexOf(args,"--menu-shot")>=0){Automated=true;gameObject.AddComponent<GBAudit>();}
     }
     void Defaults() {
         KeyCode[] defaults={KeyCode.Mouse0,KeyCode.Mouse1,KeyCode.LeftShift,KeyCode.Space,KeyCode.R,KeyCode.Q,KeyCode.LeftControl,KeyCode.C,KeyCode.E,KeyCode.W,KeyCode.S,KeyCode.A,KeyCode.D};
@@ -108,6 +110,13 @@ public partial class GBApp:MonoBehaviour {
         SelectedArena=arena;SelectedMode=mode;Scores[0]=Scores[1]=0;InMatch=true;Paused=false;focusPaused=false;ControlsVisible=false;Time.timeScale=1;RoundMessage="";Epoch++;BuildWorld(arena,mode,false);Phase=GamePhase.Countdown;Remaining=120;phaseUntil=Time.time+3;screen="home";
     }
     public void ReturnToMenu(){Paused=false;focusPaused=false;ControlsVisible=false;Time.timeScale=1;InMatch=false;Phase=GamePhase.Menu;screen="home";RoundMessage="";if(Authority&&Wrestlers.Count>0&&!Wrestlers[0].joints[1]){Epoch++;BuildWorld(3,1,false);}}
+    public void ReturnToOnlineLobby(){
+        if(Network.role==GBNetwork.Role.Client&&Network.connected){Network.RequestLobby();Paused=true;ControlsVisible=false;Toast("Returning to your room…",2);return;}
+        bool room=Network.role==GBNetwork.Role.Host&&Network.connected;
+        if(room)Network.ResetRoomReady();
+        foreach(var wrestler in Wrestlers){wrestler.Release(0);wrestler.Release(1);}
+        ReturnToMenu();if(room)ShowMenu("online");
+    }
     public void ShowMenu(string name){screen=name;}
     void Update() {
         if(KeyDown(KeyCode.F11))ToggleFullscreen();
@@ -118,7 +127,7 @@ public partial class GBApp:MonoBehaviour {
         if(InMatch&&!Paused&&!ControlsVisible&&(focus||Automated)){int mine=Network.role==GBNetwork.Role.Client?1:0;for(int p=0;p<2;p++){if(p!=mine&&(Network.role!=GBNetwork.Role.Offline||!Scripted(p)))continue;var i=Scripted(p)?ScriptedInputs[p]:PollInput(p);int pulse=(i.flags&~lastPoll[p])&(GBInput.Jump|GBInput.Strike);buffered[p]|=pulse;lastPoll[p]=i.flags;inputs[p]=i;if(Network.role==GBNetwork.Role.Client){Wrestlers[p].command=i.Sanitize();Wrestlers[p].facing=i.Aim;}}if(Network.role==GBNetwork.Role.Client){var i=inputs[1];i.flags|=buffered[1];Network.SendInput(i);buffered[1]=0;}}
         else {inputs[0]=inputs[1]=default;lastPoll[0]=lastPoll[1]=0;buffered[0]=buffered[1]=0;if(Network.role==GBNetwork.Role.Client&&Network.connected)Network.SendInput(default);}
         if(!Authority&&World){float lerp=1-Mathf.Exp(-Time.unscaledDeltaTime*22);for(int i=0;i<Registry.Count;i++){Registry[i].position=Vector3.Lerp(Registry[i].position,TargetPositions[i],lerp);Registry[i].rotation=Quaternion.Slerp(Registry[i].rotation,TargetRotations[i],lerp);}}
-        Arena?.VisualTick(dt);foreach(var w in Wrestlers)w.Visuals();
+        Arena?.VisualTick(dt);
         if(Rumble&&Time.frameCount%14==0){for(int i=0;i<2;i++)GBPad.Rumble(i,0);}
     }
     void FixedUpdate() {
@@ -233,7 +242,13 @@ public partial class GBApp:MonoBehaviour {
             if(InMatch&&Network.role==GBNetwork.Role.Offline&&!Paused){focusPaused=true;Paused=true;Time.timeScale=0;}}
         else if(focusPaused){focusPaused=false;Paused=false;Time.timeScale=1;}
     }
-    void OnApplicationQuit(){SavePrefs();Network.Stop();GBPad.Rumble(0,0);GBPad.Rumble(1,0);}
+    bool PrepareToQuit(){
+        if(quitPrepared)return true;quitPrepared=true;
+        try{Network?.Stop();}finally{GBPad.Rumble(0,0);GBPad.Rumble(1,0);}
+        return true;
+    }
+    void OnApplicationQuit(){PrepareToQuit();SavePrefs();}
+    void OnDestroy(){Application.wantsToQuit-=PrepareToQuit;if(I==this){PrepareToQuit();I=null;}}
     void Styles() {
         if(title!=null)return;
         title=new GUIStyle(GUI.skin.label){font=font,fontSize=78,fontStyle=FontStyle.Bold,normal={textColor=Color.white}};
@@ -283,7 +298,7 @@ public partial class GBApp:MonoBehaviour {
             Label(new Rect(61,626,535,30),"THE RING",body);
         }
         Label(new Rect(61,666,535,65),Network.status+(Network.connected?"\n"+Network.peerName+": "+(Network.peerReady?"READY":"NOT READY"):""),body);
-        if(Button(new Rect(61,742,260,48),"BACK")){Network.Stop();ReturnToMenu();}
+        if(Button(new Rect(61,742,260,48),Network.role==GBNetwork.Role.Offline?"BACK":"LEAVE ROOM")){Network.Stop();ReturnToMenu();}
         if(Button(new Rect(337,742,260,48),"INPUT: "+(LocalDevice==1?"PAD":"KEYBOARD")))LocalDevice=LocalDevice==1?0:1;
         Label(new Rect(61,801,535,42),"Keep this room open. Closing it ends the temporary invite.",small);
     }
@@ -382,8 +397,8 @@ public partial class GBApp:MonoBehaviour {
         Label(new Rect(195,735,820,57),"F1 controls • Esc pause • F11 fullscreen\nYour camera stays locked to your wrestler.",small);
         if(Button(new Rect(1090,742,310,50),"CLOSE • F1",true))ControlsVisible=false;
     }
-    void PauseMenu(){Panel(new Rect(0,0,1600,900),new Color(.015f,.025f,.04f,.7f));Panel(new Rect(535,215,530,470),new Color(.04f,.065f,.095f,.98f));Label(new Rect(577,250,460,50),Network.role==GBNetwork.Role.Offline?"TAKE A BREATHER":"MENU • MATCH CONTINUES",heading);if(Button(new Rect(578,330,444,57),"KEEP WRESTLING",true)){Paused=false;Time.timeScale=1;}if(Authority&&Button(new Rect(578,404,444,53),"RESET ROUND")){ResetRound(false);Paused=false;Time.timeScale=1;}if(Button(new Rect(578,476,444,53),"RETURN TO LOBBY")){Paused=false;Time.timeScale=1;ReturnToMenu();screen=Network.role==GBNetwork.Role.Offline?"home":"online";if(Network.role==GBNetwork.Role.Client){Network.Stop();ReturnToMenu();}}if(Button(new Rect(578,548,444,53),"QUIT"))Application.Quit();if(Button(new Rect(578,620,444,45),"CONTROLS • F1"))ControlsVisible=true;}
-    void Results(){Panel(new Rect(340,260,920,370),new Color(.035f,.055f,.085f,.96f));Label(new Rect(380,300,850,60),RoundMessage,new GUIStyle(heading){alignment=TextAnchor.MiddleCenter});Label(new Rect(550,382,500,65),Scores[0]+" : "+Scores[1],new GUIStyle(title){alignment=TextAnchor.MiddleCenter,fontSize=54});if(Authority&&Button(new Rect(400,501,385,58),"REMATCH",true))BeginMatch(CurrentArena,CurrentMode);if(Button(new Rect(815,501,385,58),"LOBBY")){ReturnToMenu();screen=Network.role==GBNetwork.Role.Offline?"home":"online";if(Network.role==GBNetwork.Role.Client){Network.Stop();ReturnToMenu();}}}
+    void PauseMenu(){Panel(new Rect(0,0,1600,900),new Color(.015f,.025f,.04f,.7f));Panel(new Rect(535,215,530,470),new Color(.04f,.065f,.095f,.98f));Label(new Rect(577,250,460,50),Network.role==GBNetwork.Role.Offline?"TAKE A BREATHER":"MENU • MATCH CONTINUES",heading);if(Button(new Rect(578,330,444,57),"KEEP WRESTLING",true)){Paused=false;Time.timeScale=1;}if(Authority&&Button(new Rect(578,404,444,53),"RESET ROUND")){ResetRound(false);Paused=false;Time.timeScale=1;}if(Button(new Rect(578,476,444,53),"RETURN TO LOBBY")){Paused=false;Time.timeScale=1;ReturnToOnlineLobby();}if(Button(new Rect(578,548,444,53),"QUIT"))Application.Quit();if(Button(new Rect(578,620,444,45),"CONTROLS • F1"))ControlsVisible=true;}
+    void Results(){Panel(new Rect(340,260,920,370),new Color(.035f,.055f,.085f,.96f));Label(new Rect(380,300,850,60),RoundMessage,new GUIStyle(heading){alignment=TextAnchor.MiddleCenter});Label(new Rect(550,382,500,65),Scores[0]+" : "+Scores[1],new GUIStyle(title){alignment=TextAnchor.MiddleCenter,fontSize=54});if(Authority&&Button(new Rect(400,501,385,58),"REMATCH",true))BeginMatch(CurrentArena,CurrentMode);if(Button(new Rect(815,501,385,58),"LOBBY")){ReturnToOnlineLobby();}}
     public void Capture(string path,bool primaryOnly=false) {
         Directory.CreateDirectory(Path.GetDirectoryName(path));foreach(var wrestler in Wrestlers)wrestler.Visuals();var rt=new RenderTexture(1600,900,24);var rect=cam.rect;if(primaryOnly)cam.rect=new Rect(0,0,1,1);cam.targetTexture=rt;cam.Render();RenderTexture.active=rt;var tex=new Texture2D(1600,900,TextureFormat.RGB24,false);tex.ReadPixels(new Rect(0,0,1600,900),0,0);tex.Apply();File.WriteAllBytes(path,tex.EncodeToPNG());cam.targetTexture=null;cam.rect=rect;RenderTexture.active=null;Destroy(rt);Destroy(tex);
     }

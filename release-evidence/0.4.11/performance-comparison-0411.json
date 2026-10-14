@@ -1,0 +1,54 @@
+{
+  "version": "0.4.11",
+  "nativeBuild": "f185",
+  "matchedSettings": {
+    "engine": "6000.3.7f1",
+    "processor": "Intel(R) Core(TM) i5-14400F",
+    "gpu": "NVIDIA GeForce RTX 5060",
+    "graphicsPreset": "HIGH",
+    "inputSignature": "body-surface manual aim; available L/R grips5.55s of6s; approach0.35 above0.90m; retreat0.12 below0.52m; tangential0.12*sin(relativeClock*0.65+player*pi); no shots/lift/pin/scramble;6s warmup+30s measured",
+    "width": 1920,
+    "height": 1080,
+    "targetFrameRate": 120,
+    "vSyncCount": 0,
+    "antiAliasing": 4,
+    "bodies": 92,
+    "wrestlerBodies": 30,
+    "solverIterations": 64,
+    "solverVelocityIterations": 24,
+    "fixedStep": 0.004166666883975267,
+    "shadowDistance": 28.0,
+    "warmupSeconds": 6.0
+  },
+  "before": {
+    "averageFps": 72.88607028152045,
+    "p50FrameMs": 13.291600227355957,
+    "p95FrameMs": 17.317399978637695,
+    "trials": [
+      69.94053649902344,
+      75.83267974853516
+    ],
+    "heldFrames": 0,
+    "measurementSeconds": 60.01146697998047,
+    "frames": 4374
+  },
+  "after": {
+    "averageFps": 76.44972524532683,
+    "p50FrameMs": 12.710599899291992,
+    "p95FrameMs": 16.773099899291992,
+    "trials": [
+      76.04045104980469,
+      76.85910034179688
+    ],
+    "heldFrames": 0,
+    "measurementSeconds": 60.013296127319336,
+    "frames": 4588
+  },
+  "changePercent": 4.889349844273205,
+  "scope": "Two 30-second foreground 1080p High movement/manual-reaching trials per build, same fixture and inputs, no captures inside measurement. Zero earned grips; not a grapple benchmark.",
+  "interpretation": "A modest observed difference with trial variation; not a guaranteed FPS gain in every match. Physics, detail and presets unchanged. The requested glare fix uses diffuse-only mat lighting. Physical Mac FPS and friend-session FPS remain unmeasured.",
+  "supersededFocusAndMaterialAttemptsRetained": [
+    "work/performance-after-0411-unmatched-focus.json",
+    "work/performance-after-0411-f184-superseded.json"
+  ]
+}

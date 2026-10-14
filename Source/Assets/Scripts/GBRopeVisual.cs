@@ -31,6 +31,11 @@ public class GBRopeVisual:MonoBehaviour {
             filtered[i]=Vector3.Lerp(filtered[i],live,blend);
             filtered[i]=live+Vector3.ClampMagnitude(filtered[i]-live,.05f);
         }
+        // This visual root stays unchanged throughout this LateUpdate. Sample
+        // its affine point transform and scale-free direction rotation once,
+        // instead of crossing into Transform for every rope vertex and normal.
+        var worldToLocal=transform.worldToLocalMatrix;
+        var inverseRotation=Quaternion.Inverse(transform.rotation);
         for(int group=0;group<12;group++){
             int side=group%4;float y=.62f+(group/4)*.38f;
             knots[0]=side<2?new Vector3(-4.4f,y,side==0?-4.4f:4.4f):new Vector3(side==2?-4.4f:4.4f,y,-4.4f);
@@ -46,7 +51,7 @@ public class GBRopeVisual:MonoBehaviour {
                 Vector3 across=Vector3.Cross(tangent,Vector3.up).normalized,vertical=Vector3.Cross(tangent,across).normalized;
                 for(int sideIndex=0;sideIndex<=12;sideIndex++){
                     float angle=sideIndex*Mathf.PI/6;Vector3 normal=across*Mathf.Cos(angle)+vertical*Mathf.Sin(angle);
-                    int v=ring*13+sideIndex;vertices[v]=transform.InverseTransformPoint(path[ring]+normal*.035f);normals[v]=transform.InverseTransformDirection(normal);
+                    int v=ring*13+sideIndex;vertices[v]=worldToLocal.MultiplyPoint3x4(path[ring]+normal*.035f);normals[v]=inverseRotation*normal;
                 }
             }
             skins[group].vertices=vertices;skins[group].normals=normals;skins[group].RecalculateBounds();

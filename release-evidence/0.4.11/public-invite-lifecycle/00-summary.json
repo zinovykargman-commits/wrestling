@@ -1,0 +1,23 @@
+{
+  "evidence": "C:\\Users\\zinov\\Documents\\Codex\\2026-10-09\\gi\\work\\checks\\f185-session-lifetime-public-20261014-143144",
+  "build": "f185",
+  "scope": "production room/results/menu lifetime; deliberately staged RoundWin events, not claimed physical pins",
+  "peers": [
+    {
+      "checks": 22,
+      "peer": "host",
+      "failed": [],
+      "report": "C:\\Users\\zinov\\Documents\\Codex\\2026-10-09\\gi\\work\\checks\\f185-session-lifetime-public-20261014-143144\\host\\session-host.json",
+      "issues": 0
+    },
+    {
+      "checks": 16,
+      "peer": "client",
+      "failed": [],
+      "report": "C:\\Users\\zinov\\Documents\\Codex\\2026-10-09\\gi\\work\\checks\\f185-session-lifetime-public-20261014-143144\\client\\session-client.json",
+      "issues": 0
+    }
+  ],
+  "transport": "two native processes over real public Cloudflare invite, authenticated WebSocket/TCP bridge",
+  "port": 51942
+}

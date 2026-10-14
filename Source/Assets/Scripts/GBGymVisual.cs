@@ -52,7 +52,12 @@ public static partial class GBGymVisual {
     }
     static void Materials(){
         if(canvas)return;
-        canvas=PBR("Gym printed woven canvas","canvas",Color.white,Vector2.one,.18f);
+        // A diffuse-only shader avoids every specular/reflection pass, rather
+        // than relying on Standard's runtime keywords in the built player.
+        canvas=new Material(Resources.Load<Shader>("Gym/MatteCanvas")){name="Gym printed woven canvas",color=Color.white};
+        canvas.mainTexture=Resources.Load<Texture2D>("Gym/canvas_color");canvas.mainTextureScale=Vector2.one;
+        canvas.SetTexture("_BumpMap",Resources.Load<Texture2D>("Gym/canvas_normal"));canvas.SetFloat("_BumpScale",.18f);
+        canvas.SetTexture("_MetallicGlossMap",Resources.Load<Texture2D>("Gym/canvas_smooth"));
         cloth=PBR("Gym canvas sides","fabric_pattern_07",new Color(.43f,.49f,.52f),new Vector2(18,18),.20f);
         rubber=PBR("Gym speckled rubber tiles","rubber_tiles",Color.white,new Vector2(7,5),.7f);
         leather=PBR("Gym charcoal upholstery","leather_red_02",new Color(.19f,.20f,.21f),new Vector2(2,2),.65f);

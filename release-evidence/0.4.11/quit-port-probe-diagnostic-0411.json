@@ -1,0 +1,26 @@
+[
+  {
+    "port": 54031,
+    "listeners": [],
+    "error": null,
+    "completedWithin2Seconds": false,
+    "connected": false,
+    "elapsedMs": 2052.3664
+  },
+  {
+    "port": 54035,
+    "listeners": [],
+    "error": null,
+    "completedWithin2Seconds": false,
+    "connected": false,
+    "elapsedMs": 2009.9562
+  },
+  {
+    "port": 63351,
+    "listeners": [],
+    "error": null,
+    "completedWithin2Seconds": false,
+    "connected": false,
+    "elapsedMs": 2012.2534
+  }
+]

@@ -12,6 +12,7 @@ public sealed class GBTunnel:IDisposable {
     readonly object gate=new object();
     readonly CancellationTokenSource readinessCancel=new CancellationTokenSource();
     Process process;GBWebSocketBridge bridge;
+    GBWindowsChildJob childJob;
     string invite="",status="Starting private room...",error="",publicUrl,secret,configurationRoot;
     bool registered,disposed,started;
     public string InviteUrl {get{lock(gate)return invite;}}
@@ -50,10 +51,12 @@ public sealed class GBTunnel:IDisposable {
                 UseShellExecute=false,CreateNoWindow=true,WindowStyle=ProcessWindowStyle.Hidden,
                 RedirectStandardOutput=true,RedirectStandardError=true,WorkingDirectory=Path.GetDirectoryName(executable)
             };
+            childJob=GBWindowsChildJob.Create();
             var child=new Process{StartInfo=info,EnableRaisingEvents=true};process=child;
             child.OutputDataReceived+=(sender,args)=>ReadLine(args.Data);child.ErrorDataReceived+=(sender,args)=>ReadLine(args.Data);
             child.Exited+=(sender,args)=>{lock(gate){if(!disposed){error="The private room closed. Host again to create a new invite link.";status=error;registered=false;}}readinessCancel.Cancel();};
             if(!child.Start())throw new IOException("The private-room helper could not start");
+            childJob?.Assign(child);
             child.BeginOutputReadLine();child.BeginErrorReadLine();
         }catch(Exception e){lock(gate){error=e.Message;status="Could not open private room: "+e.Message;}DisposeResources();}
     }
@@ -100,6 +103,7 @@ public sealed class GBTunnel:IDisposable {
         }
     }
     void DisposeResources(){
+        var job=Interlocked.Exchange(ref childJob,null);try{job?.Dispose();}catch{}
         var child=Interlocked.Exchange(ref process,null);
         if(child!=null){try{if(!child.HasExited)child.Kill();}catch{}try{child.Dispose();}catch{}}
         bridge?.Dispose();bridge=null;

@@ -1,4 +1,4 @@
-# GRIP BREAK 0.4.10 hands-on acceptance
+# GRIP BREAK 0.4.11 hands-on acceptance
 
 These checks need a person, real hardware or separate computers; native automated fixtures do not certify them.
 
@@ -12,7 +12,11 @@ These checks need a person, real hardware or separate computers; native automate
 8. Inspect anatomy/singlet front/back/both sides, overhead reach, crouch and sprawl, held contact and dynamic collision. Note remaining extreme underarm trim folds and small neckline wisps; check shoes/wrists stay connected and joints do not bend through invalid ranges.
 9. Check High/Balanced/Performance in Options, preference persistence and native GPU speed on both platforms. Confirm physics, grips and network timing do not change when visual quality changes. Mac defaults Balanced; hosted virtual GPUs do not represent physical Mac performance.
 10. Physical keyboard/mouse and Windows controllers: rebind/save/reset, controller disconnect/fallback/rumble, utility keys and focus. Scripted polling differs from actual hardware events. Mac keyboard/mouse is the supported control path.
-11. Independent computers/networks with matching 0.4.9: Windows host copies invite; friend pastes/joins from Windows or Mac, ready/start. Both players aim/grip/escape/pin; confirm restart, disconnect, expired invite and host helper cleanup. Same-PC/native fixtures cannot prove every network/service route.
+11. Independent computers/networks with matching 0.4.11: Windows host copies invite; friend pastes/joins from Windows or Mac, ready/start. Both players aim/grip/escape/pin; confirm restart, disconnect, expired invite and host helper cleanup. Same-PC/native fixtures cannot prove every network/service route.
 12. Go over ropes voluntarily and after being thrown: exited wrestler starts bottom on hands/knees, top kneels behind, scores preserved, rapid 1.5-second 3/2/1 then whistle. No early input/grip during the restart.
-13. Older Windows installation: CHECK FOR UPDATE → UPDATE & RESTART, then confirm new version, saved preferences/editable Source, rollback backup and restart logs. Mac update button opens the correct download; replace the app manually. Public hash evidence differs from a real old-install button-driven upgrade.
+13. Older Windows installation: CHECK FOR UPDATE → UPDATE & RESTART, then confirm new version, saved preferences/editable Source, rollback backup and restart logs. On Mac 0.4.11, check the new automatic download/verify/replace/relaunch path in a writable folder. Older Mac builds require one manual download/app replacement to gain this updater; do not mistake their download-page button for automatic installation. Public hash evidence differs from a real old-install button-driven upgrade.
 14. Play full matches against all AI difficulties and longer friend sessions. Assess hand aiming, pin setup/escape, grip stability, stamina balance, camera comfort and enjoyment; report device-specific issues.
+
+15. Complete a first round, automatic restart and first-to-three match online; idle on results, rematch and return to the lobby from each peer. Both should stay connected in the same room. LEAVE ROOM should close only that connection. Test over real separate computers/networks.
+16. Close Windows using in-game QUIT and the window X. Confirm the game, hosting listener and its own tunnel helper disappear. Repeat after hosting; unrelated apps must remain open. Native fixtures also cover forced exit with a harmless helper tree.
+17. Look downward at the mat and turn the camera around to an opposite view. Its gray weave/printed lines remain visible without a bright white glare following the view. Compare performance on your hardware at the same preset/resolution; do not infer FPS from reduced calculations alone.
