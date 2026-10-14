@@ -1,0 +1,27 @@
+{
+  "removedBytes": 950614288.0,
+  "rawPerformanceAndQuitEvidencePreserved": true,
+  "targets": [
+    {
+      "path": "C:\\Users\\zinov\\Documents\\Codex\\2026-10-09\\gi\\work\\performance-source-0410\\Source\\Library",
+      "bytes": 383957004,
+      "reason": "obsolete diagnostic-only before-build cache or exact shipped0.4.10 runtime duplicate; raw metrics/source proof preserved"
+    },
+    {
+      "path": "C:\\Users\\zinov\\Documents\\Codex\\2026-10-09\\gi\\work\\performance-source-0410\\Source\\Logs",
+      "bytes": 231,
+      "reason": "obsolete diagnostic-only before-build cache or exact shipped0.4.10 runtime duplicate; raw metrics/source proof preserved"
+    },
+    {
+      "path": "C:\\Users\\zinov\\Documents\\Codex\\2026-10-09\\gi\\work\\performance-source-0410\\Build",
+      "bytes": 255643271,
+      "reason": "obsolete diagnostic-only before-build cache or exact shipped0.4.10 runtime duplicate; raw metrics/source proof preserved"
+    },
+    {
+      "path": "C:\\Users\\zinov\\Documents\\Codex\\2026-10-09\\gi\\work\\performance-baseline-0410",
+      "bytes": 311013782,
+      "reason": "obsolete diagnostic-only before-build cache or exact shipped0.4.10 runtime duplicate; raw metrics/source proof preserved"
+    }
+  ],
+  "currentSourceAndBuildProtected": true
+}

@@ -21,7 +21,7 @@ Direct3D:
 [D3D12 Device Filter] Processor Count: 16
 [D3D12 Device Filter] Device Type: Discrete
 Begin MonoManager ReloadAssembly
-- Loaded All Assemblies, in  0.102 seconds
+- Loaded All Assemblies, in  0.103 seconds
 - Finished resetting the current domain, in  0.002 seconds
 [Physics::Module] Selected backend.
 [Physics::Module] Name: PhysX
@@ -31,6 +31,6 @@ Begin MonoManager ReloadAssembly
 [Physics::Module] Threading Mode: Multi-Threaded
 <RI> Initializing input.
 <RI> Input initialized.
-UnloadTime: 0.482900 ms
+UnloadTime: 0.489500 ms
 GRIP_CHECK test_inputs_not_serialized PASS runtime-only input; scene cannot install an empty test array
-QUIT_LIFETIME_READY {"mode":"forced","startedUtc":"2026-10-14T18:29:56.5631304Z","error":"","gamePid":15516,"helperPid":15420,"listenerPort":51435,"jobAttached":true,"listenerListening":true}
+QUIT_LIFETIME_READY {"mode":"forced","startedUtc":"2026-10-14T18:55:53.4652692Z","error":"","gamePid":27588,"helperPid":31804,"listenerPort":65230,"jobAttached":true,"listenerListening":true}

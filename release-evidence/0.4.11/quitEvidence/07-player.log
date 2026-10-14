@@ -21,7 +21,7 @@ Direct3D:
 [D3D12 Device Filter] Processor Count: 16
 [D3D12 Device Filter] Device Type: Discrete
 Begin MonoManager ReloadAssembly
-- Loaded All Assemblies, in  0.098 seconds
+- Loaded All Assemblies, in  0.105 seconds
 - Finished resetting the current domain, in  0.002 seconds
 [Physics::Module] Selected backend.
 [Physics::Module] Name: PhysX
@@ -31,9 +31,9 @@ Begin MonoManager ReloadAssembly
 [Physics::Module] Threading Mode: Multi-Threaded
 <RI> Initializing input.
 <RI> Input initialized.
-UnloadTime: 0.581800 ms
+UnloadTime: 0.463300 ms
 GRIP_CHECK test_inputs_not_serialized PASS runtime-only input; scene cannot install an empty test array
-QUIT_LIFETIME_READY {"mode":"x","startedUtc":"2026-10-14T18:29:50.2501448Z","error":"","gamePid":15072,"helperPid":28296,"listenerPort":50030,"jobAttached":true,"listenerListening":true}
+QUIT_LIFETIME_READY {"mode":"x","startedUtc":"2026-10-14T18:55:47.2784293Z","error":"","gamePid":3328,"helperPid":26072,"listenerPort":65219,"jobAttached":true,"listenerListening":true}
 [Physics::Module] Cleanup current backend.
 [Physics::Module] Id: 0xf2b8ea05
 Input System module state changed to: ShutdownInProgress.

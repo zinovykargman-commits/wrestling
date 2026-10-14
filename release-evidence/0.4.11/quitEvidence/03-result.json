@@ -1,17 +1,17 @@
 {
   "mode": "forced",
-  "gamePid": 15516,
+  "gamePid": 27588,
   "helperPids": [
-    15420,
-    24236
+    31804,
+    18584
   ],
   "observedPingDescendants": 1,
-  "listenerPort": 51435,
+  "listenerPort": 65230,
   "listenerBeforeClose": [
-    "0.0.0.0:51435"
+    "0.0.0.0:65230"
   ],
   "listenerAfterClose": {
-    "port": 51435,
+    "port": 65230,
     "osInventoryAvailable": true,
     "listeningEndpoints": [],
     "osListenerAbsent": true,
@@ -29,7 +29,7 @@
   "helperAndObservedDescendantsExitedWithin5Seconds": true,
   "listenerClosed": true,
   "fixtureTimedOut": false,
-  "elapsedSeconds": 2.0686072,
+  "elapsedSeconds": 2.05944,
   "exitCode": -1,
   "passed": true
 }

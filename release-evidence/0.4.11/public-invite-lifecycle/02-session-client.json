@@ -3,10 +3,10 @@
     "engine": "6000.3.7f1",
     "hardware": "Intel(R) Core(TM) i5-14400F / 16173 MB",
     "graphics": "Null Device",
-    "startedUtc": "2026-10-14T18:31:50.7481652Z",
-    "duration": 150.60218811035157,
-    "averageFps": 119.51569366455078,
-    "minFps": 11.101883888244629,
+    "startedUtc": "2026-10-14T18:57:48.2147926Z",
+    "duration": 147.98464965820313,
+    "averageFps": 119.5525894165039,
+    "minFps": 11.116559028625489,
     "bodies": 92,
     "issues": 0,
     "screenWidth": 1424,
@@ -20,57 +20,57 @@
         {
             "name": "session_authenticated_two_process_peer",
             "passed": true,
-            "evidence": "role=Client connected=True phase=Menu epoch=-1 score=0:0 targets=0 inputs=0 snapshots=0/0 status=Connected to LIFETIME HOST "
+            "evidence": "role=Client connected=True phase=Menu epoch=0 score=0:0 targets=0 inputs=0 snapshots=0/3 status=Connected to LIFETIME HOST "
         },
         {
             "name": "client_first_result_and_automatic_reset_stream",
             "passed": true,
-            "evidence": "role=Client connected=True phase=MatchOver epoch=3 score=3:0 targets=0 inputs=0 snapshots=0/503 status=Connected to LIFETIME HOST "
+            "evidence": "role=Client connected=True phase=MatchOver epoch=3 score=3:0 targets=0 inputs=0 snapshots=0/504 status=Connected to LIFETIME HOST "
         },
         {
             "name": "client_second_result_and_automatic_reset_stream",
             "passed": true,
-            "evidence": "role=Client connected=True phase=MatchOver epoch=3 score=3:0 targets=0 inputs=0 snapshots=0/503 status=Connected to LIFETIME HOST "
+            "evidence": "role=Client connected=True phase=MatchOver epoch=3 score=3:0 targets=0 inputs=0 snapshots=0/504 status=Connected to LIFETIME HOST "
         },
         {
             "name": "client_three_wins_reach_match_results",
             "passed": true,
-            "evidence": "role=Client connected=True phase=MatchOver epoch=3 score=3:0 targets=0 inputs=0 snapshots=0/503 status=Connected to LIFETIME HOST "
+            "evidence": "role=Client connected=True phase=MatchOver epoch=3 score=3:0 targets=0 inputs=0 snapshots=0/504 status=Connected to LIFETIME HOST "
         },
         {
             "name": "client_result_idle_and_host_rematch_survive",
             "passed": true,
-            "evidence": "role=Client connected=True phase=Fighting epoch=4 score=0:0 targets=0 inputs=0 snapshots=0/1246 status=Connected to LIFETIME HOST "
+            "evidence": "role=Client connected=True phase=Fighting epoch=4 score=0:0 targets=0 inputs=0 snapshots=0/1244 status=Connected to LIFETIME HOST "
         },
         {
             "name": "client_menu_action_keeps_room_and_clears_ready",
             "passed": true,
-            "evidence": "role=Client connected=True phase=Menu epoch=4 score=0:0 targets=0 inputs=0 snapshots=0/1275 status=Connected to LIFETIME HOST "
+            "evidence": "role=Client connected=True phase=Menu epoch=4 score=0:0 targets=0 inputs=0 snapshots=0/1274 status=Connected to LIFETIME HOST "
         },
         {
             "name": "client_input_sequence_survives_lobby",
             "passed": true,
-            "evidence": "role=Client connected=True phase=Menu epoch=4 score=0:0 targets=0 inputs=0 snapshots=0/1275 status=Connected to LIFETIME HOST initial=1 current=5716"
+            "evidence": "role=Client connected=True phase=Menu epoch=4 score=0:0 targets=0 inputs=0 snapshots=0/1274 status=Connected to LIFETIME HOST initial=1 current=5724"
         },
         {
             "name": "client_lobby_idle_keeps_snapshots_and_monotonic_inputs",
             "passed": true,
-            "evidence": "role=Client connected=True phase=Menu epoch=4 score=0:0 targets=0 inputs=0 snapshots=0/1939 status=Connected to LIFETIME HOST "
+            "evidence": "role=Client connected=True phase=Menu epoch=4 score=0:0 targets=0 inputs=0 snapshots=0/1930 status=Connected to LIFETIME HOST "
         },
         {
             "name": "client_same_room_ready_and_restart_stream",
             "passed": true,
-            "evidence": "role=Client connected=True phase=Fighting epoch=5 score=0:0 targets=0 inputs=0 snapshots=0/2018 status=Connected to LIFETIME HOST "
+            "evidence": "role=Client connected=True phase=Fighting epoch=5 score=0:0 targets=0 inputs=0 snapshots=0/2010 status=Connected to LIFETIME HOST "
         },
         {
             "name": "client_host_lobby_transition_survives",
             "passed": true,
-            "evidence": "role=Client connected=True phase=Menu epoch=5 score=0:0 targets=0 inputs=0 snapshots=0/2045 status=Connected to LIFETIME HOST "
+            "evidence": "role=Client connected=True phase=Menu epoch=5 score=0:0 targets=0 inputs=0 snapshots=0/2037 status=Connected to LIFETIME HOST "
         },
         {
             "name": "explicit_host_leave_returns_client_to_menu",
             "passed": true,
-            "evidence": "role=Offline connected=False phase=Menu epoch=6 score=0:0 targets=0 inputs=0 snapshots=0/2124 status=Host room closed • ask for a new invite "
+            "evidence": "role=Offline connected=False phase=Menu epoch=6 score=0:0 targets=0 inputs=0 snapshots=0/2112 status=Host room closed • ask for a new invite "
         },
         {
             "name": "session_kept_same_transport_until_explicit_leave",
@@ -80,7 +80,7 @@
         {
             "name": "session_manual_grip_cleanup_scope",
             "passed": true,
-            "evidence": "actual normal aim/click input produced maximum held targets=0; no Attach, forced count or assertion of physically earned pins; result event was deliberately staged"
+            "evidence": "actual normal aim/click input produced maximum held targets=1; no Attach, forced count or assertion of physically earned pins; result event was deliberately staged"
         },
         {
             "name": "session_lifetime_finite_and_runtime_clean",

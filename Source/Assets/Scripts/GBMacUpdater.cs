@@ -296,7 +296,8 @@ result 'installed-and-restarted'
 exit 0
 ";
         var values=new Dictionary<string,string>{{"__APP__",ShellQuote(j.app)},{"__STAGE__",ShellQuote(j.stage)},{"__ROOT__",ShellQuote(j.root)},{"__BACKUP__",ShellQuote(j.backup)},{"__FAILED__",ShellQuote(j.failed)},{"__VERSION__",ShellQuote(j.version)},{"__TOKEN__",ShellQuote(j.token)},{"__PID__",j.parentPid.ToString()},{"__AUDIT__",j.audit?"1":"0"},{"__FAIL__",j.failRestart?"1":"0"},{"__EVIDENCE__",ShellQuote(j.evidence??"")}};
-        return Regex.Replace(script,@"__(?:APP|STAGE|ROOT|BACKUP|FAILED|VERSION|TOKEN|PID|AUDIT|FAIL|EVIDENCE)__",match=>values[match.Value]);
+        // Normalize only the authored template; quoted paths remain literal data.
+        return Regex.Replace(script.Replace("\r\n","\n").Replace("\r","\n"),@"__(?:APP|STAGE|ROOT|BACKUP|FAILED|VERSION|TOKEN|PID|AUDIT|FAIL|EVIDENCE)__",match=>values[match.Value]);
     }
 
     sealed class Central {public string name;public uint crc,compressed,expanded,offset;public ushort flags,method;}

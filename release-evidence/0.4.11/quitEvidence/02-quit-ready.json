@@ -1,10 +1,10 @@
 {
     "mode": "forced",
-    "startedUtc": "2026-10-14T18:29:56.5631304Z",
+    "startedUtc": "2026-10-14T18:55:53.4652692Z",
     "error": "",
-    "gamePid": 15516,
-    "helperPid": 15420,
-    "listenerPort": 51435,
+    "gamePid": 27588,
+    "helperPid": 31804,
+    "listenerPort": 65230,
     "jobAttached": true,
     "listenerListening": true
 }

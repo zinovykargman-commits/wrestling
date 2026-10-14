@@ -3,8 +3,8 @@
     "engine": "6000.3.7f1",
     "hardware": "Intel(R) Core(TM) i5-14400F / 16173 MB",
     "graphics": "Null Device",
-    "startedUtc": "2026-10-14T18:27:00.3089226Z",
-    "duration": 1.5839810371398926,
+    "startedUtc": "2026-10-14T18:52:35.3384261Z",
+    "duration": 1.6547926664352418,
     "averageFps": 0.0,
     "minFps": 1000.0,
     "bodies": 92,
@@ -80,7 +80,7 @@
         {
             "name": "funded_scramble_still_blocked_during_timer",
             "passed": true,
-            "evidence": "remaining=0.5995359 stamina=20"
+            "evidence": "remaining=0.5997241 stamina=20"
         },
         {
             "name": "scramble_resumes_after_timer",

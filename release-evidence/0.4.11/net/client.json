@@ -3,10 +3,10 @@
     "engine": "6000.3.7f1",
     "hardware": "Intel(R) Core(TM) i5-14400F / 16173 MB",
     "graphics": "Null Device",
-    "startedUtc": "2026-10-14T18:31:22.9318541Z",
-    "duration": 20.555334091186525,
-    "averageFps": 118.87539672851563,
-    "minFps": 12.30307388305664,
+    "startedUtc": "2026-10-14T18:57:19.5630922Z",
+    "duration": 20.554168701171876,
+    "averageFps": 118.6060562133789,
+    "minFps": 9.265032768249512,
     "bodies": 92,
     "issues": 0,
     "screenWidth": 1424,
@@ -50,7 +50,7 @@
         {
             "name": "physical_grip_state_stream",
             "passed": true,
-            "evidence": "maximum simultaneous hand targets=4"
+            "evidence": "maximum simultaneous hand targets=3"
         },
         {
             "name": "prop_break_stream",
@@ -70,7 +70,7 @@
         {
             "name": "state_stream",
             "passed": true,
-            "evidence": "sent=0 received=517"
+            "evidence": "sent=0 received=518"
         },
         {
             "name": "network_finite",

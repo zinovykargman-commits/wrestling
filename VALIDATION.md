@@ -1,6 +1,6 @@
 # GRIP BREAK 0.4.11 Windows validation
 
-Native build f185: zero Unity errors and warnings; zero reported runtime issues. 170/170 actual current native assertions passed. Per-category counts: {"ground-recovery": 26, "gym": 17, "hand-contact": 11, "net": 32, "pin-rules": 18, "pin-spam": 37, "render-math": 3, "stamina": 10, "ui": 2, "updater": 14}.
+Native build f186: zero Unity errors and warnings; zero reported runtime issues. 170/170 actual current native assertions passed. Per-category counts: {"ground-recovery": 26, "gym": 17, "hand-contact": 11, "net": 32, "pin-rules": 18, "pin-spam": 37, "render-math": 3, "stamina": 10, "ui": 2, "updater": 14}.
 
 Failed reports remain unchanged in the repository release evidence. Remaining scenarios: none.
 

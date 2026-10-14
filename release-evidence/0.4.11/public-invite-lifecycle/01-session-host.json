@@ -3,10 +3,10 @@
     "engine": "6000.3.7f1",
     "hardware": "Intel(R) Core(TM) i5-14400F / 16173 MB",
     "graphics": "Null Device",
-    "startedUtc": "2026-10-14T18:31:45.3718777Z",
-    "duration": 150.8750762939453,
-    "averageFps": 119.4751968383789,
-    "minFps": 9.792573928833008,
+    "startedUtc": "2026-10-14T18:57:41.9896725Z",
+    "duration": 149.13137817382813,
+    "averageFps": 119.46559143066406,
+    "minFps": 9.604043960571289,
     "bodies": 92,
     "issues": 0,
     "screenWidth": 1424,
@@ -30,77 +30,77 @@
         {
             "name": "session_both_ready_initial",
             "passed": true,
-            "evidence": "role=Host connected=True phase=Menu epoch=0 score=0:0 targets=0 inputs=1 snapshots=3/0 status=Friend connected "
+            "evidence": "role=Host connected=True phase=Menu epoch=0 score=0:0 targets=0 inputs=3 snapshots=5/0 status=Friend connected "
         },
         {
             "name": "session_initial_countdown_enters_match",
             "passed": true,
-            "evidence": "role=Host connected=True phase=Fighting epoch=1 score=0:0 targets=0 inputs=345 snapshots=82/0 status=Friend connected "
+            "evidence": "role=Host connected=True phase=Fighting epoch=1 score=0:0 targets=0 inputs=356 snapshots=84/0 status=Friend connected "
         },
         {
             "name": "staged_result_1_releases_actual_grips",
             "passed": true,
-            "evidence": "role=Host connected=True phase=RoundOver epoch=1 score=1:0 targets=0 inputs=706 snapshots=164/0 status=Friend connected production RoundWin event; not an earned-pin fixture"
+            "evidence": "role=Host connected=True phase=RoundOver epoch=1 score=1:0 targets=0 inputs=714 snapshots=164/0 status=Friend connected production RoundWin event; not an earned-pin fixture"
         },
         {
             "name": "staged_result_1_automatic_round_reset_survives",
             "passed": true,
-            "evidence": "role=Host connected=True phase=Fighting epoch=2 score=1:0 targets=0 inputs=1420 snapshots=323/0 status=Friend connected observed real automatic RoundOver→new epoch→Countdown→Fighting"
+            "evidence": "role=Host connected=True phase=Fighting epoch=2 score=1:0 targets=0 inputs=1423 snapshots=323/0 status=Friend connected observed real automatic RoundOver→new epoch→Countdown→Fighting"
         },
         {
             "name": "staged_result_2_releases_actual_grips",
             "passed": true,
-            "evidence": "role=Host connected=True phase=RoundOver epoch=2 score=2:0 targets=0 inputs=1469 snapshots=334/0 status=Friend connected production RoundWin event; not an earned-pin fixture"
+            "evidence": "role=Host connected=True phase=RoundOver epoch=2 score=2:0 targets=0 inputs=1473 snapshots=334/0 status=Friend connected production RoundWin event; not an earned-pin fixture"
         },
         {
             "name": "staged_result_2_automatic_round_reset_survives",
             "passed": true,
-            "evidence": "role=Host connected=True phase=Fighting epoch=3 score=2:0 targets=0 inputs=2178 snapshots=491/0 status=Friend connected observed real automatic RoundOver→new epoch→Countdown→Fighting"
+            "evidence": "role=Host connected=True phase=Fighting epoch=3 score=2:0 targets=0 inputs=2187 snapshots=493/0 status=Friend connected observed real automatic RoundOver→new epoch→Countdown→Fighting"
         },
         {
             "name": "staged_result_3_releases_actual_grips",
             "passed": true,
-            "evidence": "role=Host connected=True phase=MatchOver epoch=3 score=3:0 targets=0 inputs=2227 snapshots=502/0 status=Friend connected production RoundWin event; not an earned-pin fixture"
+            "evidence": "role=Host connected=True phase=MatchOver epoch=3 score=3:0 targets=0 inputs=2232 snapshots=503/0 status=Friend connected production RoundWin event; not an earned-pin fixture"
         },
         {
             "name": "match_results_idle_exceeds_peer_timeout",
             "passed": true,
-            "evidence": "role=Host connected=True phase=MatchOver epoch=3 score=3:0 targets=0 inputs=5226 snapshots=1167/0 status=Friend connected 25s result idle; host's20s input timeout remains enabled"
+            "evidence": "role=Host connected=True phase=MatchOver epoch=3 score=3:0 targets=0 inputs=5232 snapshots=1165/0 status=Friend connected 25s result idle; host's20s input timeout remains enabled"
         },
         {
             "name": "host_rematch_uses_same_room_resets_scores",
             "passed": true,
-            "evidence": "role=Host connected=True phase=Fighting epoch=4 score=0:0 targets=0 inputs=5575 snapshots=1245/0 status=Friend connected "
+            "evidence": "role=Host connected=True phase=Fighting epoch=4 score=0:0 targets=0 inputs=5583 snapshots=1243/0 status=Friend connected "
         },
         {
             "name": "client_lobby_request_returns_both_without_disconnect",
             "passed": true,
-            "evidence": "role=Host connected=True phase=Menu epoch=4 score=0:0 targets=0 inputs=5707 snapshots=1274/0 status=Friend connected "
+            "evidence": "role=Host connected=True phase=Menu epoch=4 score=0:0 targets=0 inputs=5714 snapshots=1273/0 status=Friend connected "
         },
         {
             "name": "online_lobby_idle_exceeds_peer_timeout",
             "passed": true,
-            "evidence": "role=Host connected=True phase=Menu epoch=4 score=0:0 targets=0 inputs=8705 snapshots=1938/0 status=Friend connected 25s lobby idle; actual neutral client heartbeats continue"
+            "evidence": "role=Host connected=True phase=Menu epoch=4 score=0:0 targets=0 inputs=8711 snapshots=1929/0 status=Friend connected 25s lobby idle; actual neutral client heartbeats continue"
         },
         {
             "name": "same_room_can_ready_up_again",
             "passed": true,
-            "evidence": "role=Host connected=True phase=Menu epoch=4 score=0:0 targets=0 inputs=8715 snapshots=1940/0 status=Friend connected "
+            "evidence": "role=Host connected=True phase=Menu epoch=4 score=0:0 targets=0 inputs=8724 snapshots=1932/0 status=Friend connected "
         },
         {
             "name": "same_room_restarts_after_client_lobby",
             "passed": true,
-            "evidence": "role=Host connected=True phase=Fighting epoch=5 score=0:0 targets=0 inputs=9066 snapshots=2018/0 status=Friend connected "
+            "evidence": "role=Host connected=True phase=Fighting epoch=5 score=0:0 targets=0 inputs=9071 snapshots=2010/0 status=Friend connected "
         },
         {
             "name": "host_lobby_returns_without_disconnect",
             "passed": true,
-            "evidence": "role=Host connected=True phase=Menu epoch=5 score=0:0 targets=0 inputs=9547 snapshots=2124/0 status=Friend connected "
+            "evidence": "role=Host connected=True phase=Menu epoch=5 score=0:0 targets=0 inputs=9557 snapshots=2112/0 status=Friend connected "
         },
         {
             "name": "explicit_leave_alone_closes_host_session",
             "passed": true,
-            "evidence": "role=Offline connected=False phase=Menu epoch=5 score=0:0 targets=0 inputs=9547 snapshots=2124/0 status=Local play "
+            "evidence": "role=Offline connected=False phase=Menu epoch=5 score=0:0 targets=0 inputs=9557 snapshots=2112/0 status=Local play "
         },
         {
             "name": "session_kept_same_transport_until_explicit_leave",
@@ -110,7 +110,7 @@
         {
             "name": "session_manual_grip_cleanup_scope",
             "passed": true,
-            "evidence": "actual normal aim/click input produced maximum held targets=0; no Attach, forced count or assertion of physically earned pins; result event was deliberately staged"
+            "evidence": "actual normal aim/click input produced maximum held targets=1; no Attach, forced count or assertion of physically earned pins; result event was deliberately staged"
         },
         {
             "name": "session_lifetime_finite_and_runtime_clean",

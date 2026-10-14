@@ -1,6 +1,6 @@
 {
   "version": "0.4.11",
-  "nativeBuild": "f185",
+  "nativeBuild": "f186",
   "matchedSettings": {
     "engine": "6000.3.7f1",
     "processor": "Intel(R) Core(TM) i5-14400F",
@@ -33,18 +33,18 @@
     "frames": 4374
   },
   "after": {
-    "averageFps": 76.44972524532683,
-    "p50FrameMs": 12.710599899291992,
-    "p95FrameMs": 16.773099899291992,
+    "averageFps": 72.7011984150889,
+    "p50FrameMs": 13.381099700927734,
+    "p95FrameMs": 17.238300323486328,
     "trials": [
-      76.04045104980469,
-      76.85910034179688
+      74.55546569824219,
+      70.84716033935547
     ],
     "heldFrames": 0,
-    "measurementSeconds": 60.013296127319336,
-    "frames": 4588
+    "measurementSeconds": 60.012765884399414,
+    "frames": 4363
   },
-  "changePercent": 4.889349844273205,
+  "changePercent": -0.2536449910353067,
   "scope": "Two 30-second foreground 1080p High movement/manual-reaching trials per build, same fixture and inputs, no captures inside measurement. Zero earned grips; not a grapple benchmark.",
   "interpretation": "A modest observed difference with trial variation; not a guaranteed FPS gain in every match. Physics, detail and presets unchanged. The requested glare fix uses diffuse-only mat lighting. Physical Mac FPS and friend-session FPS remain unmeasured.",
   "supersededFocusAndMaterialAttemptsRetained": [

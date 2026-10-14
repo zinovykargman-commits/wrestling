@@ -3,10 +3,10 @@
     "engine": "6000.3.7f1",
     "hardware": "Intel(R) Core(TM) i5-14400F / 16173 MB",
     "graphics": "NVIDIA GeForce RTX 5060",
-    "startedUtc": "2026-10-14T18:26:29.0279118Z",
-    "duration": 2.0250067710876467,
-    "averageFps": 0.0,
-    "minFps": 1000.0,
+    "startedUtc": "2026-10-14T18:52:47.5666801Z",
+    "duration": 2.0742413997650148,
+    "averageFps": 72.46953582763672,
+    "minFps": 72.46953582763672,
     "bodies": 92,
     "issues": 0,
     "screenWidth": 1920,
@@ -30,17 +30,17 @@
         {
             "name": "contact_fit_uses_actual_manual_body_hold",
             "passed": true,
-            "evidence": "normal mouse-button inputs acquired held frames=26; nearby rendered-palm frames=17; no Attach or posed arms in this fixture"
+            "evidence": "normal mouse-button inputs acquired held frames=26; nearby rendered-palm frames=19; no Attach or posed arms in this fixture"
         },
         {
             "name": "hand_visual_adjustment_is_small_and_rotation_exact",
             "passed": true,
-            "evidence": "max shown offset=0.02771588 m, limit0.028m; physical wrist rotation difference=0"
+            "evidence": "max shown offset=0.02791377 m, limit0.028m; physical wrist rotation difference=0"
         },
         {
             "name": "nearby_palm_closes_existing_contact_gap",
             "passed": true,
-            "evidence": "best sampled gap improvement=0.02771246 m; best shown sample gap=0.04999551 m; actual close-up inspection still required"
+            "evidence": "best sampled gap improvement=0.02791119 m; best shown sample gap=0.04851347 m; actual close-up inspection still required"
         },
         {
             "name": "render_contact_adds_no_physics_or_force",

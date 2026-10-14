@@ -3,10 +3,10 @@
     "engine": "6000.3.7f1",
     "hardware": "Intel(R) Core(TM) i5-14400F / 16173 MB",
     "graphics": "NVIDIA GeForce RTX 5060",
-    "startedUtc": "2026-10-14T18:27:42.8889332Z",
-    "duration": 39.41493606567383,
-    "averageFps": 75.66280364990235,
-    "minFps": 40.596927642822269,
+    "startedUtc": "2026-10-14T19:02:46.5070205Z",
+    "duration": 39.42017364501953,
+    "averageFps": 74.26839447021485,
+    "minFps": 49.470916748046878,
     "bodies": 92,
     "issues": 0,
     "screenWidth": 1920,
@@ -25,12 +25,12 @@
         {
             "name": "performance_real_movement_and_manual_reach",
             "passed": true,
-            "evidence": "actual maximum displacement=1.263835/1.353559m; held frames=0/2282; maximum held hands=0; this measures moving/reaching and records any earned grips; no grapple benchmark claim"
+            "evidence": "actual maximum displacement=1.153265/0.9236926m; held frames=0/2237; maximum held hands=0; this measures moving/reaching and records any earned grips; no grapple benchmark claim"
         },
         {
             "name": "performance_full_window_without_capture",
             "passed": true,
-            "evidence": "seconds=30.01034; frames=2282; avgFPS=76.04045;p50/p95ms=12.7429/16.6802; no screenshots or round resets during window"
+            "evidence": "seconds=30.00451; frames=2237; avgFPS=74.55547;p50/p95ms=13.1596/16.3127; no screenshots or round resets during window"
         },
         {
             "name": "performance_runtime_clean",

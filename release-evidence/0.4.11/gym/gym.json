@@ -3,10 +3,10 @@
     "engine": "6000.3.7f1",
     "hardware": "Intel(R) Core(TM) i5-14400F / 16173 MB",
     "graphics": "NVIDIA GeForce RTX 5060",
-    "startedUtc": "2026-10-14T18:26:17.4061497Z",
-    "duration": 7.517803192138672,
-    "averageFps": 81.47655487060547,
-    "minFps": 36.73796463012695,
+    "startedUtc": "2026-10-14T18:54:00.6460253Z",
+    "duration": 7.532934188842773,
+    "averageFps": 67.50103759765625,
+    "minFps": 30.420473098754884,
     "bodies": 92,
     "issues": 0,
     "screenWidth": 1920,
@@ -80,12 +80,12 @@
         {
             "name": "gym_movement_remains_playable",
             "passed": true,
-            "evidence": "distance=1.662297"
+            "evidence": "distance=1.666932"
         },
         {
             "name": "gym_performance",
             "passed": true,
-            "evidence": "native mean FPS=81.47655 minimum=36.73796 GPU=NVIDIA GeForce RTX 5060"
+            "evidence": "native mean FPS=67.50104 minimum=30.42047 GPU=NVIDIA GeForce RTX 5060"
         },
         {
             "name": "gym_runtime_clean",

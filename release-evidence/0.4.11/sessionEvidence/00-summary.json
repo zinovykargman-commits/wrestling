@@ -1,23 +1,23 @@
 {
-  "evidence": "C:\\Users\\zinov\\Documents\\Codex\\2026-10-09\\gi\\work\\checks\\f185-session-lifetime-tcp-20261014-142958",
-  "build": "f185",
   "scope": "production room/results/menu lifetime; deliberately staged RoundWin events, not claimed physical pins",
+  "transport": "two native processes over authenticated loopback TCP",
   "peers": [
     {
-      "checks": 21,
+      "report": "C:\\Users\\zinov\\Documents\\Codex\\2026-10-09\\gi\\work\\checks\\f186-session-lifetime-tcp-20261014-145555\\host\\session-host.json",
       "peer": "host",
-      "failed": [],
-      "report": "C:\\Users\\zinov\\Documents\\Codex\\2026-10-09\\gi\\work\\checks\\f185-session-lifetime-tcp-20261014-142958\\host\\session-host.json",
-      "issues": 0
+      "checks": 21,
+      "issues": 0,
+      "failed": []
     },
     {
-      "checks": 16,
+      "report": "C:\\Users\\zinov\\Documents\\Codex\\2026-10-09\\gi\\work\\checks\\f186-session-lifetime-tcp-20261014-145555\\client\\session-client.json",
       "peer": "client",
-      "failed": [],
-      "report": "C:\\Users\\zinov\\Documents\\Codex\\2026-10-09\\gi\\work\\checks\\f185-session-lifetime-tcp-20261014-142958\\client\\session-client.json",
-      "issues": 0
+      "checks": 16,
+      "issues": 0,
+      "failed": []
     }
   ],
-  "transport": "two native processes over authenticated loopback TCP",
-  "port": 51440
+  "evidence": "C:\\Users\\zinov\\Documents\\Codex\\2026-10-09\\gi\\work\\checks\\f186-session-lifetime-tcp-20261014-145555",
+  "build": "f186",
+  "port": 65234
 }
