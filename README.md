@@ -1,14 +1,12 @@
 # GRIP BREAK
 
-**[Download the Windows game](https://github.com/zinovykargman-commits/wrestling/releases/latest)** — download GRIP_BREAK-Windows.zip, extract it, and open PLAY.cmd. Future releases install through the main menu's update button.
+**[Download the Windows game](https://github.com/zinovykargman-commits/wrestling/releases/latest)** — choose GRIP_BREAK-Windows.zip, extract, then open PLAY.cmd. Use the in-game update button for future releases.
 
-This repository contains the editable Unity source, update installer, and build instructions. The playable Windows build is distributed as a release asset.
-
-# GRIP BREAK 0.4.11
+# GRIP BREAK 0.4.12
 
 Extract **GRIP_BREAK-Windows.zip** and open **PLAY.cmd**. No Unity installation is needed to play. **PLAY AGAINST AI** and **PRIVATE ONLINE** use the same Pin Wrestling rules: first to three pins wins. There is one full-window camera locked to the wrestler you control. Training, split screen and other modes are inactive.
 
-0.4.11 fixes room lifetime across rounds, match results and returning to the lobby, and closes the game and its own room helper on Windows exit. It removes the mat's moving white glare and reduces repeated rendering work while preserving gameplay, models, textures, lights and graphics presets. Passive ground stamina recovery after 2.5 seconds, including while pinned, remains unchanged.
+0.4.12 avoids repeating native body-property reads during arm routing and spring solving, and skips unused momentum calculations on ordinary contacts. The same force equations, all 24 elbow candidates, 240 Hz physics, solver settings, collision shapes, controls and stamina rules remain. It also caches fixed gym camera obstacles and removes four decorative overhead light assemblies; actual light sources and graphics presets remain. Static batching is not included. Local paired CPU timings show cheaper helper calculations, but whole-game FPS improvement has not been established. The 0.4.11 session, Windows-exit and mat-glare fixes remain.
 
 ## Controls
 
@@ -52,7 +50,7 @@ The realistic athletes use licensed skin, hair and eye textures, fitted cloth si
 
 ## Private online
 
-Use matching **0.4.11** builds on both computers. Protocol 12 retains host authority and the same 92 registered bodies. Windows hosts: **PRIVATE ONLINE → HOST & MAKE LINK → COPY INVITE**. Send the complete copied invite to your friend. They paste it into Join, select **JOIN FRIEND**, ready up, then the host starts.
+Use matching **0.4.12** builds on both computers. Protocol 12 retains host authority and the same 92 registered bodies. Windows hosts: **PRIVATE ONLINE → HOST & MAKE LINK → COPY INVITE**. Send the complete copied invite to your friend. They paste it into Join, select **JOIN FRIEND**, ready up, then the host starts.
 
 The bundled Windows Cloudflare helper creates a temporary authenticated tunnel without router setup, VPN or a Cloudflare account. Closing the room expires the invite. The game streams existing bodies, grips, shoulder contacts and pin state. Mac joins a Windows-hosted invite; native Mac hosting/controllers are outside the current Mac package. Current separate-machine internet play and physical-Mac performance require hands-on verification. Temporary service availability is external.
 
@@ -72,8 +70,6 @@ The previous 0.4.9 Windows build **f180** passed **412 of 413 native assertions*
 
 Prior 0.4.10 build **f182** passed **125/125 focused native assertions**, with zero build errors/warnings and zero runtime issues: pinned ground recovery, stamina costs, Ctrl-spam protection, pin rules, host/client state and rendered menu. This is a focused follow-up; prior full 0.4.9 evidence and its legacy walking-height limitation remain unchanged.
 
-Current 0.4.11 results, lifecycle evidence, inspected mat viewpoints and measured performance comparisons are recorded in VALIDATION.md and the final review. Performance depends on hardware and scene; this change does not promise a fixed FPS increase.
+Current 0.4.12 affected native checks and inspected final captures are recorded in VALIDATION.md and the final review. Earlier 0.4.11 session, shutdown and updater results are retained only for code verified unchanged; they are historical evidence, not new runs. The recorded full-scene result around 73 FPS is essentially unchanged from the saved result around 72.7 FPS and used a different presentation, so it is not proof of a speedup. Local helper CPU timing ratios are separate from game FPS.
 
-Untouched report JSON and inspected key captures are published in the [repository release evidence](https://github.com/zinovykargman-commits/wrestling/tree/main/release-evidence/0.4.11). Test screenshots, videos and reports are excluded from the playable ZIP. MANUAL_CHECKS.md separates hardware, human feel and independent-network checks. Public archive byte verification and the live updater check are recorded after publication in the repository. Automated evidence does not establish long-session or human-balance acceptance.
-
-Final Windows 0.4.11 measured 72.70 FPS versus 72.89 FPS in the same foreground 1080p High movement/reaching test (two 30-second trials per build). This is essentially unchanged; fewer repeated CPU calculations did not establish an FPS gain. Physics and detail remain unchanged. See release-evidence/0.4.11/performance-comparison-0411.json.
+Untouched report JSON and inspected key captures are published in the [repository release evidence](https://github.com/zinovykargman-commits/wrestling/tree/main/release-evidence/0.4.12). Test screenshots, videos and reports are excluded from the playable ZIP. MANUAL_CHECKS.md separates hardware, human feel and independent-network checks. Public archive byte verification and the live updater check are recorded after publication in the repository. Automated evidence does not establish long-session or human-balance acceptance.

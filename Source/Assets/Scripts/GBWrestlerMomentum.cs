@@ -152,8 +152,15 @@ public partial class GBWrestler {
     }
     // Only a real torso/hip collision opens this path. Collision.impulse is
     // already delivered by PhysX: never add it again or mint a base impulse.
+    internal static bool MomentumContactEligible(bool shooting,bool shotAlreadyDelivered,bool jumpActive,bool down){
+        return shooting&&!shotAlreadyDelivered||jumpActive&&!shooting&&!down;
+    }
     internal void PhysicalMomentumContact(Collision collision){
         if(!GBApp.I||!GBApp.I.Authority||collision.contactCount==0||eliminated)return;
+        // Ordinary contacts cannot enter either earned-action branch below.
+        // Their physical collision remains untouched; avoid measuring two
+        // complete articulated bodies solely to discard the unused result.
+        if(!MomentumContactEligible(Shooting,shotImpactDone,JumpImpactActive,Down))return;
         var target=collision.rigidbody?collision.rigidbody.GetComponent<GBTarget>():null;
         if(!target||!target.wrestler||target.wrestler==this||target.wrestler.eliminated)return;
         var victim=target.wrestler;Vector3 point=collision.GetContact(0).point;

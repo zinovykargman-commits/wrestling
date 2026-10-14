@@ -1,0 +1,25 @@
+{
+    "scope": "Paired local helper CPU calls on identical native states; actor/state writes excluded; alternating AB/BA; not whole-game FPS",
+    "seed": 187012,
+    "cases": 400,
+    "pairedCallsPerHelper": 1200,
+    "preexistingNonzeroAccumulatorCases": 160,
+    "preexistingNonfiniteAccumulatorCases": 0,
+    "changedAccumulatorCases": 0,
+    "referenceSpringMs": 1.5833000000000002,
+    "candidateSpringMs": 1.1578000000000002,
+    "referenceElbowMs": 22.9874,
+    "candidateElbowMs": 15.9145,
+    "springOldOverNew": 1.3675073415097599,
+    "elbowOldOverNew": 1.4444311791133873,
+    "accumulatorExamples": [
+        "case=0 forceA (0, 0, 0) -> (0, 0, 0) forceB (0, 0, 0) -> (0, 0, 0) torqueA (0, 11.999999, 599999.938) -> (0, 11.999999, 599999.938) torqueB (0, 0, 0) -> (0, 0, 0)",
+        "case=2 forceA (0, 0, 0) -> (0, 0, 0) forceB (186.607529, 340.238556, 286.9987) -> (186.607529, 340.238556, 286.9987) torqueA (0, 0, 0) -> (0, 0, 0) torqueB (575840.75, -321771.938, 3340431) -> (575840.75, -321771.938, 3340431)",
+        "case=5 forceA (293.769165, 75.4748154, 78.41064) -> (293.769165, 75.4748154, 78.41064) forceB (0, 0, 0) -> (0, 0, 0) torqueA (76086.08, -1486584.75, 3167334) -> (76086.08, -1486584.75, 3167334) torqueB (0, 0, 0) -> (0, 0, 0)"
+    ],
+    "resultChecksum": {
+        "x": -265638.25,
+        "y": 153139.96875,
+        "z": -238062.1875
+    }
+}

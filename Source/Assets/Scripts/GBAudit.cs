@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 public partial class GBAudit:MonoBehaviour {
     [Serializable] public class Outcome {public string name;public bool passed;public string evidence;}
-    [Serializable] public class Report {public string build="0.4.11",engine,hardware,graphics,startedUtc;public float duration,averageFps,minFps;public int bodies,issues,screenWidth,screenHeight;public List<Outcome> checks=new List<Outcome>();}
+    [Serializable] public class Report {public string build="0.4.12",engine,hardware,graphics,startedUtc;public float duration,averageFps,minFps;public int bodies,issues,screenWidth,screenHeight;public List<Outcome> checks=new List<Outcome>();}
     Report report=new Report();string directory;float started;GBApp app;
     float maximumJointGap;int missingJointFrames;
     void LateUpdate(){if(app&&app.Authority)foreach(var w in app.Wrestlers){if(measureArmContacts)MeasureArmContacts(w);float gap=w.JointSeparation();if(float.IsInfinity(gap))missingJointFrames++;else maximumJointGap=Mathf.Max(maximumJointGap,gap);}}
@@ -19,12 +19,14 @@ public partial class GBAudit:MonoBehaviour {
         if(Has("--ai-test")){yield return AIRun();Finish("ai.json");yield break;}
         if(Has("--quit-lifecycle-test")){yield return QuitLifetimeRun();yield break;}
         if(Has("--performance-test")){yield return PerformanceRun();Finish("performance-report.json");yield break;}
+        if(Has("--physics-snapshot-test")){yield return PhysicsSnapshotsRun();Finish("physics-snapshots.json");yield break;}
         if(Has("--render-math-test")){yield return RenderMathRun();Finish("render-math.json");yield break;}
         if(Has("--mac-updater-test")){yield return GBAuditMacUpdater.Run(app,directory,Check);Finish("mac-updater.json");yield break;}
         if(Has("--mac-updater-public-test")){yield return GBAuditMacUpdater.PublicClone(app,directory,Check);Finish("mac-updater-public.json");yield break;}
         if(Has("--mac-updater-public-install-test")){yield return GBAuditMacUpdater.PublicInstall(app,directory,Check);Finish("mac-updater-public-install-failed.json");yield break;}
         if(Has("--mac-updater-ack-test")){yield return GBAuditMacUpdater.AckOnly(app,directory,Check);Finish("mac-updater-ack.json");yield break;}
         app.ScriptedInputs=new GBInput[2];
+        if(Has("--camera-obstruction-test")){yield return GBAuditCameraObstruction.Run(app,directory,Check);Finish("camera-obstruction.json");yield break;}
         if(Has("--session-host-test")||Has("--session-client-test")){yield return SessionLifetimeRun();Finish(Has("--session-host-test")?"session-host.json":"session-client.json");yield break;}
 
         if(Has("--ground-recovery-test")){yield return GBAuditGroundRecovery.Run(app,Check);Finish("ground-recovery.json");yield break;}

@@ -91,6 +91,43 @@ public partial class GBWrestler {
         bodies[1].AddForceAtPosition(-force,point,ForceMode.Force);
         LastArmEffort=Mathf.Max(LastArmEffort,force.magnitude);
     }
+    internal static Vector3 SelectArmElbow(Rigidbody chest,CapsuleCollider capsule,CapsuleCollider rivalCapsule,bool covering,Vector3 direction,Vector3 bend,Vector3 circle,float bendRadius,Vector3 end,Vector3 previous,Vector3 initialElbow){
+        // No physics integration or transform writes occur during this
+        // synchronous search. Read its unchanged native geometry once;
+        // retain all24 candidates, endpoint order and scoring operations.
+        Vector3 chestPosition=chest.position,chestCenter=capsule.center;
+        Quaternion inverseChestRotation=Quaternion.Inverse(chest.rotation);
+        float chestRadius=capsule.radius,half=Mathf.Max(0,capsule.height*.5f-chestRadius);
+        Transform rivalTransform=null;Vector3 rivalCenter=Vector3.zero,rivalAxis=Vector3.up;float rivalHalf=0,rivalRadius=0;
+        if(rivalCapsule){
+            rivalTransform=rivalCapsule.transform;rivalCenter=rivalCapsule.center;rivalRadius=rivalCapsule.radius;
+            rivalAxis=rivalCapsule.direction==0?Vector3.right:rivalCapsule.direction==1?Vector3.up:Vector3.forward;
+            rivalHalf=Mathf.Max(0,rivalCapsule.height*.5f-rivalRadius);
+        }
+        Vector3 bestElbow=initialElbow;float bestScore=float.NegativeInfinity;
+        for(int sample=0;sample<24;sample++){
+            Vector3 pole=Quaternion.AngleAxis(sample*15,direction)*bend;
+            Vector3 candidate=circle+pole*bendRadius;
+            float clearance=float.PositiveInfinity;
+            for(int endpoint=0;endpoint<3;endpoint++){
+                Vector3 point=Vector3.Lerp(candidate,end,.24f+endpoint*.16f);
+                Vector3 local=inverseChestRotation*(point-chestPosition)-chestCenter;
+                Vector3 core=Vector3.up*Mathf.Clamp(local.y,-half,half);
+                clearance=Mathf.Min(clearance,(local-core).magnitude-chestRadius-.11f);
+                if(rivalCapsule){
+                    // A legal route must also stay outside the rival's torso;
+                    // a forearm beneath it becomes a physical pinning spacer.
+                    Vector3 rivalLocal=rivalTransform.InverseTransformPoint(point)-rivalCenter;
+                    Vector3 rivalCore=rivalAxis*Mathf.Clamp(Vector3.Dot(rivalLocal,rivalAxis),-rivalHalf,rivalHalf);
+                    clearance=Mathf.Min(clearance,(rivalLocal-rivalCore).magnitude-rivalRadius-.11f);
+                }
+            }
+            // The same outward preference/history follows contact clearance.
+            float score=(covering?clearance:Mathf.Min(clearance,.025f))+Vector3.Dot(pole,bend)*(covering?.035f:.075f)+Vector3.Dot(pole,previous)*.025f;
+            if(score>bestScore){bestScore=score;bestElbow=candidate;}
+        }
+        return bestElbow;
+    }
     void DriveMouseArm(int h,Vector3? reach=null){
         int upper=h==0?3:6,fore=h==0?4:7,index=h==0?5:8;
         Vector3 shoulder=ArmShoulder(h),desired=reach??ArmTarget(h),delta=desired-shoulder;
@@ -112,37 +149,10 @@ public partial class GBWrestler {
             // only the bend pole preserves both link lengths and the actual
             // hand endpoint while avoiding the torso with the forearm capsule.
             var chest=bodies[1];var capsule=chest.GetComponent<CapsuleCollider>();
-            float half=Mathf.Max(0,capsule.height*.5f-capsule.radius);
             var rivalCapsule=covering?PinTarget.bodies[1].GetComponent<CapsuleCollider>():null;
             float bendRadius=Mathf.Sqrt(Mathf.Max(0,upperLength*upperLength-along*along));
-            Vector3 circle=shoulder+direction*along,bestElbow=elbow,previous=Vector3.ProjectOnPlane(armBendPole[h],direction).normalized;
-            float bestScore=float.NegativeInfinity;
-            for(int sample=0;sample<24;sample++){
-                Vector3 pole=Quaternion.AngleAxis(sample*15,direction)*bend;
-                Vector3 candidate=circle+pole*bendRadius;
-                float clearance=float.PositiveInfinity;
-                for(int endpoint=0;endpoint<3;endpoint++){
-                    Vector3 point=Vector3.Lerp(candidate,end,.24f+endpoint*.16f);
-                    Vector3 local=Quaternion.Inverse(chest.rotation)*(point-chest.position)-capsule.center;
-                    Vector3 core=Vector3.up*Mathf.Clamp(local.y,-half,half);
-                    clearance=Mathf.Min(clearance,(local-core).magnitude-capsule.radius-.11f);
-                    if(rivalCapsule){
-                        // A legal route must also stay outside the rival's
-                        // real torso. A forearm under that chest becomes a
-                        // physical spacer and stops its shoulders settling.
-                        Vector3 rivalLocal=rivalCapsule.transform.InverseTransformPoint(point)-rivalCapsule.center;
-                        Vector3 axis=rivalCapsule.direction==0?Vector3.right:rivalCapsule.direction==1?Vector3.up:Vector3.forward;
-                        float rivalHalf=Mathf.Max(0,rivalCapsule.height*.5f-rivalCapsule.radius);
-                        Vector3 rivalCore=axis*Mathf.Clamp(Vector3.Dot(rivalLocal,axis),-rivalHalf,rivalHalf);
-                        clearance=Mathf.Min(clearance,(rivalLocal-rivalCore).magnitude-rivalCapsule.radius-.11f);
-                    }
-                }
-                // Prefer an outward anatomical bend and the previous pole;
-                // contact clearance still wins when the torso blocks a route.
-                float score=(covering?clearance:Mathf.Min(clearance,.025f))+Vector3.Dot(pole,bend)*(covering?.035f:.075f)+Vector3.Dot(pole,previous)*.025f;
-                if(score>bestScore){bestScore=score;bestElbow=candidate;}
-            }
-            elbow=bestElbow;foreGoal=Vector3.Lerp(elbow,end,.40f);
+            Vector3 circle=shoulder+direction*along,previous=Vector3.ProjectOnPlane(armBendPole[h],direction).normalized;
+            elbow=SelectArmElbow(chest,capsule,rivalCapsule,covering,direction,bend,circle,bendRadius,end,previous,elbow);foreGoal=Vector3.Lerp(elbow,end,.40f);
             armBendPole[h]=(elbow-circle).normalized;
         }
         Vector3 upperDirection=(elbow-shoulder).normalized,lowerDirection=(end-elbow).normalized;

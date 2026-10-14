@@ -1,0 +1,16 @@
+{
+  "build": "f190",
+  "version": "0.4.12",
+  "evidence": "C:\\Users\\zinov\\Documents\\Codex\\2026-10-09\\gi\\work\\checks\\background-performance-0412-20261014-175647",
+  "averageFps": 73.06165313720703,
+  "p50FrameMs": 13.271499633789062,
+  "p95FrameMs": 17.428499221801758,
+  "frames": 2192,
+  "forcedFocus": false,
+  "nativeRenderedFrames": 2864,
+  "oldReferenceFps": 72.7011984150889,
+  "oldReferenceReused": true,
+  "scope": "Same scripted workload/1080pHigh/physics/lighting, now rendered offscreen without forced focus. Prior reference was foreground; presentation differs, so no guaranteed causal FPS gain claim.",
+  "valid": true,
+  "failures": []
+}

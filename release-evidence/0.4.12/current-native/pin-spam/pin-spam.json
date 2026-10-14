@@ -1,0 +1,201 @@
+{
+    "build": "0.4.12",
+    "engine": "6000.3.7f1",
+    "hardware": "Intel(R) Core(TM) i5-14400F / 16173 MB",
+    "graphics": "Null Device",
+    "startedUtc": "2026-10-14T22:05:30.9050108Z",
+    "duration": 7.535587787628174,
+    "averageFps": 0.0,
+    "minFps": 1000.0,
+    "bodies": 92,
+    "issues": 0,
+    "screenWidth": 1424,
+    "screenHeight": 714,
+    "checks": [
+        {
+            "name": "test_inputs_not_serialized",
+            "passed": true,
+            "evidence": "runtime-only input; scene cannot install an empty test array"
+        },
+        {
+            "name": "back_earned_control",
+            "passed": true,
+            "evidence": "prepared real grip + both actual compound shoulder contacts"
+        },
+        {
+            "name": "back_twitch_pauses_without_reset",
+            "passed": true,
+            "evidence": "earned=0.5999996 after0.083s shoulder lift=0.5999996"
+        },
+        {
+            "name": "back_contact_resumes_count",
+            "passed": true,
+            "evidence": "count=0.6833329"
+        },
+        {
+            "name": "back_repeated_twitches_cannot_erase_progress",
+            "passed": true,
+            "evidence": "20 short lifts pause; every real contact interval adds time; count=1.683342"
+        },
+        {
+            "name": "back_real_shoulder_escape_resets",
+            "passed": true,
+            "evidence": "sustained0.18s lift resets; never breaks actual grip"
+        },
+        {
+            "name": "back_release_C_cancels_immediately",
+            "passed": true,
+            "evidence": "C release bypasses twitch grace"
+        },
+        {
+            "name": "back_broken_hold_cancels_immediately",
+            "passed": true,
+            "evidence": "live grip loss bypasses twitch grace"
+        },
+        {
+            "name": "back_cannot_win_on_raised_shoulders",
+            "passed": true,
+            "evidence": "count never advances or wins during a twitch"
+        },
+        {
+            "name": "back_finish_requires_real_contact",
+            "passed": true,
+            "evidence": "2.5s earned contact, actual shoulders restored at finish"
+        },
+        {
+            "name": "chest_earned_control",
+            "passed": true,
+            "evidence": "prepared real grip + both actual compound shoulder contacts"
+        },
+        {
+            "name": "chest_twitch_pauses_without_reset",
+            "passed": true,
+            "evidence": "earned=0.5999996 after0.083s shoulder lift=0.5999996"
+        },
+        {
+            "name": "chest_contact_resumes_count",
+            "passed": true,
+            "evidence": "count=0.6833329"
+        },
+        {
+            "name": "chest_repeated_twitches_cannot_erase_progress",
+            "passed": true,
+            "evidence": "20 short lifts pause; every real contact interval adds time; count=1.683342"
+        },
+        {
+            "name": "chest_real_shoulder_escape_resets",
+            "passed": true,
+            "evidence": "sustained0.18s lift resets; never breaks actual grip"
+        },
+        {
+            "name": "chest_release_C_cancels_immediately",
+            "passed": true,
+            "evidence": "C release bypasses twitch grace"
+        },
+        {
+            "name": "chest_broken_hold_cancels_immediately",
+            "passed": true,
+            "evidence": "live grip loss bypasses twitch grace"
+        },
+        {
+            "name": "chest_cannot_win_on_raised_shoulders",
+            "passed": true,
+            "evidence": "count never advances or wins during a twitch"
+        },
+        {
+            "name": "chest_finish_requires_real_contact",
+            "passed": true,
+            "evidence": "2.5s earned contact, actual shoulders restored at finish"
+        },
+        {
+            "name": "stationary_live_close_pin_control",
+            "passed": true,
+            "evidence": "control=True cover=True chestRange=1.272576 target=1 liveHold=True C=True down=False stamina=155.3 validCover=True deltaY=0.835 horizontal=0.960 surfaceGap=0.634 root=(-0.55, 0.96, 0.00) chest=(-0.55, 1.30, 0.00) frontDown=0.000 victimChest=(0.35, 0.46, -0.34)"
+        },
+        {
+            "name": "stationary_Ctrl_taps_do_not_recharge",
+            "passed": true,
+            "evidence": "32 rapid tap cycles; stamina=80 -> 79.79583 max gain=0 accepted bursts=1"
+        },
+        {
+            "name": "stationary_grip_remains_physical",
+            "passed": true,
+            "evidence": "no scripted grip release or timed immunity"
+        },
+        {
+            "name": "stationary_rest_under_pin_waits_for_ground_delay",
+            "passed": true,
+            "evidence": "live C+grip control, ground seconds=2.304174 stamina=79.79583"
+        },
+        {
+            "name": "stationary_rest_under_pin_recovers_after_2_5_seconds",
+            "passed": true,
+            "evidence": "resting defender recovers without a grip release; ground seconds=2.5"
+        },
+        {
+            "name": "stationary_recovery_after_control_breaks",
+            "passed": true,
+            "evidence": "normal19/s returns after actual control ends and attempt delay expires"
+        },
+        {
+            "name": "stationary_release_has_recovery_delay",
+            "passed": true,
+            "evidence": "cooldown/release is not a free regen window, delay0.8s"
+        },
+        {
+            "name": "stationary_delayed_recovery_is_not_permanent",
+            "passed": true,
+            "evidence": "rest after0.8s resumes regeneration outside a pin"
+        },
+        {
+            "name": "moving_live_close_pin_control",
+            "passed": true,
+            "evidence": "control=True cover=True chestRange=1.272576 target=1 liveHold=True C=True down=False stamina=155.3 validCover=True deltaY=0.835 horizontal=0.960 surfaceGap=0.634 root=(-0.55, 0.96, 0.00) chest=(-0.55, 1.30, 0.00) frontDown=0.000 victimChest=(0.35, 0.46, -0.34)"
+        },
+        {
+            "name": "moving_Ctrl_taps_do_not_recharge",
+            "passed": true,
+            "evidence": "32 rapid tap cycles; stamina=80 -> 78.95725 max gain=0 accepted bursts=1"
+        },
+        {
+            "name": "moving_grip_remains_physical",
+            "passed": true,
+            "evidence": "no scripted grip release or timed immunity"
+        },
+        {
+            "name": "moving_rest_under_pin_waits_for_ground_delay",
+            "passed": true,
+            "evidence": "live C+grip control, ground seconds=2.304174 stamina=78.95725"
+        },
+        {
+            "name": "moving_rest_under_pin_recovers_after_2_5_seconds",
+            "passed": true,
+            "evidence": "resting defender recovers without a grip release; ground seconds=2.5"
+        },
+        {
+            "name": "moving_recovery_after_control_breaks",
+            "passed": true,
+            "evidence": "normal19/s returns after actual control ends and attempt delay expires"
+        },
+        {
+            "name": "moving_release_has_recovery_delay",
+            "passed": true,
+            "evidence": "cooldown/release is not a free regen window, delay0.8s"
+        },
+        {
+            "name": "moving_delayed_recovery_is_not_permanent",
+            "passed": true,
+            "evidence": "rest after0.8s resumes regeneration outside a pin"
+        },
+        {
+            "name": "pin_spam_runtime_clean",
+            "passed": true,
+            "evidence": ""
+        },
+        {
+            "name": "connected_body_joints",
+            "passed": true,
+            "evidence": "missing frames=0 maximum physical anchor separation=0.0000 m"
+        }
+    ]
+}

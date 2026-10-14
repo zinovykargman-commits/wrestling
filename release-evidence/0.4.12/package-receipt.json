@@ -1,0 +1,288 @@
+{
+  "version": "0.4.12",
+  "nativeBuild": "f191",
+  "sourceBaselineSha256": "e62676f2d50feab30ce1e236d6cddadcdbe8ddd6ec442ca24d2b83223e1a87d5",
+  "approvedReview": "work/f191-final-review-0412.json",
+  "approvedReviewSha256": "ce28c74f10d19d4b1c294fee2581b02e89f9f43805624f59149e230615f2ac2f",
+  "counts": {
+    "physics-snapshot": 8,
+    "momentum": 22,
+    "camera-obstruction": 25,
+    "stamina": 10,
+    "pin-spam": 37,
+    "pin-rules": 18,
+    "hand-contact": 11,
+    "ground-recovery": 26
+  },
+  "nativeChecks": 157,
+  "passedNativeChecks": 157,
+  "issues": 0,
+  "currentEvidence": [
+    {
+      "category": "physics-snapshot",
+      "path": "work/checks/f191-physics-snapshot/physics-snapshots.json",
+      "sha256": "cde2e1a4d6057f20dc4aaddc0f8efaf45a4f3429d971777372ef5846d959d85a",
+      "checks": 8
+    },
+    {
+      "category": "momentum",
+      "path": "work/checks/f191-momentum/momentum.json",
+      "sha256": "6a5c00832dbd801ed11e384b09419c569e44d9ca115a6e0d46323aa5f653799d",
+      "checks": 22
+    },
+    {
+      "category": "camera-obstruction",
+      "path": "work/checks/f191-camera-obstruction/camera-obstruction.json",
+      "sha256": "3f66dd5f488d9a8eebdbc390180bdf6a546c857f3c5534a81eee6998d69f012b",
+      "checks": 25
+    },
+    {
+      "category": "stamina",
+      "path": "work/checks/f191-stamina/stamina.json",
+      "sha256": "01080647ea20706fe9dd39439f548ffb937aa5c17d91016311d6400f2da01929",
+      "checks": 10
+    },
+    {
+      "category": "pin-spam",
+      "path": "work/checks/f191-pin-spam/pin-spam.json",
+      "sha256": "34f94c41e8db83659a23b29ef746e4b60e00c60281ef3f55d03c32c6cf03063e",
+      "checks": 37
+    },
+    {
+      "category": "pin-rules",
+      "path": "work/checks/f191-pin-rules/pin-rules.json",
+      "sha256": "29076b8a4d2c0dec800172a765088e1ef02c2cdf9f529df791399919b4c7fc9a",
+      "checks": 18
+    },
+    {
+      "category": "hand-contact",
+      "path": "work/checks/f191-hand-contact/hand-contact.json",
+      "sha256": "809c0fb54cebc6689a862b86a0f29f31512f546c0df73feb0923956b0775cbb9",
+      "checks": 11
+    },
+    {
+      "category": "ground-recovery",
+      "path": "work/checks/f191-ground-recovery/ground-recovery.json",
+      "sha256": "8674080acb20f349ff10f4c1c6d15e01195c1184f5d43b1658de4e7bfd7e3236",
+      "checks": 26
+    }
+  ],
+  "unchangedHistoricalBaselines": {
+    "scope": "Historical0.4.11 native session/quit/updater evidence retained only for unchanged subsystem source; these are NOT f191 rerun passes",
+    "sourceComparisons": [
+      {
+        "path": "Source/Assets/Scripts/GBNetwork.cs",
+        "baselineBuild": "f186",
+        "baselineSha256": "e607ded6e4b27774c63b13ab4ed54d674944ee8e92ded3f8b591b2e62df10619",
+        "currentSha256": "e607ded6e4b27774c63b13ab4ed54d674944ee8e92ded3f8b591b2e62df10619",
+        "comparison": "exact text, allowing release-version literal only"
+      },
+      {
+        "path": "Source/Assets/Scripts/GBTunnel.cs",
+        "baselineBuild": "f186",
+        "baselineSha256": "9a5ef61ce3b22f9799b399beba95868526ba9b7c0883a2b5c0eb3a6fc2c89cee",
+        "currentSha256": "9a5ef61ce3b22f9799b399beba95868526ba9b7c0883a2b5c0eb3a6fc2c89cee",
+        "comparison": "exact text, allowing release-version literal only"
+      },
+      {
+        "path": "Source/Assets/Scripts/GBWindowsChildJob.cs",
+        "baselineBuild": "f186",
+        "baselineSha256": "cd43939a05497954092279c583215bcecfed33d93f133c15d793ea9ab66f284b",
+        "currentSha256": "cd43939a05497954092279c583215bcecfed33d93f133c15d793ea9ab66f284b",
+        "comparison": "exact text, allowing release-version literal only"
+      },
+      {
+        "path": "Source/Assets/Scripts/GBUpdater.cs",
+        "baselineBuild": "f186",
+        "baselineSha256": "3dfd7d6b6dc92af4a93e5710db7cab02b2ffaf5bfaa808714f55a8d530b41a05",
+        "currentSha256": "3dfd7d6b6dc92af4a93e5710db7cab02b2ffaf5bfaa808714f55a8d530b41a05",
+        "comparison": "exact text, allowing release-version literal only"
+      },
+      {
+        "path": "Source/Assets/Scripts/GBApp.cs",
+        "method": "BeginMatch",
+        "baselineBuild": "f186",
+        "comparison": "exact method source unchanged"
+      },
+      {
+        "path": "Source/Assets/Scripts/GBApp.cs",
+        "method": "ReturnToMenu",
+        "baselineBuild": "f186",
+        "comparison": "exact method source unchanged"
+      },
+      {
+        "path": "Source/Assets/Scripts/GBApp.cs",
+        "method": "ReturnToOnlineLobby",
+        "baselineBuild": "f186",
+        "comparison": "exact method source unchanged"
+      },
+      {
+        "path": "Source/Assets/Scripts/GBApp.cs",
+        "method": "RoundWin",
+        "baselineBuild": "f186",
+        "comparison": "exact method source unchanged"
+      },
+      {
+        "path": "Source/Assets/Scripts/GBApp.cs",
+        "method": "ResetRound",
+        "baselineBuild": "f186",
+        "comparison": "exact method source unchanged"
+      },
+      {
+        "path": "Source/Assets/Scripts/GBApp.cs",
+        "method": "PrepareToQuit",
+        "baselineBuild": "f186",
+        "comparison": "exact method source unchanged"
+      },
+      {
+        "path": "Source/Assets/Scripts/GBApp.cs",
+        "method": "OnApplicationQuit",
+        "baselineBuild": "f186",
+        "comparison": "exact method source unchanged"
+      },
+      {
+        "path": "Source/Assets/Scripts/GBApp.cs",
+        "method": "OnDestroy",
+        "baselineBuild": "f186",
+        "comparison": "exact method source unchanged"
+      },
+      {
+        "path": "Source/Assets/Scripts/GBApp.cs",
+        "method": "SavePrefs",
+        "baselineBuild": "f186",
+        "comparison": "exact method source unchanged"
+      },
+      {
+        "path": "Update/install-update.ps1",
+        "baselineBuild": "f186",
+        "currentSha256": "5f7945aa02bf59bb8267ec1d9a10ee69302971ab19c3ac3026a42c0d161b4b87",
+        "comparison": "exact installed/repository installer bytes"
+      }
+    ],
+    "historicalEvidence": [
+      {
+        "path": "work/checks/f186-session-lifetime-tcp-20261014-145555/summary.json",
+        "sha256": "1a966a1c207943b783ee5b9ecc9e21dfe87d9a3f6f4ab00872932b214ce6d0cc",
+        "baselineBuild": "f186",
+        "kind": "sessionEvidence"
+      },
+      {
+        "path": "work/checks/f186-session-lifetime-tcp-20261014-145555/host/session-host.json",
+        "sha256": "33a11ed94ff604892043b5e61e4b229ed9bd4c13970ffe62fa01202f644c0e92",
+        "baselineBuild": "f186",
+        "kind": "sessionEvidence"
+      },
+      {
+        "path": "work/checks/f186-session-lifetime-tcp-20261014-145555/client/session-client.json",
+        "sha256": "387807ba18b9a753630466c81978630c8400d3c573219f99a99c67d85554f49e",
+        "baselineBuild": "f186",
+        "kind": "sessionEvidence"
+      },
+      {
+        "path": "work/checks/f186-quit-lifetime-20261014-145536/summary.json",
+        "sha256": "31b0e71e1bea02037ca3ca38e53efae00cc8e3b0c0396ff460b114a26f954436",
+        "baselineBuild": "f186",
+        "kind": "quitEvidence"
+      },
+      {
+        "path": "work/checks/f186-quit-lifetime-20261014-145536/forced/player.log",
+        "sha256": "cce2b7165dc767f7f193cde1fb936618b8ab472a0c555c42fc0c4e3da3d7adb1",
+        "baselineBuild": "f186",
+        "kind": "quitEvidence"
+      },
+      {
+        "path": "work/checks/f186-quit-lifetime-20261014-145536/forced/quit-ready.json",
+        "sha256": "d171aa127a07b11fa76be8e09bd121fe780ebd276957a63aafc74472fd0db0b6",
+        "baselineBuild": "f186",
+        "kind": "quitEvidence"
+      },
+      {
+        "path": "work/checks/f186-quit-lifetime-20261014-145536/forced/result.json",
+        "sha256": "05247bf052f014372585d40b7b31bb8914a504f433dbed7ce2d321a31a3effcf",
+        "baselineBuild": "f186",
+        "kind": "quitEvidence"
+      },
+      {
+        "path": "work/checks/f186-quit-lifetime-20261014-145536/quit/player.log",
+        "sha256": "fc59fb79dc30fae979416e4011a830933804f39d477b156193d7e282c8af6d4c",
+        "baselineBuild": "f186",
+        "kind": "quitEvidence"
+      },
+      {
+        "path": "work/checks/f186-quit-lifetime-20261014-145536/quit/quit-ready.json",
+        "sha256": "b1ff8de4e0ae8e1f749ef44e88d594dc895d766491d89b4fb5445ff1de7a63ca",
+        "baselineBuild": "f186",
+        "kind": "quitEvidence"
+      },
+      {
+        "path": "work/checks/f186-quit-lifetime-20261014-145536/quit/result.json",
+        "sha256": "05b03da12d81c2301bc16d1eba2fa135dc911f24d875f7aaecd43fee8d15eb50",
+        "baselineBuild": "f186",
+        "kind": "quitEvidence"
+      },
+      {
+        "path": "work/checks/f186-quit-lifetime-20261014-145536/x/player.log",
+        "sha256": "27702ecf2ce261515e8a31cc2a9a3fecc6a433065fc37acf1b82c65de72c178d",
+        "baselineBuild": "f186",
+        "kind": "quitEvidence"
+      },
+      {
+        "path": "work/checks/f186-quit-lifetime-20261014-145536/x/quit-ready.json",
+        "sha256": "d07d864905c53bab5cf98eb27abd28c5d66c0d0f33e825dfbe9fe59e4d03756e",
+        "baselineBuild": "f186",
+        "kind": "quitEvidence"
+      },
+      {
+        "path": "work/checks/f186-quit-lifetime-20261014-145536/x/result.json",
+        "sha256": "3158e76e06f6a6795b39f6ed7daf807d6b4fcbadd3c90d1021995b75cb897b93",
+        "baselineBuild": "f186",
+        "kind": "quitEvidence"
+      },
+      {
+        "path": "work/checks/f186-public-updater/updater.json",
+        "sha256": "d8686854e05154579b29f7faa8c5fa96cb3124d76557cddac502508422ac2f32",
+        "baselineBuild": "f186",
+        "kind": "updater"
+      }
+    ]
+  },
+  "performanceEvidence": [
+    {
+      "path": "work/performance-background-after-0412.json",
+      "sha256": "d9823d16fef1964b9d96a42cf81bd1353ccb82d182af1b7e8814b26acd46b70a"
+    },
+    {
+      "path": "work/checks/f189-physics-snapshot/physics-snapshot-cpu.json",
+      "sha256": "daa2e9d74d1456d38ce903ee49d9a2cca59a886ec9eaad1aac05fae9c14596bf"
+    }
+  ],
+  "performanceClaim": "No measured whole-game FPS improvement claimed; paired helper CPU timings are a separate diagnostic",
+  "assetDirectory": "outputs/windows-0.4.12",
+  "assets": [
+    {
+      "name": "GRIP_BREAK-Windows.zip",
+      "path": "outputs/windows-0.4.12/GRIP_BREAK-Windows.zip",
+      "sha256": "d780fb7af294af7eb2d6c8c94b9478e6908d355bab78e922d140a42cf9b32527",
+      "size": 153659182
+    },
+    {
+      "name": "GRIP_BREAK-Source.zip",
+      "path": "outputs/windows-0.4.12/GRIP_BREAK-Source.zip",
+      "sha256": "861913fefc71abc0b10295d5a8bd5b29a2f6b2a2068af0d2fa35ade940b4d9fe",
+      "size": 127676361
+    },
+    {
+      "name": "GRIP_BREAK-Update.json",
+      "path": "outputs/windows-0.4.12/GRIP_BREAK-Update.json",
+      "sha256": "2cfdcdd54116e2dbec460d24be16a10f0f08c010b448eb4c5124307d0b6d520b",
+      "size": 245
+    },
+    {
+      "name": "GRIP_BREAK-Archives-SHA256.txt",
+      "path": "outputs/windows-0.4.12/GRIP_BREAK-Archives-SHA256.txt",
+      "sha256": "456e4d2c662f920ba4fbea15c8ebfee1c579da4c9029d97d338d4270585e8608",
+      "size": 179
+    }
+  ],
+  "authoringSha256": "79cba5496156807cd68c0b4f370ef6b01c172885b4cb90c997dfa3576d7855bb"
+}

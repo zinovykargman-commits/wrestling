@@ -1,0 +1,42 @@
+{
+  "version": "0.4.12",
+  "nativeBuild": "f191",
+  "approved": true,
+  "sourceBaselineSha256": "e62676f2d50feab30ce1e236d6cddadcdbe8ddd6ec442ca24d2b83223e1a87d5",
+  "reviewedCaptures": [
+    "work/checks/f191-camera-obstruction/camera-blue-near-corner.png",
+    "work/checks/f191-camera-obstruction/camera-blue-opposite-corner.png",
+    "work/checks/f191-camera-obstruction/camera-blue-raised-center.png",
+    "work/checks/f191-camera-obstruction/camera-blue-raised-corner.png",
+    "work/checks/f191-camera-obstruction/camera-blue-standing.png",
+    "work/checks/f191-camera-obstruction/camera-orange-near-corner.png",
+    "work/checks/f191-camera-obstruction/camera-orange-opposite-corner.png",
+    "work/checks/f191-camera-obstruction/camera-orange-raised-center.png",
+    "work/checks/f191-camera-obstruction/camera-orange-raised-corner.png",
+    "work/checks/f191-camera-obstruction/camera-orange-standing.png"
+  ],
+  "currentNativeChecks": 157,
+  "categories": [
+    "physics-snapshot",
+    "momentum",
+    "camera-obstruction",
+    "stamina",
+    "pin-spam",
+    "pin-rules",
+    "hand-contact",
+    "ground-recovery"
+  ],
+  "f190ProductionEquivalent": true,
+  "f190SourceDifferences": [
+    "Source/Assets/Scenes/GripBreak.unity",
+    "Source/Assets/Scripts/GBAuditCameraObstruction.cs"
+  ],
+  "bootstrapSerializedValuesUnchanged": true,
+  "performanceEvidence": [
+    "work/performance-background-after-0412.json",
+    "work/checks/f189-physics-snapshot/physics-snapshot-cpu.json"
+  ],
+  "visualDecision": "Root inspected all10 f191 captures: controlled orange/blue centered and unobstructed at standing/raised/corner positions. Housings removed, actualillumination/diffusemat retained. Raised suspendedposes are deliberate fixtureplacement, not groundingproof. Corrected separatedcharacter/pivot fixture has no oldstretched/overlaid skins.",
+  "performanceDecision": "400 exact force/elbow matches; pairedhelperCPU ~27percent spring/~31percent elbow cheaper. f190production-equivalent1080pHigh realoffscreen73.06FPS vs reusedf186foreground72.70: essentiallyunchanged; presentationdiff forbids causalFPSboostclaim. Oldbuildnotrerun/forcedfocusfalse. Slowerbatching/nonrendering119FPS attempts rejected.",
+  "limits": "No meaningfulwhole-gameFPSincrease proven. CurrentMacnativeverification separate. Untouchednetworking/updater/quit evidence remains explicitly0.4.11historical, notf191reruns."
+}

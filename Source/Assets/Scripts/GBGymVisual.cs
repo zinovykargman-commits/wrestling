@@ -180,11 +180,8 @@ public static partial class GBGymVisual {
             }
         }
         for(int s=-1;s<=1;s+=2)GBArt.Box(p,"Weight rack upright",new Vector3(s*1.8f,-.37f,7.65f),new Vector3(.1f,1.4f,.1f),metal,false);
-        for(int x=-3;x<=3;x+=6)for(int z=-3;z<=3;z+=6){
-            Round(p,"Overhead light housing",new Vector3(x,5.3f,z),new Vector3(2.4f,.18f,.52f),.04f,metal);
-            GBArt.Box(p,"Overhead light diffuser",new Vector3(x,5.2f,z),new Vector3(2.20f,.018f,.39f),light,false);
-            for(int s=-1;s<=1;s+=2)GBArt.Cylinder(p,"Fixture suspension",new Vector3(x+s*.8f,5.35f,z),new Vector3(x+s*.8f,6.6f,z),.012f,metal);
-        }
+        // Low hanging fixture boxes crossed the wrestler-follow camera.
+        // Keep the authored illumination in Lighting(), without those housings.
         // Visual stairs dress the existing base without adding new collision.
         for(int step=0;step<3;step++)Round(p,"Ringside access step",new Vector3(-3.3f,-.91f+step*.20f,-5.5f+step*.25f),new Vector3(1.0f,.18f,.72f),.035f,rubber);
     }

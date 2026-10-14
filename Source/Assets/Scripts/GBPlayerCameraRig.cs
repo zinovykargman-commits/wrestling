@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 // Body wobble and camera obstruction have separate filters; one view tracks its wrestler.
 public class GBPlayerCameraRig:MonoBehaviour {
@@ -12,6 +13,43 @@ public class GBPlayerCameraRig:MonoBehaviour {
     int lastEpoch=-1,lastPlayer=-1;
     float distanceVelocity,clearSince=-1,sideAngle,sideVelocity,chosenSide,nextChoice;
     readonly Vector3 offset=new Vector3(3.1f,3.8f,-5.8f);
+    static readonly float[] sideChoices={-55,55,-100,100};
+    readonly List<Bounds> structure=new List<Bounds>();
+    GBArena cachedArena;
+    float roomCameraTop=float.PositiveInfinity;
+    public int StructuralBoundsCount {get{return structure.Count;}}
+    public int StructuralCacheBuilds {get;private set;}
+
+    void CacheStructure(){
+        if(cachedArena==app.Arena)return;
+        cachedArena=app.Arena;structure.Clear();roomCameraTop=float.PositiveInfinity;StructuralCacheBuilds++;
+        if(!cachedArena||app.CurrentArena!=3)return;
+        // These immobile room meshes intentionally have no gameplay colliders.
+        // Read their bounds once per world, rather than scanning the gym each frame.
+        foreach(var renderer in cachedArena.GetComponentsInChildren<Renderer>()){
+            if(!renderer.enabled)continue;
+            string name=renderer.name;
+            bool block=name=="Solid concrete ceiling"||name=="Roof crossbeam"||name=="I beam web"||name=="I beam flange"||
+                name=="Overhead ventilation duct"||name=="Overhead light housing"||name=="Overhead light diffuser"||
+                name=="Gym wall"||name=="Upper back wall"||name=="Gym entrance wall"||name=="Gym window sill wall"||
+                name=="Gym upper window wall"||name=="Window wall pier"||name=="Side wall column";
+            if(!block)continue;
+            var bounds=renderer.bounds;
+            // Covers the entire near plane even at the closest-view FOV and
+            // widescreen aspect, not just a ray through the camera's center.
+            bounds.Expand(.68f);structure.Add(bounds);
+            if(name=="Solid concrete ceiling"||name=="Roof crossbeam"||name=="I beam web"||name=="I beam flange")roomCameraTop=Mathf.Min(roomCameraTop,bounds.min.y-.08f);
+        }
+    }
+    float StructuralDistance(Vector3 target,Vector3 direction,float length){
+        float safe=length;var ray=new Ray(target,direction);
+        foreach(var bounds in structure){float entry;if(bounds.Contains(target))continue;if(bounds.IntersectRay(ray,out entry)&&entry<safe)safe=Mathf.Max(.12f,entry-.08f);}
+        return safe;
+    }
+    public bool StructuralViewClear(Vector3 target,Vector3 cameraPosition){
+        CacheStructure();Vector3 delta=cameraPosition-target;float length=delta.magnitude;
+        return length<.001f||StructuralDistance(target,delta/length,length)>=length-.001f;
+    }
 
     public void Setup(GBApp owner,Camera primary){
         app=owner;Primary=primary;
@@ -36,9 +74,10 @@ public class GBPlayerCameraRig:MonoBehaviour {
         RaycastHit hit;float safe=length;
         if(Physics.SphereCast(target,.24f,direction,out hit,length,1,QueryTriggerInteraction.Ignore))safe=Mathf.Max(.12f,hit.distance-.28f);
         while(safe>.25f&&Physics.CheckSphere(target+direction*safe,.24f,1,QueryTriggerInteraction.Ignore))safe-=.15f;
-        return Mathf.Max(.12f,safe);
+        return Mathf.Min(Mathf.Max(.12f,safe),StructuralDistance(target,direction,length));
     }
     void Follow(Camera view,int player,bool snap,float shake){
+        CacheStructure();
         float dt=Mathf.Clamp(Time.unscaledDeltaTime,.0001f,.05f);
         Vector3 raw=RawFollowPoint(player);if(!Finite(raw))return;
         snap|=!initialized[player]||Vector3.Distance(focus[player],raw)>12;
@@ -58,7 +97,12 @@ public class GBPlayerCameraRig:MonoBehaviour {
             p.y=Mathf.Clamp(p.y,raw.y-.65f,raw.y+.65f);
             focus[player]=p;focusVelocity[player]=v;
         }
-        Vector3 center=focus[player];float length=offset.magnitude;Vector3 preferred=offset/length;
+        Vector3 center=focus[player],desiredOffset=offset;
+        // As a wrestler rises, lower the viewing angle gradually before the
+        // camera reaches the beams. This avoids repeatedly pulling in and out
+        // across an overhead edge while keeping the same centered body target.
+        desiredOffset.y=Mathf.Min(desiredOffset.y,roomCameraTop-center.y);
+        float length=desiredOffset.magnitude;Vector3 preferred=desiredOffset/length;
         float defaultSafe=SafeDistance(center,preferred,length);
         // Hold a side choice at corners, only switching if the view is very close.
         if(Time.unscaledTime>=nextChoice){
@@ -66,7 +110,7 @@ public class GBPlayerCameraRig:MonoBehaviour {
             float currentSafe=SafeDistance(center,Quaternion.Euler(0,chosenSide,0)*preferred,length);
             if(defaultSafe<2.8f&&currentSafe<3.8f){
                 float best=currentSafe,bestSide=chosenSide;
-                foreach(float side in new float[]{-55,55,-100,100}){
+                foreach(float side in sideChoices){
                     float candidate=SafeDistance(center,Quaternion.Euler(0,side,0)*preferred,length);
                     if(candidate>best+1.1f){best=candidate;bestSide=side;}
                 }

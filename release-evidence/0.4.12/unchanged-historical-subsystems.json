@@ -1,0 +1,179 @@
+{
+  "scope": "Historical0.4.11 native session/quit/updater evidence retained only for unchanged subsystem source; these are NOT f191 rerun passes",
+  "sourceComparisons": [
+    {
+      "path": "Source/Assets/Scripts/GBNetwork.cs",
+      "baselineBuild": "f186",
+      "baselineSha256": "e607ded6e4b27774c63b13ab4ed54d674944ee8e92ded3f8b591b2e62df10619",
+      "currentSha256": "e607ded6e4b27774c63b13ab4ed54d674944ee8e92ded3f8b591b2e62df10619",
+      "comparison": "exact text, allowing release-version literal only"
+    },
+    {
+      "path": "Source/Assets/Scripts/GBTunnel.cs",
+      "baselineBuild": "f186",
+      "baselineSha256": "9a5ef61ce3b22f9799b399beba95868526ba9b7c0883a2b5c0eb3a6fc2c89cee",
+      "currentSha256": "9a5ef61ce3b22f9799b399beba95868526ba9b7c0883a2b5c0eb3a6fc2c89cee",
+      "comparison": "exact text, allowing release-version literal only"
+    },
+    {
+      "path": "Source/Assets/Scripts/GBWindowsChildJob.cs",
+      "baselineBuild": "f186",
+      "baselineSha256": "cd43939a05497954092279c583215bcecfed33d93f133c15d793ea9ab66f284b",
+      "currentSha256": "cd43939a05497954092279c583215bcecfed33d93f133c15d793ea9ab66f284b",
+      "comparison": "exact text, allowing release-version literal only"
+    },
+    {
+      "path": "Source/Assets/Scripts/GBUpdater.cs",
+      "baselineBuild": "f186",
+      "baselineSha256": "3dfd7d6b6dc92af4a93e5710db7cab02b2ffaf5bfaa808714f55a8d530b41a05",
+      "currentSha256": "3dfd7d6b6dc92af4a93e5710db7cab02b2ffaf5bfaa808714f55a8d530b41a05",
+      "comparison": "exact text, allowing release-version literal only"
+    },
+    {
+      "path": "Source/Assets/Scripts/GBApp.cs",
+      "method": "BeginMatch",
+      "baselineBuild": "f186",
+      "comparison": "exact method source unchanged"
+    },
+    {
+      "path": "Source/Assets/Scripts/GBApp.cs",
+      "method": "ReturnToMenu",
+      "baselineBuild": "f186",
+      "comparison": "exact method source unchanged"
+    },
+    {
+      "path": "Source/Assets/Scripts/GBApp.cs",
+      "method": "ReturnToOnlineLobby",
+      "baselineBuild": "f186",
+      "comparison": "exact method source unchanged"
+    },
+    {
+      "path": "Source/Assets/Scripts/GBApp.cs",
+      "method": "RoundWin",
+      "baselineBuild": "f186",
+      "comparison": "exact method source unchanged"
+    },
+    {
+      "path": "Source/Assets/Scripts/GBApp.cs",
+      "method": "ResetRound",
+      "baselineBuild": "f186",
+      "comparison": "exact method source unchanged"
+    },
+    {
+      "path": "Source/Assets/Scripts/GBApp.cs",
+      "method": "PrepareToQuit",
+      "baselineBuild": "f186",
+      "comparison": "exact method source unchanged"
+    },
+    {
+      "path": "Source/Assets/Scripts/GBApp.cs",
+      "method": "OnApplicationQuit",
+      "baselineBuild": "f186",
+      "comparison": "exact method source unchanged"
+    },
+    {
+      "path": "Source/Assets/Scripts/GBApp.cs",
+      "method": "OnDestroy",
+      "baselineBuild": "f186",
+      "comparison": "exact method source unchanged"
+    },
+    {
+      "path": "Source/Assets/Scripts/GBApp.cs",
+      "method": "SavePrefs",
+      "baselineBuild": "f186",
+      "comparison": "exact method source unchanged"
+    },
+    {
+      "path": "Update/install-update.ps1",
+      "baselineBuild": "f186",
+      "currentSha256": "5f7945aa02bf59bb8267ec1d9a10ee69302971ab19c3ac3026a42c0d161b4b87",
+      "comparison": "exact installed/repository installer bytes"
+    }
+  ],
+  "historicalEvidence": [
+    {
+      "path": "work/checks/f186-session-lifetime-tcp-20261014-145555/summary.json",
+      "sha256": "1a966a1c207943b783ee5b9ecc9e21dfe87d9a3f6f4ab00872932b214ce6d0cc",
+      "baselineBuild": "f186",
+      "kind": "sessionEvidence"
+    },
+    {
+      "path": "work/checks/f186-session-lifetime-tcp-20261014-145555/host/session-host.json",
+      "sha256": "33a11ed94ff604892043b5e61e4b229ed9bd4c13970ffe62fa01202f644c0e92",
+      "baselineBuild": "f186",
+      "kind": "sessionEvidence"
+    },
+    {
+      "path": "work/checks/f186-session-lifetime-tcp-20261014-145555/client/session-client.json",
+      "sha256": "387807ba18b9a753630466c81978630c8400d3c573219f99a99c67d85554f49e",
+      "baselineBuild": "f186",
+      "kind": "sessionEvidence"
+    },
+    {
+      "path": "work/checks/f186-quit-lifetime-20261014-145536/summary.json",
+      "sha256": "31b0e71e1bea02037ca3ca38e53efae00cc8e3b0c0396ff460b114a26f954436",
+      "baselineBuild": "f186",
+      "kind": "quitEvidence"
+    },
+    {
+      "path": "work/checks/f186-quit-lifetime-20261014-145536/forced/player.log",
+      "sha256": "cce2b7165dc767f7f193cde1fb936618b8ab472a0c555c42fc0c4e3da3d7adb1",
+      "baselineBuild": "f186",
+      "kind": "quitEvidence"
+    },
+    {
+      "path": "work/checks/f186-quit-lifetime-20261014-145536/forced/quit-ready.json",
+      "sha256": "d171aa127a07b11fa76be8e09bd121fe780ebd276957a63aafc74472fd0db0b6",
+      "baselineBuild": "f186",
+      "kind": "quitEvidence"
+    },
+    {
+      "path": "work/checks/f186-quit-lifetime-20261014-145536/forced/result.json",
+      "sha256": "05247bf052f014372585d40b7b31bb8914a504f433dbed7ce2d321a31a3effcf",
+      "baselineBuild": "f186",
+      "kind": "quitEvidence"
+    },
+    {
+      "path": "work/checks/f186-quit-lifetime-20261014-145536/quit/player.log",
+      "sha256": "fc59fb79dc30fae979416e4011a830933804f39d477b156193d7e282c8af6d4c",
+      "baselineBuild": "f186",
+      "kind": "quitEvidence"
+    },
+    {
+      "path": "work/checks/f186-quit-lifetime-20261014-145536/quit/quit-ready.json",
+      "sha256": "b1ff8de4e0ae8e1f749ef44e88d594dc895d766491d89b4fb5445ff1de7a63ca",
+      "baselineBuild": "f186",
+      "kind": "quitEvidence"
+    },
+    {
+      "path": "work/checks/f186-quit-lifetime-20261014-145536/quit/result.json",
+      "sha256": "05b03da12d81c2301bc16d1eba2fa135dc911f24d875f7aaecd43fee8d15eb50",
+      "baselineBuild": "f186",
+      "kind": "quitEvidence"
+    },
+    {
+      "path": "work/checks/f186-quit-lifetime-20261014-145536/x/player.log",
+      "sha256": "27702ecf2ce261515e8a31cc2a9a3fecc6a433065fc37acf1b82c65de72c178d",
+      "baselineBuild": "f186",
+      "kind": "quitEvidence"
+    },
+    {
+      "path": "work/checks/f186-quit-lifetime-20261014-145536/x/quit-ready.json",
+      "sha256": "d07d864905c53bab5cf98eb27abd28c5d66c0d0f33e825dfbe9fe59e4d03756e",
+      "baselineBuild": "f186",
+      "kind": "quitEvidence"
+    },
+    {
+      "path": "work/checks/f186-quit-lifetime-20261014-145536/x/result.json",
+      "sha256": "3158e76e06f6a6795b39f6ed7daf807d6b4fcbadd3c90d1021995b75cb897b93",
+      "baselineBuild": "f186",
+      "kind": "quitEvidence"
+    },
+    {
+      "path": "work/checks/f186-public-updater/updater.json",
+      "sha256": "d8686854e05154579b29f7faa8c5fa96cb3124d76557cddac502508422ac2f32",
+      "baselineBuild": "f186",
+      "kind": "updater"
+    }
+  ]
+}

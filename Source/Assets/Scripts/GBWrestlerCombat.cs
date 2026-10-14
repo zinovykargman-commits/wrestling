@@ -230,15 +230,22 @@ public partial class GBWrestler {
 public class GBGrip:MonoBehaviour {
     public GBWrestler owner;public int handIndex;public Rigidbody handBody,connectedBody;public Vector3 anchor,connectedAnchor;public float breakForce=1050;
     float strained;public float Strain {get;private set;}
-    static Vector3 PointInverseMass(Rigidbody body,Vector3 point,Vector3 force){
-        if(body.isKinematic)return Vector3.zero;
-        Vector3 lever=point-body.worldCenterOfMass;
-        Quaternion principal=body.rotation*body.inertiaTensorRotation;
-        Vector3 localTorque=Quaternion.Inverse(principal)*Vector3.Cross(lever,force),tensor=body.inertiaTensor;
+    struct PointMassSnapshot {
+        public bool kinematic;public Vector3 lever,tensor;public Quaternion principal,inversePrincipal;public float mass;
+        public PointMassSnapshot(Rigidbody body,Vector3 point){
+            kinematic=body.isKinematic;lever=tensor=Vector3.zero;principal=inversePrincipal=Quaternion.identity;mass=1;
+            if(kinematic)return;
+            lever=point-body.worldCenterOfMass;principal=body.rotation*body.inertiaTensorRotation;
+            inversePrincipal=Quaternion.Inverse(principal);tensor=body.inertiaTensor;mass=Mathf.Max(.001f,body.mass);
+        }
+    }
+    static Vector3 PointInverseMass(in PointMassSnapshot body,Vector3 force){
+        if(body.kinematic)return Vector3.zero;
+        Vector3 localTorque=body.inversePrincipal*Vector3.Cross(body.lever,force),tensor=body.tensor;
         // Unity represents frozen principal axes with zero inertia; they have
         // zero inverse inertia rather than an artificially huge response.
         Vector3 localAcceleration=new Vector3(tensor.x>0?localTorque.x/tensor.x:0,tensor.y>0?localTorque.y/tensor.y:0,tensor.z>0?localTorque.z/tensor.z:0);
-        return force/Mathf.Max(.001f,body.mass)+Vector3.Cross(principal*localAcceleration,lever);
+        return force/body.mass+Vector3.Cross(body.principal*localAcceleration,body.lever);
     }
     internal static Vector3 SolveSpringForce(Rigidbody hand,Rigidbody target,Vector3 a,Vector3 b,Vector3 error,Vector3 relative,float dt,float spring=2800,float damping=90){
         // Solve F = k*(error + dt*vNext) + c*vNext, where
@@ -247,9 +254,12 @@ public class GBGrip:MonoBehaviour {
         // Explicit point damping otherwise reverses that velocity many times
         // in one step, pumping the connected joints when the anchor is offset.
         float softness=damping*dt+spring*dt*dt;
-        Vector3 x=Vector3.right+softness*(PointInverseMass(hand,a,Vector3.right)+PointInverseMass(target,b,Vector3.right));
-        Vector3 y=Vector3.up+softness*(PointInverseMass(hand,a,Vector3.up)+PointInverseMass(target,b,Vector3.up));
-        Vector3 z=Vector3.forward+softness*(PointInverseMass(hand,a,Vector3.forward)+PointInverseMass(target,b,Vector3.forward));
+        // Body properties cannot change between these three axis evaluations.
+        // Keep the same solve/math order, with two local native-data snapshots.
+        var handMass=new PointMassSnapshot(hand,a);var targetMass=new PointMassSnapshot(target,b);
+        Vector3 x=Vector3.right+softness*(PointInverseMass(handMass,Vector3.right)+PointInverseMass(targetMass,Vector3.right));
+        Vector3 y=Vector3.up+softness*(PointInverseMass(handMass,Vector3.up)+PointInverseMass(targetMass,Vector3.up));
+        Vector3 z=Vector3.forward+softness*(PointInverseMass(handMass,Vector3.forward)+PointInverseMass(targetMass,Vector3.forward));
         Vector3 rhs=error*spring+relative*(damping+spring*dt);
         float determinant=Vector3.Dot(x,Vector3.Cross(y,z));
         if(determinant<=.000001f)return Vector3.zero;
