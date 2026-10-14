@@ -1,3 +1,46 @@
-# Windows 0.4.10 public delivery
+# GRIP BREAK 0.4.11 public delivery
 
-All four actual anonymous GitHub downloads match local SHA256 hashes and sizes: game, source, update manifest and checksums. The current 125/125 focused native assertions and 14/14 live public updater checks passed. The real Desktop installation has 147 matching runtime files and only the current 0.4.10 shortcut. The current game was launched. Cleanup removed 3.89 GB of audited obsolete caches and media, preserving current models, source, builds and raw reports.
+Actual public Windows game, source, manifest and checksum-file bytes SHA256-match the packaged f186 release. Live Windows updater:15/15 native checks passed. Desktop:147 runtime hashes verified, single current game shortcut, launchAttempted=false and no owned processes remaining.
+
+{
+  "version": "0.4.11",
+  "nativeBuild": "f186",
+  "passed": true,
+  "release": "https://github.com/zinovykargman-commits/wrestling/releases/tag/v0.4.11",
+  "releaseId": 413085185,
+  "manifestMatches": true,
+  "checksumsMatch": true,
+  "assets": [
+    {
+      "name": "GRIP_BREAK-Windows.zip",
+      "sha256": "e911c0f5ca416a202b1e96bd00d9da2380fb6a3065ada6eb4a65507a02800a64",
+      "size": 156338521,
+      "url": "https://github.com/zinovykargman-commits/wrestling/releases/download/v0.4.11/GRIP_BREAK-Windows.zip",
+      "passed": true
+    },
+    {
+      "name": "GRIP_BREAK-Source.zip",
+      "sha256": "28ffa02b7ac9d28f73a51a3cfcb761fa1383aa4af7f0fc570133d258fbabab27",
+      "size": 127665167,
+      "url": "https://github.com/zinovykargman-commits/wrestling/releases/download/v0.4.11/GRIP_BREAK-Source.zip",
+      "passed": true
+    },
+    {
+      "name": "GRIP_BREAK-Update.json",
+      "sha256": "f80e16a1b277a35c7d20a08d6f757d609e4546bad9948832ee93fc719eb9b135",
+      "size": 245,
+      "url": "https://github.com/zinovykargman-commits/wrestling/releases/download/v0.4.11/GRIP_BREAK-Update.json",
+      "passed": true
+    },
+    {
+      "name": "GRIP_BREAK-Archives-SHA256.txt",
+      "sha256": "42b3ca37b8d3fdc5ff794d19bd877213aefaf6c5542f9d4a283e91c44762cb50",
+      "size": 179,
+      "url": "https://github.com/zinovykargman-commits/wrestling/releases/download/v0.4.11/GRIP_BREAK-Archives-SHA256.txt",
+      "passed": true
+    }
+  ],
+  "sourceCommit": "afa3e480a04ccff5bc452613e2d94f31c72dd45b",
+  "sessionPersistenceVerified": true,
+  "windowsQuitVerified": true
+}
